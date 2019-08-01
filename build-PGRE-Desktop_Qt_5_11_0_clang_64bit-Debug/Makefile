@@ -215,7 +215,8 @@ DIST          = ../../../Qt5.11.0/5.11.0/clang_64/mkspecs/features/spec_pre.prf 
 		../../../Qt5.11.0/5.11.0/clang_64/mkspecs/features/exceptions.prf \
 		../../../Qt5.11.0/5.11.0/clang_64/mkspecs/features/yacc.prf \
 		../../../Qt5.11.0/5.11.0/clang_64/mkspecs/features/lex.prf \
-		../PGRE/PGRE.pro core.h ../PGRE/main.cpp
+		../PGRE/PGRE.pro core.h \
+		../PGRE/Core/Math/vec.h ../PGRE/main.cpp
 QMAKE_TARGET  = PGRE
 DESTDIR       = 
 TARGET        = PGRE
@@ -578,7 +579,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Qt5.11.0/5.11.0/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents core.h $(DISTDIR)/
+	$(COPY_FILE) --parents core.h ../PGRE/Core/Math/vec.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../PGRE/main.cpp $(DISTDIR)/
 
 
@@ -674,7 +675,8 @@ main.o: ../PGRE/main.cpp ../../../Qt5.11.0/5.11.0/clang_64/lib/QtCore.framework/
 		/usr/local/Cellar/sdl2/2.0.8/include/SDL2/SDL_shape.h \
 		/usr/local/Cellar/sdl2/2.0.8/include/SDL2/SDL_system.h \
 		/usr/local/Cellar/sdl2/2.0.8/include/SDL2/SDL_timer.h \
-		/usr/local/Cellar/sdl2/2.0.8/include/SDL2/SDL_version.h
+		/usr/local/Cellar/sdl2/2.0.8/include/SDL2/SDL_version.h \
+		../PGRE/Core/core.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../PGRE/main.cpp
 
 ####### Install

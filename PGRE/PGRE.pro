@@ -15,7 +15,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp
+        main.cpp \
+    Core/Math/vec.inl
 
 macx: LIBS += -L$$PWD/../../../../../usr/local/Cellar/sdl2/2.0.8/lib/ -lSDL2-2.0.0
 
@@ -33,4 +34,5 @@ INCLUDEPATH += $$PWD/../../../../../usr/local/Cellar/sdl2/2.0.8/include
 DEPENDPATH += $$PWD/../../../../../usr/local/Cellar/sdl2/2.0.8/include
 
 HEADERS += \
-    core.h
+    core.h \
+    Core/Math/vec.h

@@ -3,10 +3,18 @@
 #include <SDL2/SDL.h>
 
 #include "Core/core.h"
+#include "Core/Math/vec.h"
+
+using namespace PRGE;
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+
+    Vec2<int> i = {1, 2};
+    Vec2<int> j = {3, 5};
+
+    j = i + j;
 
     SDL_Init(SDL_INIT_EVERYTHING);
 
