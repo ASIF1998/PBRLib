@@ -26,3 +26,11 @@ macx: LIBS += -L$$PWD/../../../../../usr/local/Cellar/glew/2.1.0/lib/ -lGLEW.2.1
 
 INCLUDEPATH += $$PWD/../../../../../usr/local/Cellar/glew/2.1.0/include
 DEPENDPATH += $$PWD/../../../../../usr/local/Cellar/glew/2.1.0/include
+
+macx: LIBS += -L$$PWD/../../../../../usr/local/Cellar/sdl2/2.0.8/lib/ -lSDL2-2.0.0
+
+INCLUDEPATH += $$PWD/../../../../../usr/local/Cellar/sdl2/2.0.8/include
+DEPENDPATH += $$PWD/../../../../../usr/local/Cellar/sdl2/2.0.8/include
+
+HEADERS += \
+    core.h

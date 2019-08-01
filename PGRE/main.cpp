@@ -2,6 +2,8 @@
 
 #include <SDL2/SDL.h>
 
+#include "Core/core.h"
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);

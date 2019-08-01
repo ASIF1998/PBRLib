@@ -15,7 +15,7 @@ CXX           = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefau
 DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_CORE_LIB
 CFLAGS        = -pipe -g $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk -mmacosx-version-min=10.11 -Wall -W -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -stdlib=libc++ -g -std=gnu++11 $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk -mmacosx-version-min=10.11 -Wall -W -fPIC $(DEFINES)
-INCPATH       = -I../PGRE -I. -I/usr/local/Cellar/sdl2/2.0.8/include -I/usr/local/Cellar/glew/2.1.0/include -I../../../Qt5.11.0/5.11.0/clang_64/lib/QtCore.framework/Headers -I. -I../../../Qt5.11.0/5.11.0/clang_64/mkspecs/macx-clang -F/Users/asifmamedov/Qt5.11.0/5.11.0/clang_64/lib
+INCPATH       = -I../PGRE -I. -I/usr/local/Cellar/sdl2/2.0.8/include -I/usr/local/Cellar/glew/2.1.0/include -I/usr/local/Cellar/sdl2/2.0.8/include -I../../../Qt5.11.0/5.11.0/clang_64/lib/QtCore.framework/Headers -I. -I../../../Qt5.11.0/5.11.0/clang_64/mkspecs/macx-clang -F/Users/asifmamedov/Qt5.11.0/5.11.0/clang_64/lib
 QMAKE         = /Users/asifmamedov/Qt5.11.0/5.11.0/clang_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -35,10 +35,10 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = PGRE1.0.0
-DISTDIR = /Users/asifmamedov/Desktop/PRGE/build-PGRE-Desktop_Qt_5_11_0_clang_64bit-Debug/.tmp/PGRE1.0.0
+DISTDIR = /Users/asifmamedov/Desktop/PGRE/build-PGRE-Desktop_Qt_5_11_0_clang_64bit-Debug/.tmp/PGRE1.0.0
 LINK          = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 LFLAGS        = -stdlib=libc++ -headerpad_max_install_names $(EXPORT_ARCH_ARGS) -Wl,-syslibroot,/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk -mmacosx-version-min=10.11 -Wl,-rpath,@executable_path/Frameworks -Wl,-rpath,/Users/asifmamedov/Qt5.11.0/5.11.0/clang_64/lib
-LIBS          = $(SUBLIBS) -F/Users/asifmamedov/Qt5.11.0/5.11.0/clang_64/lib -L/Users/asifmamedov/Desktop/PRGE/PGRE/../../../../../usr/local/Cellar/sdl2/2.0.8/lib/ -lSDL2-2.0.0 -L/Users/asifmamedov/Desktop/PRGE/PGRE/../../../../../usr/local/Cellar/glew/2.1.0/lib/ -lGLEW.2.1.0 -framework QtCore -framework DiskArbitration -framework IOKit 
+LIBS          = $(SUBLIBS) -F/Users/asifmamedov/Qt5.11.0/5.11.0/clang_64/lib -L/Users/asifmamedov/Desktop/PGRE/PGRE/../../../../../usr/local/Cellar/sdl2/2.0.8/lib/ -L/Users/asifmamedov/Desktop/PGRE/PGRE/../../../../../usr/local/Cellar/glew/2.1.0/lib/ -lGLEW.2.1.0 -lSDL2-2.0.0 -framework QtCore -framework DiskArbitration -framework IOKit 
 AR            = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar cq
 RANLIB        = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib -s
 SED           = sed
@@ -215,7 +215,7 @@ DIST          = ../../../Qt5.11.0/5.11.0/clang_64/mkspecs/features/spec_pre.prf 
 		../../../Qt5.11.0/5.11.0/clang_64/mkspecs/features/exceptions.prf \
 		../../../Qt5.11.0/5.11.0/clang_64/mkspecs/features/yacc.prf \
 		../../../Qt5.11.0/5.11.0/clang_64/mkspecs/features/lex.prf \
-		../PGRE/PGRE.pro  ../PGRE/main.cpp
+		../PGRE/PGRE.pro core.h ../PGRE/main.cpp
 QMAKE_TARGET  = PGRE
 DESTDIR       = 
 TARGET        = PGRE
@@ -578,6 +578,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Qt5.11.0/5.11.0/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents core.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../PGRE/main.cpp $(DISTDIR)/
 
 
