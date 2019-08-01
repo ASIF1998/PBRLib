@@ -11,10 +11,19 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    Vec2<int> i = {1, 2};
-    Vec2<int> j = {3, 5};
+    Vec3<int> i = {1, 2, 4};
+    Vec3<int> j = {3, 5, 5};
+    Vec3<float> f;
+    Vec3<float> e;
+
+    f + e;
 
     j = i + j;
+
+    int d = dot(i, j);
+
+    cout << i << '\n' << j << '\n' << d << endl;
+
 
     SDL_Init(SDL_INIT_EVERYTHING);
 

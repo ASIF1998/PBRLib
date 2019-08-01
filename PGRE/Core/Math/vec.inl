@@ -1,7 +1,10 @@
 #include "math.h"
 
+#include <xmmintrin.h>
+
 #if DEBUG_PRGE == 1
 #include <iostream>
+#include <iomanip>
 using namespace std;
 #endif
 
@@ -147,7 +150,7 @@ namespace PRGE
         }
 
 #if DEBUG_PRGE == 1
-        friend auto& operator << (ostream& os, const Vec2& vec2)
+        friend ostream& operator << (ostream& os, const Vec2& vec2)
         {
             int w = static_cast<int>(os.width());
             os << vec2._xy[0] << setw(!w ? 2 : w) << vec2._xy[1];
@@ -157,5 +160,236 @@ namespace PRGE
 
     private:
         Type _xy[2];
+    };
+
+    template<typename Type>
+    class Vec3
+    {
+    public:
+        inline Vec3() noexcept
+        {
+            _xyz[0] = static_cast<Type>(0);
+            _xyz[1] = static_cast<Type>(0);
+            _xyz[3] = static_cast<Type>(0);
+        }
+
+        inline Vec3(Type x, Type y, Type z) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(x, y, z);
+#endif
+
+            _xyz[0] = x;
+            _xyz[1] = y;
+            _xyz[2] = z;
+        }
+
+        inline Vec3(const Vec3& vec3) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            _xyz[0] = vec3._xyz[0];
+            _xyz[0] = vec3._xyz[1];
+            _xyz[2] = vec3._xyz[2];
+        }
+
+        inline Vec3& operator = (const Vec3& vec3) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            _xyz[0] = vec3._xyz[0];
+            _xyz[0] = vec3._xyz[1];
+            _xyz[2] = vec3._xyz[2];
+
+            return *this;
+        }
+
+        inline Vec3 operator + (const Vec3& vec3) const NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            return {_xyz[0] + vec3._xyz[0], _xyz[1] + vec3._xyz[1], _xyz[2] + vec3._xyz[2]};
+        }
+
+        inline Vec3 operator - (const Vec3& vec3) const NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            return {_xyz[0] - vec3._xyz[0], _xyz[1] - vec3._xyz[1], _xyz[2] - vec3._xyz[2]};
+        }
+
+        inline Vec3 operator * (Type s) const noexcept
+        {
+            return {_xyz[0] * s, _xyz[1] * s, _xyz[2] * s};
+        }
+
+        inline Vec3& operator += (const Vec3& vec3) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            _xyz[0] += vec3._xyz[0];
+            _xyz[1] += vec3._xyz[1];
+            _xyz[2] += vec3._xyz[2];
+
+            return *this;
+        }
+
+        inline Vec3& operator -= (const Vec3& vec3) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            _xyz[0] -= vec3._xyz[0];
+            _xyz[1] -= vec3._xyz[1];
+            _xyz[2] -= vec3._xyz[2];
+
+            return *this;
+        }
+
+        inline Vec3& operator *= (Type s) NOEXCEPT_PRGE
+        {
+            _xyz[0] *= s;
+            _xyz[1] *= s;
+            _xyz[2] *= s;
+
+            return *this;
+        }
+
+        Type& operator [] (size_t i) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            if (i > 3) {
+                throw length_error("Go beyond the boundaries of the two-dimensional vector");
+            }
+#endif
+
+            return _xyz[i];
+        }
+
+        const Type& operator [] (size_t i) const NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            if (i > 3) {
+                throw length_error("Go beyond the boundaries of the two-dimensional vector");
+            }
+#endif
+
+            return _xyz[i];
+        }
+
+#if DEBUG_PRGE == 1
+        friend ostream& operator << (ostream& os, const Vec3& vec3) 
+        {
+            int w = static_cast<int>(os.width());
+            w = !w ? 2 : w;
+            os << vec3._xyz[0] << setw(w) << vec3._xyz[1] << setw(w) << vec3._xyz[2];
+            return os;
+        }
+#endif
+        friend inline Type dot(const Vec3& v1, const Vec3& v2) NOEXCEPT_PRGE 
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(v1._xyz[0], v1._xyz[1], v1._xyz[2]);
+            NAN_OR_INF_XYZ(v2._xyz[0], v2._xyz[1], v2._xyz[2]);
+#endif
+
+            return v1._xyz[0] * v2._xyz[0] + v1._xyz[1] * v2._xyz[1] + v1._xyz[2] * v2._xyz[2];
+        }
+
+        friend inline Vec3 cross(const Vec3& v1, const Vec3& v2) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(v1._xyz[0], v1._xyz[1], v1._xyz[2]);
+            NAN_OR_INF_XYZ(v2._xyz[0], v2._xyz[1], v2._xyz[2]);
+#endif
+
+            return {v1._xyz[1] * v2._xyz[2] - v1._xyz[2] * v2._xyz[1], 
+                    v1._xyz[2] * v2._xyz[0] - v1._xyz[0] * v2._xyz[2],
+                    v1._xyz[0] * v2._xyz[1] - v1._xyz[1] * v2._xyz[0]};
+        }
+
+    private:
+        Type _xyz[3];
+    };
+
+    template<>
+    class Vec3<float>
+    {
+    public:
+        inline Vec3(float x = 0.0f, float y = 0.0f, float z = 0.0f) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(x, y, z);
+#endif
+
+            _xyz[0] = x;
+            _xyz[1] = y;
+            _xyz[2] = z;
+        }
+
+        inline Vec3(const Vec3& vec3) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            _xyz[0] = vec3._xyz[0];
+            _xyz[0] = vec3._xyz[1];
+            _xyz[2] = vec3._xyz[2];
+        }
+
+        inline Vec3& operator = (const Vec3& vec3) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            _xyz[0] = vec3._xyz[0];
+            _xyz[0] = vec3._xyz[1];
+            _xyz[2] = vec3._xyz[2];
+
+            return *this;
+        }
+
+        inline Vec3 operator + (const Vec3& vec3) const noexcept
+        {
+            return {_mm_add_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f))};
+        }
+
+        inline Vec3 operator - (const Vec3& vec3) const noexcept
+        {
+            return {_mm_sub_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f))};
+        }
+
+        inline Vec3 operator * (float s) const noexcept
+        {
+            return {_mm_add_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(s, s, s, s))};
+        }
+
+    private:
+        inline Vec3(const __m128& v) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(v[0], v[1], v[2]);
+#endif
+
+            _xyz[0] = v[0];
+            _xyz[1] = v[1];
+            _xyz[2] = v[2];
+        }
+
+    private:
+        float _xyz[3];
     };
 }
