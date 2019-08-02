@@ -10,6 +10,9 @@ using namespace std;
 
 namespace PRGE
 {
+    /**
+     * Класс описывающий двумерный вектор.
+    */
     template<typename Type>
     class Vec2
     {
@@ -138,7 +141,7 @@ namespace PRGE
             return _xy[i];
         }
 
-        const Type& operator [] (size_t i) const NOEXCEPT_PRGE
+        Type operator [] (size_t i) const NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 2) {
@@ -162,6 +165,9 @@ namespace PRGE
         Type _xy[2];
     };
 
+    /**
+     * Класс описывающий трехмерный вектор.
+    */
     template<typename Type>
     class Vec3
     {
@@ -277,7 +283,7 @@ namespace PRGE
             return _xyz[i];
         }
 
-        const Type& operator [] (size_t i) const NOEXCEPT_PRGE
+        Type operator [] (size_t i) const NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 3) {
@@ -297,6 +303,14 @@ namespace PRGE
             return os;
         }
 #endif
+
+        /**
+         * Функция осуществляющая скалярное произведение.
+         * 
+         * @param v1 первый вектор
+         * @param v2 второй вектор
+         * @return скалярное произведение между векторами v1 и v2
+        */
         friend inline Type dot(const Vec3& v1, const Vec3& v2) NOEXCEPT_PRGE 
         {
 #if DEBUG_PRGE == 1
@@ -307,6 +321,13 @@ namespace PRGE
             return v1._xyz[0] * v2._xyz[0] + v1._xyz[1] * v2._xyz[1] + v1._xyz[2] * v2._xyz[2];
         }
 
+        /**
+         * Функция осуществляющая векторное произведение.
+         * 
+         * @param v1 первый вектор
+         * @param v2 второй вектор
+         * @return векторное произведение между векторами v1 и v2
+        */
         friend inline Vec3 cross(const Vec3& v1, const Vec3& v2) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
@@ -323,6 +344,9 @@ namespace PRGE
         Type _xyz[3];
     };
 
+    /**
+     * Класс описывающий трехмерный вектор типа float с применением SIMD.
+    */
     template<>
     class Vec3<float>
     {
@@ -362,19 +386,139 @@ namespace PRGE
             return *this;
         }
 
-        inline Vec3 operator + (const Vec3& vec3) const noexcept
+        inline Vec3 operator + (const Vec3& vec3) const NOEXCEPT_PRGE
         {
-            return {_mm_add_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f))};
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            return {_mm_add_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2], 0.0f))};
         }
 
-        inline Vec3 operator - (const Vec3& vec3) const noexcept
+        inline Vec3 operator - (const Vec3& vec3) const NOEXCEPT_PRGE
         {
-            return {_mm_sub_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f))};
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            return {_mm_sub_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2], 0.0f))};
         }
 
         inline Vec3 operator * (float s) const noexcept
         {
-            return {_mm_add_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(s, s, s, s))};
+            return {_mm_mul_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(s, s, s, s))};
+        }
+
+        inline Vec3& operator += (const Vec3& vec3) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            auto res = _mm_add_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2], 0.0f));
+
+            _xyz[0] = res[0];
+            _xyz[1] = res[1];
+            _xyz[2] = res[2];
+
+            return *this;
+        }
+
+        inline Vec3& operator -= (const Vec3& vec3) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            auto res = _mm_sub_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2], 0.0f));
+
+            _xyz[0] = res[0];
+            _xyz[1] = res[1];
+            _xyz[2] = res[2];
+
+            return *this;
+        }
+
+        inline Vec3& operator *= (float s) noexcept
+        {
+            auto res = _mm_mul_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(s, s, s, s));
+
+            _xyz[0] = res[0];
+            _xyz[1] = res[1];
+            _xyz[2] = res[2];
+
+            return *this;
+        }
+
+        float& operator [] (size_t i) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            if (i > 3) {
+                throw length_error("Go beyond the boundaries of the two-dimensional vector");
+            }
+#endif
+
+            return _xyz[i];
+        }
+
+        float operator [] (size_t i) const NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            if (i > 3) {
+                throw length_error("Go beyond the boundaries of the two-dimensional vector");
+            }
+#endif
+
+            return _xyz[i];
+        }
+
+#if DEBUG_PRGE == 1
+        friend ostream& operator << (ostream& os, const Vec3& vec3) 
+        {
+            int w = static_cast<int>(os.width());
+            w = !w ? 2 : w;
+            os << vec3._xyz[0] << setw(w) << vec3._xyz[1] << setw(w) << vec3._xyz[2];
+            return os;
+        }
+#endif
+
+        /**
+         * Функция осуществляющая скалярное произведение.
+         * 
+         * @param v1 первый вектор
+         * @param v2 второй вектор
+         * @return скалярное произведение между векторами v1 и v2
+        */
+        friend float dot(const Vec3& v1, const Vec3& v2) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(v1._xyz[0], v1._xyz[1], v1._xyz[2]);
+            NAN_OR_INF_XYZ(v2._xyz[0], v2._xyz[1], v2._xyz[2]);
+#endif
+
+            auto r = _mm_mul_ps(_mm_set_ps(v1._xyz[0], v1._xyz[1], v1._xyz[2], 0.0f), _mm_set_ps(v2._xyz[0], v2._xyz[1], v2._xyz[2], 0.0f));
+
+            return r[0] + r[1] + r[2]; 
+        }
+
+        /**
+         * Функция осуществляющая векторное произведение.
+         * 
+         * @param v1 первый вектор
+         * @param v2 второй вектор
+         * @return векторное произведение между векторами v1 и v2
+        */
+        friend Vec3 cross(const Vec3& v1, const Vec3& v2) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(v1._xyz[0], v1._xyz[1], v1._xyz[2]);
+            NAN_OR_INF_XYZ(v2._xyz[0], v2._xyz[1], v2._xyz[2]);
+#endif
+
+            auto r1 = _mm_mul_ps(_mm_set_ps(v1._xyz[1], v1._xyz[2], v1._xyz[0]), _mm_set_ps(v2._xyz[2], v2._xyz[0], v2._xyz[1]));
+            auto r2 = _mm_mul_ps(_mm_set_ps(v1._xyz[2], v1._xyz[0], v1._xyz[1]), _mm_set_ps(v2._xy1[1], v2._xyz[2], v2._xyz[0]));
+
+            return _mm_sub_ps(r1, r2);
         }
 
     private:
