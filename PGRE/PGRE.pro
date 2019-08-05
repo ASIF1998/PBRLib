@@ -1,6 +1,6 @@
 QT -= gui
 
-CONFIG += c++11 console
+CONFIG += c++17 console
 CONFIG -= app_bundle
 
 # The following define makes your compiler emit warnings if you use
@@ -16,7 +16,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    Core/Math/vec.inl
+    Core/Math/vec.inl \
+    Core/Math/point.inl
 
 macx: LIBS += -L$$PWD/../../../../../usr/local/Cellar/sdl2/2.0.8/lib/ -lSDL2-2.0.0
 
@@ -35,4 +36,5 @@ DEPENDPATH += $$PWD/../../../../../usr/local/Cellar/sdl2/2.0.8/include
 
 HEADERS += \
     core.h \
-    Core/Math/vec.h
+    Core/Math/vec.h \
+    Core/Math/point.h

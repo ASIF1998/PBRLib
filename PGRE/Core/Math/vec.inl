@@ -10,12 +10,20 @@ using namespace std;
 
 namespace PRGE
 {
+    template<typename Type>
+    class Point2;
+
+    template<typename Type>
+    class Point3;
+
     /**
      * Класс описывающий двумерный вектор.
     */
     template<typename Type>
     class Vec2
     {
+            friend class Point2<Type>;
+
     public:
         inline Vec2() noexcept
         {
@@ -171,6 +179,8 @@ namespace PRGE
     template<typename Type>
     class Vec3
     {
+        friend class Point3<Type>;
+
     public:
         inline Vec3() noexcept
         {
@@ -304,6 +314,16 @@ namespace PRGE
         }
 #endif
 
+        inline bool operator == (const Vec3& vec3) const noexcept
+        {
+            return _xyz[0] == vec3._xyz[0] && _xyz[1] == vec3._xyz[1] && _xyz[2] == vec3._xyz[2];
+        }
+
+        inline bool operator != (const Vec3& vec3) const noexcept
+        {
+            return _xyz[0] != vec3._xyz[0] || _xyz[1] != vec3._xyz[1] || _xyz[2] != vec3._xyz[2];
+        }
+
         /**
          * Функция осуществляющая скалярное произведение.
          * 
@@ -350,6 +370,8 @@ namespace PRGE
     template<>
     class Vec3<float>
     {
+        friend class Point3<float>;
+
     public:
         inline Vec3(float x = 0.0f, float y = 0.0f, float z = 0.0f) NOEXCEPT_PRGE
         {
@@ -360,6 +382,7 @@ namespace PRGE
             _xyz[0] = x;
             _xyz[1] = y;
             _xyz[2] = z;
+            _xyz[3] = 0.f;
         }
 
         inline Vec3(const Vec3& vec3) NOEXCEPT_PRGE
@@ -392,7 +415,7 @@ namespace PRGE
             NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
 #endif
 
-            return {_mm_add_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2], 0.0f))};
+            return {_mm_add_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(vec3._xyz))};
         }
 
         inline Vec3 operator - (const Vec3& vec3) const NOEXCEPT_PRGE
@@ -401,12 +424,12 @@ namespace PRGE
             NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
 #endif
 
-            return {_mm_sub_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2], 0.0f))};
+            return {_mm_sub_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(vec3._xyz))};
         }
 
         inline Vec3 operator * (float s) const noexcept
         {
-            return {_mm_mul_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(s, s, s, s))};
+            return {_mm_mul_ps(*reinterpret_cast<const __m128*>(_xyz), _mm_set_ps(s, s, s, s))};
         }
 
         inline Vec3& operator += (const Vec3& vec3) NOEXCEPT_PRGE
@@ -415,7 +438,7 @@ namespace PRGE
             NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
 #endif
 
-            auto res = _mm_add_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2], 0.0f));
+            auto res = _mm_add_ps(*reinterpret_cast<const __m128*>(_xyz),*reinterpret_cast<const __m128*>(vec3._xyz));
 
             _xyz[0] = res[0];
             _xyz[1] = res[1];
@@ -430,7 +453,7 @@ namespace PRGE
             NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
 #endif
 
-            auto res = _mm_sub_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2], 0.0f));
+            auto res = _mm_sub_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(vec3._xyz));
 
             _xyz[0] = res[0];
             _xyz[1] = res[1];
@@ -441,7 +464,7 @@ namespace PRGE
 
         inline Vec3& operator *= (float s) noexcept
         {
-            auto res = _mm_mul_ps(_mm_set_ps(_xyz[0], _xyz[1], _xyz[2], 0.0f), _mm_set_ps(s, s, s, s));
+            auto res = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyz), _mm_set_ps(s, s, s, s));
 
             _xyz[0] = res[0];
             _xyz[1] = res[1];
@@ -482,6 +505,18 @@ namespace PRGE
         }
 #endif
 
+        inline bool operator == (const Vec3& vec3) const noexcept
+        {
+            auto res = _mm_cmpeq_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(vec3._xyz));
+            return res[0] && res[1] && res[2];
+        }
+
+        inline bool operator != (const Vec3& vec3) const noexcept
+        {
+            auto res = _mm_cmpneq_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(vec3._xyz));
+            return res[0] || res[1] || res[2];
+        }
+
         /**
          * Функция осуществляющая скалярное произведение.
          * 
@@ -496,7 +531,7 @@ namespace PRGE
             NAN_OR_INF_XYZ(v2._xyz[0], v2._xyz[1], v2._xyz[2]);
 #endif
 
-            auto r = _mm_mul_ps(_mm_set_ps(v1._xyz[0], v1._xyz[1], v1._xyz[2], 0.0f), _mm_set_ps(v2._xyz[0], v2._xyz[1], v2._xyz[2], 0.0f));
+            auto r = _mm_mul_ps(*reinterpret_cast<const __m128*>(v1._xyz), *reinterpret_cast<const __m128*>(v2._xyz));
 
             return r[0] + r[1] + r[2]; 
         }
@@ -515,8 +550,8 @@ namespace PRGE
             NAN_OR_INF_XYZ(v2._xyz[0], v2._xyz[1], v2._xyz[2]);
 #endif
 
-            auto r1 = _mm_mul_ps(_mm_set_ps(v1._xyz[1], v1._xyz[2], v1._xyz[0]), _mm_set_ps(v2._xyz[2], v2._xyz[0], v2._xyz[1]));
-            auto r2 = _mm_mul_ps(_mm_set_ps(v1._xyz[2], v1._xyz[0], v1._xyz[1]), _mm_set_ps(v2._xy1[1], v2._xyz[2], v2._xyz[0]));
+            auto r1 = _mm_mul_ps(_mm_set_ps(v1._xyz[1], v1._xyz[2], v1._xyz[0], 0.0f), _mm_set_ps(v2._xyz[2], v2._xyz[0], v2._xyz[1], 0.0f));
+            auto r2 = _mm_mul_ps(_mm_set_ps(v1._xyz[2], v1._xyz[0], v1._xyz[1], 0.0f), _mm_set_ps(v2._xyz[1], v2._xyz[2], v2._xyz[0], 0.0f));
 
             return _mm_sub_ps(r1, r2);
         }
@@ -534,6 +569,6 @@ namespace PRGE
         }
 
     private:
-        float _xyz[3];
+        float _xyz[4];
     };
 }
