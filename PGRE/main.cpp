@@ -5,6 +5,7 @@
 #include "Core/core.h"
 #include "Core/Math/vec.h"
 #include "Core/Math/point.h"
+#include "Core/Math/normal.h"
 
 using namespace PRGE;
 
