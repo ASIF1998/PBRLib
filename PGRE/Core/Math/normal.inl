@@ -187,7 +187,7 @@ namespace PRGE
         }
 #endif
 
-        friend Normal3f normalize(const Normal3f& normal) NOEXCEPT_PRGE
+        friend Normal3f normalize(const Normal3f& normal)
         {
             auto res = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(_xyz));
             auto invLength = 1.0f / sqrt(res[0] + res[1] + res[2]);
