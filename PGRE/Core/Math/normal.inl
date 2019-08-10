@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include <iostream>
+
 using namespace std;
 
 namespace PRGE
@@ -189,7 +191,7 @@ namespace PRGE
 
         friend Normal3f normalize(const Normal3f& normal)
         {
-            auto res = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(_xyz));
+            auto res = _mm_mul_ps(*reinterpret_cast<const __m128*>(normal._xyz), *reinterpret_cast<const __m128*>(normal._xyz));
             auto invLength = 1.0f / sqrt(res[0] + res[1] + res[2]);
             return {_mm_mul_ps(*reinterpret_cast<const __m128*>(normal._xyz), _mm_set_ps(invLength, invLength, invLength, invLength))};
         }
