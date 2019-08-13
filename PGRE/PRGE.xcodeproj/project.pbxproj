@@ -14,6 +14,7 @@
 		951518932302E7810061C8CC /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 951518922302E7810061C8CC /* OpenGL.framework */; };
 		951518952302E7A90061C8CC /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 951518942302E7A90061C8CC /* libSDL2-2.0.0.dylib */; };
 		951518972302E7B60061C8CC /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 951518962302E7B60061C8CC /* libGLEW.2.1.0.dylib */; };
+		957D70D823033F170000F3A9 /* Ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 957D70D623033F170000F3A9 /* Ray.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,6 +48,8 @@
 		951518922302E7810061C8CC /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		951518942302E7A90061C8CC /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../../../../../../usr/local/Cellar/sdl2/2.0.8/lib/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
 		951518962302E7B60061C8CC /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../../../usr/local/Cellar/glew/2.1.0/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
+		957D70D623033F170000F3A9 /* Ray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ray.cpp; sourceTree = "<group>"; };
+		957D70D723033F170000F3A9 /* Ray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ray.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +86,7 @@
 		951518712302E6BB0061C8CC /* PRGE */ = {
 			isa = PBXGroup;
 			children = (
+				957D70D523033EF70000F3A9 /* Physics */,
 				951518792302E6DB0061C8CC /* Core */,
 				951518882302E6DB0061C8CC /* main.cpp */,
 			);
@@ -125,6 +129,15 @@
 				951518922302E7810061C8CC /* OpenGL.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		957D70D523033EF70000F3A9 /* Physics */ = {
+			isa = PBXGroup;
+			children = (
+				957D70D623033F170000F3A9 /* Ray.cpp */,
+				957D70D723033F170000F3A9 /* Ray.hpp */,
+			);
+			path = Physics;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -185,6 +198,7 @@
 			files = (
 				9515188A2302E6DB0061C8CC /* matrix.cpp in Sources */,
 				9515188B2302E6DB0061C8CC /* quaternion.cpp in Sources */,
+				957D70D823033F170000F3A9 /* Ray.cpp in Sources */,
 				9515188C2302E6DB0061C8CC /* main.cpp in Sources */,
 				951518892302E6DB0061C8CC /* math.cpp in Sources */,
 			);
