@@ -1,5 +1,3 @@
-#include <QCoreApplication>
-
 #include <SDL2/SDL.h>
 
 #include "Core/core.h"

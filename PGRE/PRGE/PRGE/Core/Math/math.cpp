@@ -1,7 +1,13 @@
 #include "math.h"
 
+#include <cmath>
+
+#include "vec.h"
+
 namespace PRGE
 {
+    using namespace std;
+
     /**
      * Функция необходимая для решения линейной системы вида:
      *              (a00 a01) (x0) = (b0)

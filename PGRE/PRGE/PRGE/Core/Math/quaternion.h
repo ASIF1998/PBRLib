@@ -21,8 +21,8 @@ namespace PRGE
         inline Quaternion operator / (float s) const;
         inline Quaternion& operator += (const Quaternion& quaternion) NOEXCEPT_PRGE;
         inline Quaternion& operator -= (const Quaternion& quaternion) NOEXCEPT_PRGE;
-        inline Quaternion operator *= (float s) noexcept;
-        inline Quaternion operator /= (float s);
+        inline Quaternion& operator *= (float s) noexcept;
+        inline Quaternion& operator /= (float s);
 
         /**
          * TODO:

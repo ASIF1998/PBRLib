@@ -18,7 +18,7 @@ namespace PRGE
         _xyzw[3] = w;
     }
 
-    Quaternion::Quaternion(const quaternion) NOEXCEPT_PRGE
+    Quaternion::Quaternion(const Quaternion& quaternion) NOEXCEPT_PRGE
     {
 #if DEBUG_PRGE == 1
             NAN_OR_INF_XYZW(quaternion._xyzw[0], quaternion._xyzw[1], quaternion._xyzw[2], quaternion._xyzw[3]);
@@ -112,14 +112,14 @@ namespace PRGE
 
     Quaternion& Quaternion::operator *= (float s) noexcept
     {
-        *reinterpret_cast<__m128*>(_xyzw) = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyzw), _mm_set_ps(s, s, s, s)));
+        *reinterpret_cast<__m128*>(_xyzw) = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyzw), _mm_set_ps(s, s, s, s));
         return *this;
     }
 
     Quaternion& Quaternion::operator /= (float s)
     {
         float invS = 1.0f / s;
-        *reinterpret_cast<__m128*>(_xyzw) = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyzw), _mm_set_ps(invS, invS, invS, invS)));
+        *reinterpret_cast<__m128*>(_xyzw) = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyzw), _mm_set_ps(invS, invS, invS, invS));
         return *this;
     }
 

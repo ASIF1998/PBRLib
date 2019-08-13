@@ -2,6 +2,8 @@
 
 #include <stdexcept>
 
+#include <cmath>
+
 using namespace std;
 
 #define NAN_OR_INF_MATRIX4X4(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) \
@@ -83,25 +85,10 @@ namespace PRGE
                              m[3][0], m[3][1], m[3][2], m[3][3]);
 #endif
 
-        _m[0][0] = m[0][0];
-        _m[0][1] = m[0][1];
-        _m[0][2] = m[0][2];
-        _m[0][3] = m[0][3];
-
-        _m[1][0] = m[1][0];
-        _m[1][1] = m[1][1];
-        _m[1][2] = m[1][2];
-        _m[1][3] = m[1][3];
-
-        _m[2][0] = m[2][0];
-        _m[2][1] = m[2][1];
-        _m[2][2] = m[2][2];
-        _m[2][3] = m[2][3];
-
-        _m[3][0] = m[3][0];
-        _m[3][1] = m[3][1];
-        _m[3][2] = m[3][2];
-        _m[3][3] = m[3][3];
+        *reinterpret_cast<__m128*>(_m[0]) = m[0];
+        *reinterpret_cast<__m128*>(_m[1]) = m[1];
+        *reinterpret_cast<__m128*>(_m[2]) = m[2];
+        *reinterpret_cast<__m128*>(_m[3]) = m[3];
     }
 
     bool Matrix4x4f::operator == (const Matrix4x4f& matrix4x4) const noexcept
@@ -190,17 +177,17 @@ namespace PRGE
         return {out};
     }
 
-    const float* Matrix4x4::operator [] (size_t i) const noexcept
+    const float* Matrix4x4f::operator [] (size_t i) const noexcept
     {
         return _m[i];
     }
 
-    float* Matrix4x4::operator [] (size_t i) noexcept
+    float* Matrix4x4f::operator [] (size_t i) noexcept
     {
         return _m[i];
     }
 
-    float Matrix4x4::at(size_t i, size_t j) const
+    float Matrix4x4f::at(size_t i, size_t j) const
     {
         if (i > 3 || j > 3) {
             throw out_of_range("Go beyond the matrix");
@@ -209,7 +196,7 @@ namespace PRGE
         return _m[i][j];
     }
 
-    float& Matrix4x4::at(size_t i, size_t j)
+    float& Matrix4x4f::at(size_t i, size_t j)
     {
         if (i > 3 || j > 3) {
             throw out_of_range("Go beyond the matrix");
@@ -218,7 +205,7 @@ namespace PRGE
         return _m[i][j];
     }
 
-    float Matrix4x4::det() const noexcept
+    float Matrix4x4f::det() const noexcept
     {
         auto d1 = _mm_sub_ps(_mm_mul_ps(_mm_setr_ps(_m[2][2], _m[2][1], _m[2][1], _m[2][0]), _mm_setr_ps(_m[3][3], _m[3][3], _m[3][2], _m[3][3])),
                              _mm_mul_ps(_mm_setr_ps(_m[2][3], _m[2][3], _m[2][2], _m[3][0]), _mm_setr_ps(_m[3][2], _m[3][1], _m[3][1], _m[2][3])));
@@ -232,7 +219,7 @@ namespace PRGE
         r1 = _mm_sub_ps(r1, r2);
         r2 = _mm_mul_ps(_mm_setr_ps(_m[1][3], _m[1][3], _m[1][3], _m[1][2]), _mm_setr_ps(d1[2], d2[0], d2[1], d2[1]));
         r1 = _mm_add_ps(r1, r2);
-        r1 = _mm_mul_ps(r1, _mm_setr_ps(m[0][0], _m[0][1], _m[0][2], _m[0][3]));
+        r1 = _mm_mul_ps(r1, _mm_setr_ps(_m[0][0], _m[0][1], _m[0][2], _m[0][3]));
 
         return r1[0] - r1[1] + r1[2] - r1[3];
     }
@@ -306,9 +293,9 @@ namespace PRGE
             auto d4 = _mm_sub_ps(_mm_mul_ps(c41, c42), _mm_mul_ps(c43, c44));
             auto d5 = _mm_sub_ps(_mm_mul_ps(c51, c52), _mm_mul_ps(c53, c54));
 
-            auto m11 = _mm_mul_ps(e11, _mm_setr_ps(d1[0], d1[0], d1[1], d1[2]));
-            auto m12 = _mm_mul_ps(e12, _mm_setr_ps(d1[1], d1[2], d1[2], d1[3]));
-            auto m13 = _mm_mul_ps(e13, _mm_setr_ps(d2[1], d1[3], d2[0], d2[0]));
+            auto m11 = _mm_mul_ps(e1, _mm_setr_ps(d1[0], d1[0], d1[1], d1[2]));
+            auto m12 = _mm_mul_ps(e2, _mm_setr_ps(d1[1], d1[2], d1[2], d1[3]));
+            auto m13 = _mm_mul_ps(e3, _mm_setr_ps(d2[1], d1[3], d2[0], d2[0]));
 
             auto m21 = _mm_mul_ps(e4, _mm_setr_ps(d1[0], d1[0], d1[1], d2[1]));
             auto m22 = _mm_mul_ps(e5, _mm_setr_ps(d1[1], d1[2], d1[2], d1[3]));
