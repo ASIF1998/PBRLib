@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		95133D7C23042DB100B478B9 /* shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95133D7A23042DB100B478B9 /* shape.cpp */; };
+		95133D8023042E4D00B478B9 /* transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95133D7E23042E4D00B478B9 /* transform.cpp */; };
 		951518892302E6DB0061C8CC /* math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9515187F2302E6DB0061C8CC /* math.cpp */; };
 		9515188A2302E6DB0061C8CC /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 951518842302E6DB0061C8CC /* matrix.cpp */; };
 		9515188B2302E6DB0061C8CC /* quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 951518852302E6DB0061C8CC /* quaternion.cpp */; };
@@ -30,6 +32,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		95133D7A23042DB100B478B9 /* shape.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = shape.cpp; sourceTree = "<group>"; };
+		95133D7B23042DB100B478B9 /* shape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = shape.hpp; sourceTree = "<group>"; };
+		95133D7E23042E4D00B478B9 /* transform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transform.cpp; sourceTree = "<group>"; };
+		95133D7F23042E4D00B478B9 /* transform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transform.hpp; sourceTree = "<group>"; };
 		9515186F2302E6BB0061C8CC /* PRGE */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PRGE; sourceTree = BUILT_PRODUCTS_DIR; };
 		9515187A2302E6DB0061C8CC /* core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = core.h; sourceTree = "<group>"; };
 		9515187C2302E6DB0061C8CC /* point.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = point.inl; sourceTree = "<group>"; };
@@ -66,6 +72,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		95133D7823042D6200B478B9 /* LowLevelRendering */ = {
+			isa = PBXGroup;
+			children = (
+				95133D7923042DA700B478B9 /* SubmissionShape */,
+			);
+			path = LowLevelRendering;
+			sourceTree = "<group>";
+		};
+		95133D7923042DA700B478B9 /* SubmissionShape */ = {
+			isa = PBXGroup;
+			children = (
+				95133D7A23042DB100B478B9 /* shape.cpp */,
+				95133D7B23042DB100B478B9 /* shape.hpp */,
+			);
+			path = SubmissionShape;
+			sourceTree = "<group>";
+		};
+		95133D7D23042E3B00B478B9 /* Transform */ = {
+			isa = PBXGroup;
+			children = (
+				95133D7E23042E4D00B478B9 /* transform.cpp */,
+				95133D7F23042E4D00B478B9 /* transform.hpp */,
+			);
+			path = Transform;
+			sourceTree = "<group>";
+		};
 		951518662302E6BB0061C8CC = {
 			isa = PBXGroup;
 			children = (
@@ -86,6 +118,8 @@
 		951518712302E6BB0061C8CC /* PRGE */ = {
 			isa = PBXGroup;
 			children = (
+				95133D7D23042E3B00B478B9 /* Transform */,
+				95133D7823042D6200B478B9 /* LowLevelRendering */,
 				957D70D523033EF70000F3A9 /* Physics */,
 				951518792302E6DB0061C8CC /* Core */,
 				951518882302E6DB0061C8CC /* main.cpp */,
@@ -107,16 +141,16 @@
 			children = (
 				9515187C2302E6DB0061C8CC /* point.inl */,
 				9515187D2302E6DB0061C8CC /* point.h */,
-				9515187E2302E6DB0061C8CC /* vec.h */,
-				9515187F2302E6DB0061C8CC /* math.cpp */,
-				951518802302E6DB0061C8CC /* quaternion.h */,
-				951518812302E6DB0061C8CC /* matrix.h */,
 				951518822302E6DB0061C8CC /* vec.inl */,
-				951518832302E6DB0061C8CC /* normal.h */,
+				9515187E2302E6DB0061C8CC /* vec.h */,
 				951518842302E6DB0061C8CC /* matrix.cpp */,
+				951518812302E6DB0061C8CC /* matrix.h */,
 				951518852302E6DB0061C8CC /* quaternion.cpp */,
-				951518862302E6DB0061C8CC /* math.h */,
+				951518802302E6DB0061C8CC /* quaternion.h */,
 				951518872302E6DB0061C8CC /* normal.inl */,
+				951518832302E6DB0061C8CC /* normal.h */,
+				9515187F2302E6DB0061C8CC /* math.cpp */,
+				951518862302E6DB0061C8CC /* math.h */,
 			);
 			path = Math;
 			sourceTree = "<group>";
@@ -197,6 +231,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9515188A2302E6DB0061C8CC /* matrix.cpp in Sources */,
+				95133D8023042E4D00B478B9 /* transform.cpp in Sources */,
+				95133D7C23042DB100B478B9 /* shape.cpp in Sources */,
 				9515188B2302E6DB0061C8CC /* quaternion.cpp in Sources */,
 				957D70D823033F170000F3A9 /* ray.cpp in Sources */,
 				9515188C2302E6DB0061C8CC /* main.cpp in Sources */,
@@ -321,6 +357,7 @@
 		951518772302E6BB0061C8CC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 434D6RQ2UV;
 				"HEADER_SEARCH_PATHS[arch=*]" = /usr/local/include;
@@ -336,6 +373,7 @@
 		951518782302E6BB0061C8CC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 434D6RQ2UV;
 				"HEADER_SEARCH_PATHS[arch=*]" = /usr/local/include;

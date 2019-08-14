@@ -10,6 +10,8 @@ namespace PRGE
 {
     class Normal3f
     {
+        friend class Transform;
+
     public:
         inline Normal3f(float x = 0.f, float y = 0.f, float z = 0.f) NOEXCEPT_PRGE
         {

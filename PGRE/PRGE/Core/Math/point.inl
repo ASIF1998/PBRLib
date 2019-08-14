@@ -353,6 +353,8 @@ namespace PRGE
     template<>
     class Point3<float>
     {
+        friend class Transform;
+
     public:
         Point3(float x = 0.0f, float y = 0.0f, float z = 0.0f) NOEXCEPT_PRGE
         {

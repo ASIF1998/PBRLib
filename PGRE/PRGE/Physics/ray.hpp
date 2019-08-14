@@ -24,7 +24,7 @@ namespace PRGE
     class Ray
     {
     public:
-        inline Ray() noexcept;
+        Ray() noexcept;
         Ray(const Ray&) = delete;
         Ray(Ray&&) = delete;
 
@@ -44,10 +44,10 @@ namespace PRGE
         inline Point3<float> operator () (float t) const noexcept;
 
 #if DEBUG_PRGE == 1
-        friend ostream& operator << (ostream os, const Ray& ray);
+        friend ostream& operator << (ostream& os, const Ray& ray);
 #endif
 
-    private:
+    protected:
         Point3<float> _o;
         Vec3<float> _dir;
         float _time;
@@ -85,7 +85,7 @@ namespace PRGE
         void scaleDifferentional(float s) NOEXCEPT_PRGE;
 
 #if DEBUG_PRGE == 1
-        friend ostream& operator << (ostream os, const RayDifferential& rayDifferential);
+        friend ostream& operator << (ostream& os, const RayDifferential& rayDifferential);
 #endif
 
     private:

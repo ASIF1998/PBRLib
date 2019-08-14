@@ -55,25 +55,57 @@ namespace PRGE
                              matrix4x4._m[3][0], matrix4x4._m[3][1], matrix4x4._m[3][2], matrix4x4._m[3][3]);
 #endif
 
-        _m[0][0] = matrix4x4._m[0][0];
-        _m[0][1] = matrix4x4._m[0][1];
-        _m[0][2] = matrix4x4._m[0][2];
-        _m[0][3] = matrix4x4._m[0][3];
+        *reinterpret_cast<__m128*>(_m[0]) = *reinterpret_cast<const __m128*>(matrix4x4._m[0]);
+        *reinterpret_cast<__m128*>(_m[1]) = *reinterpret_cast<const __m128*>(matrix4x4._m[1]);
+        *reinterpret_cast<__m128*>(_m[2]) = *reinterpret_cast<const __m128*>(matrix4x4._m[2]);
+        *reinterpret_cast<__m128*>(_m[3]) = *reinterpret_cast<const __m128*>(matrix4x4._m[3]);
+    }
 
-        _m[1][0] = matrix4x4._m[1][0];
-        _m[1][1] = matrix4x4._m[1][1];
-        _m[1][2] = matrix4x4._m[1][2];
-        _m[1][3] = matrix4x4._m[1][3];
+    Matrix4x4f::Matrix4x4f(Matrix4x4f&& matrix4x4) NOEXCEPT_PRGE
+    {
+#if DEBUG_PRGE == 1
+        NAN_OR_INF_MATRIX4X4(matrix4x4._m[0][0], matrix4x4._m[0][1], matrix4x4._m[0][2], matrix4x4._m[0][3],
+                             matrix4x4._m[1][0], matrix4x4._m[1][1], matrix4x4._m[1][2], matrix4x4._m[1][3],
+                             matrix4x4._m[2][0], matrix4x4._m[2][1], matrix4x4._m[2][2], matrix4x4._m[2][3],
+                             matrix4x4._m[3][0], matrix4x4._m[3][1], matrix4x4._m[3][2], matrix4x4._m[3][3]);
+#endif
 
-        _m[2][0] = matrix4x4._m[2][0];
-        _m[2][1] = matrix4x4._m[2][1];
-        _m[2][2] = matrix4x4._m[2][2];
-        _m[2][3] = matrix4x4._m[2][3];
+        auto&& m1 = move(_m);
+        auto&& m2 = move(matrix4x4._m);
+        swap(m1, m2);
+    }
 
-        _m[3][0] = matrix4x4._m[3][0];
-        _m[3][1] = matrix4x4._m[3][1];
-        _m[3][2] = matrix4x4._m[3][2];
-        _m[3][3] = matrix4x4._m[3][3];
+    Matrix4x4f& Matrix4x4f::operator = (const Matrix4x4f& matrix4x4) NOEXCEPT_PRGE
+    {
+#if DEBUG_PRGE == 1
+        NAN_OR_INF_MATRIX4X4(matrix4x4._m[0][0], matrix4x4._m[0][1], matrix4x4._m[0][2], matrix4x4._m[0][3],
+                             matrix4x4._m[1][0], matrix4x4._m[1][1], matrix4x4._m[1][2], matrix4x4._m[1][3],
+                             matrix4x4._m[2][0], matrix4x4._m[2][1], matrix4x4._m[2][2], matrix4x4._m[2][3],
+                             matrix4x4._m[3][0], matrix4x4._m[3][1], matrix4x4._m[3][2], matrix4x4._m[3][3]);
+#endif
+
+        *reinterpret_cast<__m128*>(_m[0]) = *reinterpret_cast<const __m128*>(matrix4x4._m[0]);
+        *reinterpret_cast<__m128*>(_m[1]) = *reinterpret_cast<const __m128*>(matrix4x4._m[1]);
+        *reinterpret_cast<__m128*>(_m[2]) = *reinterpret_cast<const __m128*>(matrix4x4._m[2]);
+        *reinterpret_cast<__m128*>(_m[3]) = *reinterpret_cast<const __m128*>(matrix4x4._m[3]);
+
+        return *this;
+    }
+
+    Matrix4x4f& Matrix4x4f::operator = (Matrix4x4f&& matrix4x4) NOEXCEPT_PRGE
+    {
+#if DEBUG_PRGE == 1
+        NAN_OR_INF_MATRIX4X4(matrix4x4._m[0][0], matrix4x4._m[0][1], matrix4x4._m[0][2], matrix4x4._m[0][3],
+                             matrix4x4._m[1][0], matrix4x4._m[1][1], matrix4x4._m[1][2], matrix4x4._m[1][3],
+                             matrix4x4._m[2][0], matrix4x4._m[2][1], matrix4x4._m[2][2], matrix4x4._m[2][3],
+                             matrix4x4._m[3][0], matrix4x4._m[3][1], matrix4x4._m[3][2], matrix4x4._m[3][3]);
+#endif
+
+        auto&& m1 = move(_m);
+        auto&& m2 = move(matrix4x4._m);
+        swap(m1, m2);
+
+        return *this;
     }
 
     Matrix4x4f::Matrix4x4f(const __m128 m[4]) NOEXCEPT_PRGE

@@ -14,6 +14,8 @@ namespace PRGE
 {
     class Matrix4x4f
     {
+        friend class Transform;
+
     public:
         Matrix4x4f(float m00 = 0.f, float m01 = 0.f, float m02 = 0.f, float m03 = 0.f,
                    float m10 = 0.f, float m11 = 0.f, float m12 = 0.f, float m13 = 0.f,
@@ -21,6 +23,10 @@ namespace PRGE
                    float m30 = 0.f, float m31 = 0.f, float m32 = 0.f, float m33 = 0.f) NOEXCEPT_PRGE;
 
         Matrix4x4f(const Matrix4x4f& matrix4x4) NOEXCEPT_PRGE;
+        Matrix4x4f(Matrix4x4f&& matrix4x4) NOEXCEPT_PRGE;
+
+        Matrix4x4f& operator = (const Matrix4x4f& matrix4x4) NOEXCEPT_PRGE;
+        Matrix4x4f& operator = (Matrix4x4f&& matrix4x4) NOEXCEPT_PRGE;
 
         bool operator == (const Matrix4x4f& matrix4x4) const noexcept;
         bool operator != (const Matrix4x4f& matrix4x4) const noexcept;

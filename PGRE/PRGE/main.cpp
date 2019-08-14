@@ -6,6 +6,8 @@
 
 #include "Physics/ray.hpp"
 
+#include "Transform/transform.hpp"
+
 using namespace PRGE;
 
 int main()
@@ -20,6 +22,8 @@ int main()
     Ray ray;
 
     Matrix4x4f m;
+
+    Transform transform;
 
     cout << m.det() << endl;
 

@@ -374,6 +374,7 @@ namespace PRGE
     class Vec3<float>
     {
         friend class Point3<float>;
+        friend class Transform;
 
     public:
         inline Vec3(float x = 0.0f, float y = 0.0f, float z = 0.0f) NOEXCEPT_PRGE

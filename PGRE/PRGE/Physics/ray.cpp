@@ -14,7 +14,7 @@ using namespace std;
 
 namespace PRGE
 {
-    Ray::Ray() :
+    Ray::Ray() noexcept:
         _time{0},
         _tMax{numeric_limits<float>::infinity()}
     {}
@@ -48,16 +48,16 @@ namespace PRGE
         _hasDifferentials{false}
     {}
 
-    RayDifferential::RayDifferential(Point3<float>& o, Vec3<float>& dir, float time, float tMax) :
+    RayDifferential::RayDifferential(Point3<float> o, Vec3<float> dir, float time, float tMax) :
         Ray(o, dir, time, tMax)
     {}
 
-    void RayDifferential::scaleDifferential(float s) NOEXCEPT_PRGE
+    void RayDifferential::scaleDifferentional(float s) NOEXCEPT_PRGE
     {
         _rxOrigin = _o + (_rxOrigin - _o) * s;
         _ryOrigin = _o + (_ryOrigin - _o) * s;
-        _rxDirection = _d + (_rxDirection - _d) * s;
-        _ryDirection = _d + (_ryDirection - _d) * s;
+        _rxDirection = _dir + (_rxDirection - _dir) * s;
+        _ryDirection = _dir + (_ryDirection - _dir) * s;
     }
 
 #if DEBUG_PRGE == 1
