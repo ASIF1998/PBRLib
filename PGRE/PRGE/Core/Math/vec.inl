@@ -2,11 +2,14 @@
 
 #include <xmmintrin.h>
 
+#include <cmath>
+
 #if DEBUG_PRGE == 1
 #include <iostream>
 #include <iomanip>
-using namespace std;
 #endif
+
+using namespace std;
 
 namespace PRGE
 {
