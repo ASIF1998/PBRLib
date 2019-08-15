@@ -8,10 +8,21 @@
 
 #include "Transform/transform.hpp"
 
+#include "Core/boundingVolume.hpp"
+
 using namespace PRGE;
 
 int main()
 {
-    Point3<float> p3 {0.1f, 0.5454f, 23.43f};
+    Vec2<float> v1;
+    Vec2<float> v2;
+    BoundingVolume2<float> bbox {v1, v2};
+    BoundingVolume2<float> bboxx {bbox};
+    Point2<float> p;
+    
+    bbox = bboxx;
+    bbox.offset(p);
+    
+    
     return 0;
 }

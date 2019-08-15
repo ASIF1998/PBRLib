@@ -4,6 +4,8 @@
 
 #include <cmath>
 
+#include <limits>
+
 #if DEBUG_PRGE == 1
 #include <iostream>
 #include <iomanip>
@@ -64,6 +66,22 @@ namespace PRGE
             _xy[1] = vec2._xy[1];
 
             return *this;
+        }
+
+        template<typename U>
+        explicit operator Vec2<U> () const
+        {
+            return {static_cast<U>(_xy[0]), static_cast<U>(_xy[1])};
+        }
+
+        inline bool operator == (const Vec2& vec2) const noexcept
+        {
+            return _xy[0] == vec2._xy[0] && _xy[1] == vec2._xy[1];
+        }
+
+        inline bool operator != (const Vec2& vec2) const noexcept
+        {
+            return _xy[0] != vec2._xy[0] || _xy[1] != vec2._xy[1];
         }
 
         inline Vec2 operator + (const Vec2& vec2) const NOEXCEPT_PRGE

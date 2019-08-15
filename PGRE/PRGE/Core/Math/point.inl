@@ -533,7 +533,7 @@ namespace PRGE
             return *this;
         }
 
-        float& operator [] (size_t i) NOEXCEPT_PRGE
+        inline float& operator [] (size_t i) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 3) {

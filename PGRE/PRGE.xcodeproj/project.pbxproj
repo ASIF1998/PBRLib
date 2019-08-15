@@ -133,10 +133,10 @@
 		951518792302E6DB0061C8CC /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				9515187A2302E6DB0061C8CC /* core.h */,
 				9515187B2302E6DB0061C8CC /* Math */,
 				95FEB1812305B3A600DFBEDC /* boundingVolume.inl */,
 				95FEB1822305B3A600DFBEDC /* boundingVolume.hpp */,
+				9515187A2302E6DB0061C8CC /* core.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
