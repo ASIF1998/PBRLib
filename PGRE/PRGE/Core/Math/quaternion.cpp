@@ -30,10 +30,7 @@ namespace PRGE
             NAN_OR_INF_XYZW(quaternion._xyzw[0], quaternion._xyzw[1], quaternion._xyzw[2], quaternion._xyzw[3]);
 #endif
 
-        _xyzw[0] = quaternion._xyzw[0];
-        _xyzw[1] = quaternion._xyzw[1];
-        _xyzw[2] = quaternion._xyzw[2];
-        _xyzw[3] = quaternion._xyzw[3];
+        *reinterpret_cast<__m128*>(_xyzw) = *reinterpret_cast<const __m128*>(quaternion._xyzw);
     }
 
     Quaternion::Quaternion(Quaternion&& quaternion) NOEXCEPT_PRGE
@@ -53,10 +50,7 @@ namespace PRGE
             NAN_OR_INF_XYZW(m[0], m[1], m[2], m[3]);
 #endif
 
-        _xyzw[0] = m[0];
-        _xyzw[1] = m[1];
-        _xyzw[2] = m[2];
-        _xyzw[3] = m[3];
+        *reinterpret_cast<__m128*>(_xyzw) = m;
     }
 
     Quaternion& Quaternion::operator = (const Quaternion& quaternion) NOEXCEPT_PRGE
@@ -65,10 +59,7 @@ namespace PRGE
             NAN_OR_INF_XYZW(quaternion._xyzw[0], quaternion._xyzw[1], quaternion._xyzw[2], quaternion._xyzw[3]);
 #endif
 
-        _xyzw[0] = quaternion._xyzw[0];
-        _xyzw[1] = quaternion._xyzw[1];
-        _xyzw[2] = quaternion._xyzw[2];
-        _xyzw[3] = quaternion._xyzw[3];
+        *reinterpret_cast<__m128*>(_xyzw) = *reinterpret_cast<const __m128*>(quaternion._xyzw);
 
         return *this;
     }

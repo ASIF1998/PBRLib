@@ -374,9 +374,7 @@ namespace PRGE
             NAN_OR_INF_XYZ(point3._xyz[0], point3._xyz[1], point3._xyz[2]);
 #endif
 
-            _xyz[0] = point3._xyz[0];
-            _xyz[1] = point3._xyz[1];
-            _xyz[2] = point3._xyz[2];
+            *reinterpret_cast<__m128*>(_xyz) = *reinterpret_cast<const __m128*>(point3._xyz);
         }
 
         inline Point3(Point3&& point3) NOEXCEPT_PRGE
@@ -396,9 +394,7 @@ namespace PRGE
             NAN_OR_INF_XYZ(point3._xyz[0], point3._xyz[1], point3._xyz[2]);
 #endif
 
-            _xyz[0] = point3._xyz[0];
-            _xyz[1] = point3._xyz[1];
-            _xyz[2] = point3._xyz[2];
+            *reinterpret_cast<__m128*>(_xyz) = *reinterpret_cast<const __m128*>(point3._xyz);
 
             return *this;
         }
@@ -471,11 +467,7 @@ namespace PRGE
             NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
 #endif
 
-            auto res = _mm_add_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(vec3._xyz));
-
-            _xyz[0] = res[0];
-            _xyz[1] = res[1];
-            _xyz[2] = res[2];
+            *reinterpret_cast<__m128*>(_xyz) = _mm_add_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(vec3._xyz));
 
             return *this;
         }
@@ -486,11 +478,7 @@ namespace PRGE
             NAN_OR_INF_XYZ(point3._xyz[0], point3._xyz[1], point3._xyz[2]);
 #endif
 
-            auto res = _mm_sub_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(point3._xyz));
-
-            _xyz[0] = res[0];
-            _xyz[1] = res[1];
-            _xyz[2] = res[2];
+            *reinterpret_cast<__m128*>(_xyz) = _mm_sub_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(point3._xyz));
 
             return *this;
         }
@@ -507,16 +495,14 @@ namespace PRGE
             _xyz[1] = res[1];
             _xyz[2] = res[2];
 
+            *reinterpret_cast<__m128*>(_xyz) = _mm_sub_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(vec3._xyz));
+
             return *this;
         }
 
         inline Point3& operator *= (float s) noexcept
         {
-            auto res = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyz), _mm_set_ps(s, s, s, s));
-
-            _xyz[0] = res[0];
-            _xyz[1] = res[1];
-            _xyz[2] = res[2];
+            *reinterpret_cast<__m128*>(_xyz) = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyz), _mm_set_ps(s, s, s, s));
 
             return *this;
         }
@@ -524,11 +510,7 @@ namespace PRGE
         inline Point3& operator /= (float s) noexcept
         {
             float invS = 1.0f / s;
-            auto res = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyz), _mm_set_ps(invS, invS, invS, invS));
-
-            _xyz[0] = res[0];
-            _xyz[1] = res[1];
-            _xyz[2] = res[2];
+            *reinterpret_cast<__m128*>(_xyz) = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyz), _mm_set_ps(invS, invS, invS, invS));
 
             return *this;
         }
@@ -584,9 +566,7 @@ namespace PRGE
             NAN_OR_INF_XYZ(m[0], m[1], m[2]);
 #endif
 
-            _xyz[0] = m[0];
-            _xyz[1] = m[1];
-            _xyz[2] = m[2];
+            *reinterpret_cast<__m128*>(_xyz) = m;
         }
 
     private:

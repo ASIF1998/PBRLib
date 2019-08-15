@@ -32,9 +32,7 @@ namespace PRGE
             NAN_OR_INF_XYZ(normal._xyz[0], normal._xyz[1], normal._xyz[2]);
 #endif
 
-            _xyz[0] = normal._xyz[0];
-            _xyz[1] = normal._xyz[1];
-            _xyz[2] = normal._xyz[2];
+            *reinterpret_cast<__m128*>(_xyz) = *reinterpret_cast<const __m128*>(normal._xyz);
         }
 
         Normal3f(Normal3f&& normal) NOEXCEPT_PRGE
@@ -55,9 +53,7 @@ namespace PRGE
             NAN_OR_INF_XYZ(normal._xyz[0], normal._xyz[1], normal._xyz[2]);
 #endif
 
-            _xyz[0] = normal._xyz[0];
-            _xyz[1] = normal._xyz[1];
-            _xyz[2] = normal._xyz[2];
+            *reinterpret_cast<__m128*>(_xyz) = *reinterpret_cast<const __m128*>(normal._xyz);
 
             return *this;
         }
@@ -115,11 +111,7 @@ namespace PRGE
             NAN_OR_INF_XYZ(normal._xyz[0], normal._xyz[1], normal._xyz[2]);
 #endif
 
-            auto res = _mm_add_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(normal._xyz));
-
-            _xyz[0] = res[0];
-            _xyz[1] = res[1];
-            _xyz[2] = res[2];
+            *reinterpret_cast<__m128*>(_xyz) = _mm_add_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(normal._xyz));
 
             return *this;
         }
@@ -130,22 +122,14 @@ namespace PRGE
             NAN_OR_INF_XYZ(normal._xyz[0], normal._xyz[1], normal._xyz[2]);
 #endif
 
-            auto res = _mm_sub_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(normal._xyz));
-
-            _xyz[0] = res[0];
-            _xyz[1] = res[1];
-            _xyz[2] = res[2];
+            *reinterpret_cast<__m128*>(_xyz) = _mm_sub_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(normal._xyz));
 
             return *this;
         }
 
         inline Normal3f& operator *= (float s) noexcept
         {
-            auto res = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyz), _mm_set_ps(s, s, s, s));
-
-            _xyz[0] = res[0];
-            _xyz[1] = res[1];
-            _xyz[2] = res[2];
+            *reinterpret_cast<__m128*>(_xyz) = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyz), _mm_set_ps(s, s, s, s));
 
             return *this;
         }
@@ -153,11 +137,7 @@ namespace PRGE
         inline Normal3f& operator /= (float s) noexcept
         {
             float invS = 1.0f / s;
-            auto res = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyz), _mm_set_ps(invS, invS, invS, invS));
-
-            _xyz[0] = res[0];
-            _xyz[1] = res[1];
-            _xyz[2] = res[2];
+            *reinterpret_cast<__m128*>(_xyz) = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyz), _mm_set_ps(invS, invS, invS, invS));
 
             return *this;
         }
@@ -232,9 +212,7 @@ namespace PRGE
             NAN_OR_INF_XYZ(m[0], m[1], m[2]);
 #endif
 
-            _xyz[0] = m[0];
-            _xyz[1] = m[1];
-            _xyz[2] = m[2];
+            *reinterpret_cast<__m128*>(_xyz) = m;
         }
 
         float _xyz[4];
