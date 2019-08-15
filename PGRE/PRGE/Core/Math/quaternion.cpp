@@ -2,6 +2,12 @@
 
 #include <cmath>
 
+#include <algorithm>
+
+#if DEBUG_PRGE == 1
+#include <iomanip>
+#endif
+
 using namespace std;
 
 namespace PRGE
@@ -30,6 +36,17 @@ namespace PRGE
         _xyzw[3] = quaternion._xyzw[3];
     }
 
+    Quaternion::Quaternion(Quaternion&& quaternion) NOEXCEPT_PRGE
+    {
+#if DEBUG_PRGE == 1
+        NAN_OR_INF_XYZW(quaternion._xyzw[0], quaternion._xyzw[1], quaternion._xyzw[2], quaternion._xyzw[3]);
+#endif
+        
+        auto&& q1 = move(quaternion._xyzw);
+        auto&& q2 = move(_xyzw);
+        swap(q1, q2);
+    }
+
     Quaternion::Quaternion(__m128 m) NOEXCEPT_PRGE
     {
 #if DEBUG_PRGE == 1
@@ -52,6 +69,19 @@ namespace PRGE
         _xyzw[1] = quaternion._xyzw[1];
         _xyzw[2] = quaternion._xyzw[2];
         _xyzw[3] = quaternion._xyzw[3];
+
+        return *this;
+    }
+
+    Quaternion& Quaternion::operator = (Quaternion&& quaternion) NOEXCEPT_PRGE
+    {
+#if DEBUG_PRGE == 1
+        NAN_OR_INF_XYZW(quaternion._xyzw[0], quaternion._xyzw[1], quaternion._xyzw[2], quaternion._xyzw[3]);
+#endif
+
+        auto&& q1 = move(quaternion._xyzw);
+        auto&& q2 = move(_xyzw);
+        swap(q1, q2);
 
         return *this;
     }
@@ -122,6 +152,16 @@ namespace PRGE
         *reinterpret_cast<__m128*>(_xyzw) = _mm_mul_ps(*reinterpret_cast<const __m128*>(_xyzw), _mm_set_ps(invS, invS, invS, invS));
         return *this;
     }
+
+#if DEBUG_PRGE == 1
+    ostream& operator << (ostream& os, const Quaternion& quaternion)
+    {
+        int w = static_cast<int>(os.width());
+        w = !w ? 2 : w;
+        os << quaternion._xyzw[0] << setw(w) << quaternion._xyzw[1] << setw(w) << quaternion._xyzw[2] << setw(w) << quaternion._xyzw[3];
+        return os;
+    }
+#endif
 
     float dot(const Quaternion& q1, const Quaternion& q2) NOEXCEPT_PRGE
     {

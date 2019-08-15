@@ -4,6 +4,10 @@
 
 #include <cmath>
 
+#if DEBUG_PRGE == 1
+#include <iomanip>
+#endif
+
 using namespace std;
 
 #define NAN_OR_INF_MATRIX4X4(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) \
@@ -75,6 +79,21 @@ namespace PRGE
         swap(m1, m2);
     }
 
+    Matrix4x4f::Matrix4x4f(const __m128 m[4]) NOEXCEPT_PRGE
+    {
+#if DEBUG_PRGE == 1
+        NAN_OR_INF_MATRIX4X4(m[0][0], m[0][1], m[0][2], m[0][3],
+                             m[1][0], m[1][1], m[1][2], m[1][3],
+                             m[2][0], m[2][1], m[2][2], m[2][3],
+                             m[3][0], m[3][1], m[3][2], m[3][3]);
+#endif
+
+        *reinterpret_cast<__m128*>(_m[0]) = m[0];
+        *reinterpret_cast<__m128*>(_m[1]) = m[1];
+        *reinterpret_cast<__m128*>(_m[2]) = m[2];
+        *reinterpret_cast<__m128*>(_m[3]) = m[3];
+    }
+
     Matrix4x4f& Matrix4x4f::operator = (const Matrix4x4f& matrix4x4) NOEXCEPT_PRGE
     {
 #if DEBUG_PRGE == 1
@@ -106,21 +125,6 @@ namespace PRGE
         swap(m1, m2);
 
         return *this;
-    }
-
-    Matrix4x4f::Matrix4x4f(const __m128 m[4]) NOEXCEPT_PRGE
-    {
-#if DEBUG_PRGE == 1
-        NAN_OR_INF_MATRIX4X4(m[0][0], m[0][1], m[0][2], m[0][3],
-                             m[1][0], m[1][1], m[1][2], m[1][3],
-                             m[2][0], m[2][1], m[2][2], m[2][3],
-                             m[3][0], m[3][1], m[3][2], m[3][3]);
-#endif
-
-        *reinterpret_cast<__m128*>(_m[0]) = m[0];
-        *reinterpret_cast<__m128*>(_m[1]) = m[1];
-        *reinterpret_cast<__m128*>(_m[2]) = m[2];
-        *reinterpret_cast<__m128*>(_m[3]) = m[3];
     }
 
     bool Matrix4x4f::operator == (const Matrix4x4f& matrix4x4) const noexcept
@@ -200,11 +204,12 @@ namespace PRGE
     Matrix4x4f Matrix4x4f::operator * (float s) const noexcept
     {
         __m128 out[4];
+        __m128 vs = _mm_set_ps(s, s, s, s);
 
-        out[0] = _mm_mul_ps(*reinterpret_cast<const __m128*>(_m[0]), _mm_set_ps(s, s, s, s));
-        out[1] = _mm_mul_ps(*reinterpret_cast<const __m128*>(_m[1]), _mm_set_ps(s, s, s, s));
-        out[2] = _mm_mul_ps(*reinterpret_cast<const __m128*>(_m[2]), _mm_set_ps(s, s, s, s));
-        out[3] = _mm_mul_ps(*reinterpret_cast<const __m128*>(_m[3]), _mm_set_ps(s, s, s, s));
+        out[0] = _mm_mul_ps(*reinterpret_cast<const __m128*>(_m[0]), vs);
+        out[1] = _mm_mul_ps(*reinterpret_cast<const __m128*>(_m[1]), vs);
+        out[2] = _mm_mul_ps(*reinterpret_cast<const __m128*>(_m[2]), vs);
+        out[3] = _mm_mul_ps(*reinterpret_cast<const __m128*>(_m[3]), vs);
 
         return {out};
     }
@@ -341,11 +346,14 @@ namespace PRGE
             auto m42 = _mm_mul_ps(e5, _mm_setr_ps(d4[1], d4[3], d4[3], d5[0]));
             auto m43 = _mm_mul_ps(e6, _mm_setr_ps(d4[2], d5[0], d5[1], d5[1]));
 
+            auto h1 = _mm_setr_ps(1.0f, -1.0f, 1.0f, -1.0f);
+            auto h2 = _mm_setr_ps(-1.0f, 1.0f, -1.0f, 1.0f);
+
             __m128 out[4] {
-                _mm_mul_ps(_mm_add_ps(_mm_sub_ps(m11, m12), m13), _mm_setr_ps(1.0f, -1.0f, 1.0f, -1.0f)),
-                _mm_mul_ps(_mm_add_ps(_mm_sub_ps(m21, m22), m23), _mm_setr_ps(-1.0f, 1.0f, -1.0f, 1.0f)),
-                _mm_mul_ps(_mm_add_ps(_mm_sub_ps(m31, m32), m33), _mm_setr_ps(1.0f, -1.0f, 1.0f, -1.0f)),
-                _mm_mul_ps(_mm_add_ps(_mm_sub_ps(m41, m42), m43), _mm_setr_ps(-1.0f, 1.0f, -1.0f, 1.0f))
+                _mm_mul_ps(_mm_add_ps(_mm_sub_ps(m11, m12), m13), h1),
+                _mm_mul_ps(_mm_add_ps(_mm_sub_ps(m21, m22), m23), h2),
+                _mm_mul_ps(_mm_add_ps(_mm_sub_ps(m31, m32), m33), h1),
+                _mm_mul_ps(_mm_add_ps(_mm_sub_ps(m41, m42), m43), h2)
             };
 
             return {out};
@@ -357,10 +365,12 @@ namespace PRGE
 #if DEBUG_PRGE == 1
         ostream& operator << (ostream& os, const Matrix4x4f& matrix4x4)
         {
-            cout << matrix4x4._m[0][0] << ' ' << matrix4x4._m[0][1] << ' ' << matrix4x4._m[0][2] <<  ' ' << matrix4x4._m[0][3] << endl
-                 << matrix4x4._m[1][0] << ' ' << matrix4x4._m[1][1] << ' ' << matrix4x4._m[1][2] <<  ' ' << matrix4x4._m[1][3] << endl
-                 << matrix4x4._m[2][0] << ' ' << matrix4x4._m[2][1] << ' ' << matrix4x4._m[2][2] <<  ' ' << matrix4x4._m[2][3] << endl
-                 << matrix4x4._m[3][0] << ' ' << matrix4x4._m[3][1] << ' ' << matrix4x4._m[3][2] <<  ' ' << matrix4x4._m[3][3] << endl;
+            int w = static_cast<int>(os.width());
+            w = !w ? 2 : w;
+            cout << matrix4x4._m[0][0] << setw(w) << matrix4x4._m[0][1] << setw(w) << matrix4x4._m[0][2] <<  setw(w) << matrix4x4._m[0][3] << endl
+                 << matrix4x4._m[1][0] << setw(w) << matrix4x4._m[1][1] << setw(w) << matrix4x4._m[1][2] <<  setw(w) << matrix4x4._m[1][3] << endl
+                 << matrix4x4._m[2][0] << setw(w) << matrix4x4._m[2][1] << setw(w) << matrix4x4._m[2][2] <<  setw(w) << matrix4x4._m[2][3] << endl
+                 << matrix4x4._m[3][0] << setw(w) << matrix4x4._m[3][1] << setw(w) << matrix4x4._m[3][2] <<  setw(w) << matrix4x4._m[3][3] << endl;
 
             return os;
         }

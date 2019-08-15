@@ -39,8 +39,9 @@ namespace PRGE
         Point3<float> operator () (const Point3<float>& point3) const NOEXCEPT_PRGE;
         Normal3f operator () (const Normal3f& normal) const NOEXCEPT_PRGE;
 
-        /// TODO: дописать оператор () для Ray, RayDifferential, BBox, SurfaceInteraction
+        /// TODO: дописать оператор () для BoundingVolume, SurfaceInteraction
         Ray operator () (const Ray& ray) const NOEXCEPT_PRGE;
+        RayDifferential operator () (const RayDifferential& rayDifferential) NOEXCEPT_PRGE;
 
     private:
         Matrix4x4f _m;

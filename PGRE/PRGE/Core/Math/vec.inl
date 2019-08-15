@@ -84,7 +84,7 @@ namespace PRGE
             return {_xy[0] - vec2._xy[0], _xy[1] - vec2._xy[1]};
         }
 
-        Vec2 operator * (const Vec2& vec2) const NOEXCEPT_PRGE
+        inline Vec2 operator * (const Vec2& vec2) const NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             NAN_OR_INF_XY(vec2._xy[0], vec2._xy[1]);
@@ -93,12 +93,12 @@ namespace PRGE
             return {_xy[0] * vec2._xy[0], _xy[1] * vec2._xy[1]};
         }
 
-        Vec2 operator * (Type s) const noexcept
+        inline Vec2 operator * (Type s) const noexcept
         {
             return {_xy[0] * s, _xy[1] * s};
         }
 
-        Vec2 operator += (const Vec2& vec2) NOEXCEPT_PRGE
+        inline Vec2 operator += (const Vec2& vec2) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             NAN_OR_INF_XY(vec2._xy[0], vec2._xy[1]);
@@ -110,7 +110,7 @@ namespace PRGE
             return *this;
         }
 
-        Vec2 operator -= (const Vec2& vec2) NOEXCEPT_PRGE
+        inline Vec2 operator -= (const Vec2& vec2) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             NAN_OR_INF_XY(vec2._xy[0], vec2._xy[1]);
@@ -122,7 +122,7 @@ namespace PRGE
             return *this;
         }
 
-        Vec2 operator *= (const Vec2& vec2) NOEXCEPT_PRGE
+        inline Vec2 operator *= (const Vec2& vec2) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             NAN_OR_INF_XY(vec2._xy[0], vec2._xy[1]);
@@ -134,14 +134,14 @@ namespace PRGE
             return *this;
         }
 
-        Vec2 operator *= (Type s) noexcept
-		{
+        inline Vec2 operator *= (Type s) noexcept
+        {
             _xy[0] *= s;
             _xy[1] *= s;
             return *this;
         }
 
-        Type& operator [] (size_t i) NOEXCEPT_PRGE
+        inline Type& operator [] (size_t i) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 2) {
@@ -152,7 +152,7 @@ namespace PRGE
             return _xy[i];
         }
 
-        Type operator [] (size_t i) const NOEXCEPT_PRGE
+        inline Type operator [] (size_t i) const NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 2) {
@@ -285,7 +285,7 @@ namespace PRGE
             return *this;
         }
 
-        Type& operator [] (size_t i) NOEXCEPT_PRGE
+        inline Type& operator [] (size_t i) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 3) {
@@ -296,7 +296,7 @@ namespace PRGE
             return _xyz[i];
         }
 
-        Type operator [] (size_t i) const NOEXCEPT_PRGE
+        inline Type operator [] (size_t i) const NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 3) {
@@ -400,7 +400,18 @@ namespace PRGE
             _xyz[2] = vec3._xyz[2];
         }
 
-        inline Vec3& operator = (const Vec3& vec3) NOEXCEPT_PRGE
+        inline Vec3(Vec3&& vec3) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            auto&& v1 = move(vec3._xyz);
+            auto&& v2 = move(_xyz);
+            swap(v1, v2);
+        }
+
+        Vec3& operator = (const Vec3& vec3) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
@@ -409,6 +420,19 @@ namespace PRGE
             _xyz[0] = vec3._xyz[0];
             _xyz[0] = vec3._xyz[1];
             _xyz[2] = vec3._xyz[2];
+
+            return *this;
+        }
+
+        inline Vec3& operator = (Vec3&& vec3) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            auto&& v1 = move(vec3._xyz);
+            auto&& v2 = move(_xyz);
+            swap(v1, v2);
 
             return *this;
         }
@@ -477,7 +501,7 @@ namespace PRGE
             return *this;
         }
 
-        float& operator [] (size_t i) NOEXCEPT_PRGE
+        inline float& operator [] (size_t i) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 3) {
@@ -488,7 +512,7 @@ namespace PRGE
             return _xyz[i];
         }
 
-        float operator [] (size_t i) const NOEXCEPT_PRGE
+        inline float operator [] (size_t i) const NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 3) {

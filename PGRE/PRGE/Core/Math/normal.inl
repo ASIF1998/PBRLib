@@ -2,7 +2,9 @@
 
 #include <cmath>
 
+#if DEBUG_PRGE == 1
 #include <iostream>
+#endif
 
 using namespace std;
 
@@ -35,6 +37,18 @@ namespace PRGE
             _xyz[2] = normal._xyz[2];
         }
 
+        Normal3f(Normal3f&& normal) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(normal._xyz[0], normal._xyz[1], normal._xyz[2]);
+#endif
+
+            auto&& n1 = move(normal._xyz);
+            auto&& n2 = move(_xyz);
+            swap(n1, n2);
+        }
+
+
         inline Normal3f& operator = (const Normal3f& normal) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
@@ -44,6 +58,19 @@ namespace PRGE
             _xyz[0] = normal._xyz[0];
             _xyz[1] = normal._xyz[1];
             _xyz[2] = normal._xyz[2];
+
+            return *this;
+        }
+
+        Normal3f& operator = (Normal3f&& normal) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(normal._xyz[0], normal._xyz[1], normal._xyz[2]);
+#endif
+            
+            auto&& n1 = move(normal._xyz);
+            auto&& n2 = move(_xyz);
+            swap(n1, n2);
 
             return *this;
         }

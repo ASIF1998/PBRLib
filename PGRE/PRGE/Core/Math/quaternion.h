@@ -5,6 +5,11 @@
 
 #include <xmmintrin.h>
 
+#if DEBUG_PRGE == 1
+#include <iostream>
+using namespace std;
+#endif
+
 namespace PRGE
 {
     struct Quaternion
@@ -12,8 +17,10 @@ namespace PRGE
     public:
         inline Quaternion(float x = 0.f, float y = 0.f, float z = 0.f, float w = 0.f) NOEXCEPT_PRGE;
         inline Quaternion(const Quaternion& quaternion) NOEXCEPT_PRGE;
+        inline Quaternion(Quaternion&& quaternion) NOEXCEPT_PRGE;
 
-        Quaternion& operator = (const Quaternion& quaternion) NOEXCEPT_PRGE;
+        inline Quaternion& operator = (const Quaternion& quaternion) NOEXCEPT_PRGE;
+        inline Quaternion& operator = (Quaternion&& quaternion) NOEXCEPT_PRGE;
         inline Quaternion operator + (const Quaternion& quaternion) const NOEXCEPT_PRGE;
         inline Quaternion operator - (const Quaternion& quaternion) const NOEXCEPT_PRGE;
         inline Quaternion operator - () const noexcept;
@@ -23,6 +30,9 @@ namespace PRGE
         inline Quaternion& operator -= (const Quaternion& quaternion) NOEXCEPT_PRGE;
         inline Quaternion& operator *= (float s) noexcept;
         inline Quaternion& operator /= (float s);
+#if DEBUG_PRGE == 1
+        friend ostream& operator << (ostream& os, const Quaternion& quaternion);
+#endif
 
         /**
          * TODO:

@@ -112,6 +112,24 @@ namespace PRGE
 
     Ray Transform::operator () (const Ray& ray) const NOEXCEPT_PRGE
     {
-        
+        auto o = this->operator () (ray._o);
+        auto dir = this->operator () (ray._dir);
+
+        return {o, dir, ray._time, ray._tMax};
+    }
+
+    RayDifferential Transform::operator () (const RayDifferential& rayDifferential) NOEXCEPT_PRGE
+    {
+        auto o = this->operator()(rayDifferential._o);
+        auto dir = this->operator()(rayDifferential._dir);
+        RayDifferential outRayDifferential{o, dir, rayDifferential._time, rayDifferential._tMax};
+
+        outRayDifferential._hasDifferentials = rayDifferential._hasDifferentials;
+        outRayDifferential._rxOrigin = this->operator () (rayDifferential._rxOrigin);
+        outRayDifferential._ryOrigin = this->operator () (rayDifferential._ryOrigin);
+        outRayDifferential._rxDirection = this->operator () (rayDifferential._rxDirection);
+        outRayDifferential._ryDirection = this->operator () (rayDifferential._ryDirection);
+
+        return outRayDifferential;
     }
 }

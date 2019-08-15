@@ -19,6 +19,20 @@ namespace PRGE
         _tMax{numeric_limits<float>::infinity()}
     {}
 
+    Ray::Ray(const Ray& ray) NOEXCEPT_PRGE :
+        _o{ray._o},
+        _dir{ray._dir},
+        _time{ray._time},
+        _tMax{ray._tMax}
+    {}
+
+    Ray::Ray(Ray&& ray) NOEXCEPT_PRGE :
+        _o{move(ray._o)},
+        _dir{move(ray._dir)},
+        _time{ray._time},
+        _tMax{ray._tMax}
+    {}
+
     Ray::Ray(const Point3<float>& o, Vec3<float>& dir, float time, float tMax) NOEXCEPT_PRGE :
         _o{0},
         _dir{dir},
@@ -48,7 +62,23 @@ namespace PRGE
         _hasDifferentials{false}
     {}
 
-    RayDifferential::RayDifferential(Point3<float> o, Vec3<float> dir, float time, float tMax) :
+    RayDifferential::RayDifferential(const RayDifferential& rayDifferential) NOEXCEPT_PRGE :
+        Ray(rayDifferential),
+        _rxOrigin(rayDifferential._rxOrigin),
+        _ryOrigin(rayDifferential._ryOrigin),
+        _rxDirection(rayDifferential._rxDirection),
+        _ryDirection(rayDifferential._ryDirection)
+    {}
+
+    RayDifferential::RayDifferential(RayDifferential&& rayDifferential) NOEXCEPT_PRGE :
+        Ray(move(rayDifferential)),
+        _rxOrigin(move(rayDifferential._rxOrigin)),
+        _ryOrigin(move(rayDifferential._ryOrigin)),
+        _rxDirection(move(rayDifferential._rxDirection)),
+        _ryDirection(move(rayDifferential._ryDirection))
+    {}
+
+    RayDifferential::RayDifferential(Point3<float>& o, Vec3<float>& dir, float time, float tMax) :
         Ray(o, dir, time, tMax)
     {}
 

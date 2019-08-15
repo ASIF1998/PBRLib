@@ -23,10 +23,12 @@ namespace PRGE
 {
     class Ray
     {
+        friend class Transform;
+
     public:
         Ray() noexcept;
-        Ray(const Ray&) = delete;
-        Ray(Ray&&) = delete;
+        inline Ray(const Ray& ray) NOEXCEPT_PRGE;
+        Ray(Ray&&) NOEXCEPT_PRGE;
 
         /**
          * Конструктор.
@@ -64,10 +66,12 @@ namespace PRGE
     class RayDifferential :
         public Ray
     {
+        friend class Transform;
+
     public:
         RayDifferential();
-        RayDifferential(const RayDifferential&) = delete;
-        RayDifferential(RayDifferential&&) = delete;
+        RayDifferential(const RayDifferential& rayDifferential) NOEXCEPT_PRGE;
+        RayDifferential(RayDifferential&& rayDifferential) NOEXCEPT_PRGE;
 
         /**
          * Конструктор.
@@ -77,7 +81,7 @@ namespace PRGE
          * @param time время
          * @param tMax максимальное время
         */
-        RayDifferential(Point3<float> o, Vec3<float> dir, float time = 0.0f, float tMax = numeric_limits<float>::infinity());
+        RayDifferential(Point3<float>& o, Vec3<float>& dir, float time = 0.0f, float tMax = numeric_limits<float>::infinity());
 
         RayDifferential& operator = (const RayDifferential&) = delete;
         RayDifferential& operator = (RayDifferential&&) = delete;

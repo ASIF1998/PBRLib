@@ -84,13 +84,13 @@ namespace PRGE
             return {_xy[0] * s, _xy[1] * s};
         }
 
-        Point2 operator / (Type s) const
+        inline Point2 operator / (Type s) const
         {
             float invS = 1.0f / s;
             return {_xy[0] * invS, _xy[1] * invS};
         }
 
-        Point2& operator += (const Vec2<Type>& vec2) NOEXCEPT_PRGE
+        inline Point2& operator += (const Vec2<Type>& vec2) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             NAN_OR_INF_XY(vec2._xy[0], vec2._xy[1]);
@@ -103,7 +103,7 @@ namespace PRGE
         }
 
         template<typename T, template<typename> class U>
-        Point2& operator -= (const U<T>& p) NOEXCEPT_PRGE
+        inline Point2& operator -= (const U<T>& p) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             NAN_OR_INF_XY(p._xy[0], p._xy[1]);
@@ -115,7 +115,7 @@ namespace PRGE
             return *this;
         }
 
-        Point2& operator *= (Type s)
+        inline Point2& operator *= (Type s)
         {
             _xy[0] *= s;
             _xy[1] *= s;
@@ -123,7 +123,7 @@ namespace PRGE
             return *this;
         }
 
-        Point2& operator /= (Type s)
+        inline Point2& operator /= (Type s)
         {
             float invS = 1.0f / s;
 
@@ -133,7 +133,7 @@ namespace PRGE
             return *this;
         }
 
-        Type& operator [] (size_t i) NOEXCEPT_PRGE
+        inline Type& operator [] (size_t i) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 2) {
@@ -144,7 +144,7 @@ namespace PRGE
             return _xy[i];
         }
 
-        Type operator [] (size_t i) const NOEXCEPT_PRGE
+        inline Type operator [] (size_t i) const NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 2) {
@@ -257,7 +257,7 @@ namespace PRGE
             return {_xyz[0] * invS, _xyz[1] * invS, _xyz[2] * invS};
         }
 
-        Point3& operator += (const Vec3<Type>& vec3) NOEXCEPT_PRGE
+        inline Point3& operator += (const Vec3<Type>& vec3) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
@@ -271,7 +271,7 @@ namespace PRGE
         }
 
         template<typename T, template<typename> class U>
-        Point3& operator -= (const U<T>& p) NOEXCEPT_PRGE
+        inline Point3& operator -= (const U<T>& p) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             NAN_OR_INF_XYZ(p._xyz[0], p._xyz[1], p._xyz[2]);
@@ -284,7 +284,7 @@ namespace PRGE
             return *this;
         }
 
-        Point3& operator *= (Type s)
+        inline Point3& operator *= (Type s)
         {
             _xyz[0] *= s;
             _xyz[1] *= s;
@@ -293,7 +293,7 @@ namespace PRGE
             return *this;
         }
 
-        Point3& operator /= (Type s)
+        inline Point3& operator /= (Type s)
         {
             float invS = 1.0f / s;
 
@@ -304,7 +304,7 @@ namespace PRGE
             return *this;
         }
 
-        Type& operator [] (size_t i) NOEXCEPT_PRGE
+        inline Type& operator [] (size_t i) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 3) {
@@ -315,7 +315,7 @@ namespace PRGE
             return _xyz[i];
         }
 
-        Type operator [] (size_t i) const NOEXCEPT_PRGE
+        inline Type operator [] (size_t i) const NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 3) {
@@ -356,7 +356,7 @@ namespace PRGE
         friend class Transform;
 
     public:
-        Point3(float x = 0.0f, float y = 0.0f, float z = 0.0f) NOEXCEPT_PRGE
+        inline Point3(float x = 0.0f, float y = 0.0f, float z = 0.0f) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             NAN_OR_INF_XYZ(x, y, z);
@@ -379,6 +379,17 @@ namespace PRGE
             _xyz[2] = point3._xyz[2];
         }
 
+        inline Point3(Point3&& point3) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(point3._xyz[0], point3._xyz[1], point3._xyz[2]);
+#endif
+
+            auto&& p1 = move(point3._xyz);
+            auto&& p2 = move(_xyz);
+            swap(p1, p2);
+        }
+
         inline Point3& operator = (const Point3& point3) NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
@@ -388,6 +399,19 @@ namespace PRGE
             _xyz[0] = point3._xyz[0];
             _xyz[1] = point3._xyz[1];
             _xyz[2] = point3._xyz[2];
+
+            return *this;
+        }
+
+        inline Point3& operator = (Point3&& point3) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(point3._xyz[0], point3._xyz[1], point3._xyz[2]);
+#endif
+
+            auto&& p1 = move(point3._xyz);
+            auto&& p2 = move(_xyz);
+            swap(p1, p2);
 
             return *this;
         }
@@ -520,7 +544,7 @@ namespace PRGE
             return _xyz[i];
         }
 
-        float operator [] (size_t i) const NOEXCEPT_PRGE
+        inline float operator [] (size_t i) const NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             if (i > 3) {
