@@ -1,4 +1,4 @@
-#include "math.h"
+#include "math.hpp"
 
 #include <xmmintrin.h>
 
@@ -189,6 +189,17 @@ namespace PRGE
             return os;
         }
 #endif
+
+        friend Vec2 normalize(const Vec2& vec2)
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XY(vec2._xy[0], vec2._xy[1]);
+#endif
+
+            auto len = sqrt(vec2._xy[0] * vec2._xy[0] + vec2._xy[1] * vec2._xy[1]);
+
+            return {vec2._xy[0] / len, vec2._xy[1] / len};
+        }
 
     private:
         Type _xy[2];
@@ -381,6 +392,16 @@ namespace PRGE
                     v1._xyz[0] * v2._xyz[1] - v1._xyz[1] * v2._xyz[0]};
         }
 
+        friend inline Vec3 normalize(const Vec3& vec3)
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            auto len = sqrt(vec3._xyz[0] * vec3._xyz[0] + vec3._xyz[1] * vec3._xyz[1] + vec3._xyz[2] * vec3._xyz[2]);
+            return {vec3._xyz[0] / len, vec3._xyz[1] / len, vec3._xyz[2] / len};
+        }
+
     private:
         Type _xyz[3];
     };
@@ -393,6 +414,7 @@ namespace PRGE
     {
         friend class Point3<float>;
         friend class Transform;
+        friend class Normal3f;
 
     public:
         inline Vec3(float x = 0.0f, float y = 0.0f, float z = 0.0f) NOEXCEPT_PRGE
@@ -584,6 +606,18 @@ namespace PRGE
             auto r2 = _mm_mul_ps(_mm_set_ps(v1._xyz[2], v1._xyz[0], v1._xyz[1], 0.0f), _mm_set_ps(v2._xyz[1], v2._xyz[2], v2._xyz[0], 0.0f));
 
             return _mm_sub_ps(r1, r2);
+        }
+
+        friend inline Vec3 normalize(const Vec3& vec3)
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            auto m = _mm_mul_ps(*reinterpret_cast<const __m128*>(vec3._xyz), *reinterpret_cast<const __m128*>(vec3._xyz));
+            float invLen = 1.0f / sqrt(m[0] + m[1] + m[2]);
+
+            return {vec3._xyz[0] * invLen, vec3._xyz[1] * invLen, vec3._xyz[2] * invLen};
         }
 
     private:

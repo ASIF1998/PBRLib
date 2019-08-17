@@ -14,7 +14,7 @@
 #include "../Core/Math/point.h"
 #include "../Core/Math/normal.h"
 
-#include "../Physics/ray.hpp"
+#include "../CollisionAndPhysics/ray.hpp"
 
 #include "../Core/core.h"
 

@@ -1,7 +1,7 @@
 #ifndef QUATERNION_H
 #define QUATERNION_H
 
-#include "math.h"
+#include "math.hpp"
 
 #include <xmmintrin.h>
 

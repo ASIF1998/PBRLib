@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "vec.h"
+
 #if DEBUG_PRGE == 1
 #include <iostream>
 #endif
@@ -24,6 +26,15 @@ namespace PRGE
             _xyz[1] = y;
             _xyz[2] = z;
             _xyz[3] = 0.f;
+        }
+
+        inline Normal3f(const Vec3<float>& vec3) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(vec3._xyz[0], vec3._xyz[1], vec3._xyz[2]);
+#endif
+
+            *reinterpret_cast<__m128*>(_xyz) = *reinterpret_cast<const __m128*>(vec3._xyz);
         }
 
         inline Normal3f(const Normal3f& normal) NOEXCEPT_PRGE
@@ -213,6 +224,25 @@ namespace PRGE
 #endif
 
             *reinterpret_cast<__m128*>(_xyz) = m;
+        }
+
+        /**
+         * Функция осуществляющая скалярное произведение.
+         *
+         * @param n1 первый вектор
+         * @param n2 второй вектор
+         * @return скалярное произведение между векторами v1 и v2
+         */
+        friend float dot(const Normal3f& n1, const Normal3f& n2) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(n1._xyz[0], n1._xyz[1], n1._xyz[2]);
+            NAN_OR_INF_XYZ(n2._xyz[0], n2._xyz[1], n2._xyz[2]);
+#endif
+
+            auto r = _mm_mul_ps(*reinterpret_cast<const __m128*>(n1._xyz), *reinterpret_cast<const __m128*>(n2._xyz));
+
+            return r[0] + r[1] + r[2];
         }
 
         float _xyz[4];
