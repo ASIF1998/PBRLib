@@ -7,3 +7,23 @@
 //
 
 #include "shape.hpp"
+
+namespace PRGE
+{
+    IShape::IShape(const Transform& objectToWorld, const Transform& worldToObject, bool reverseOrientation, bool transformSwapsHandednes) NOEXCEPT_PRGE :
+        objectToWorld{objectToWorld},
+        worldToObject{worldToObject},
+        reverseOrientation{reverseOrientation},
+        transformSwapsHandednes{transformSwapsHandednes}
+    {}
+
+    Interaction IShape::sample(const Interaction& interaction, const Point2<float>& uv) const
+    {
+        return sample(uv);
+    }
+
+    float IShape::pdf(const Interaction& interaction) const
+    {
+        return 1.0f / arena()l
+    }
+}
