@@ -4,6 +4,9 @@
 
 namespace PRGE
 {
+    template<typename>
+    class BoundingVolume3;
+
     /**
      * Класс описывающий двумерную точку.
     */
@@ -213,6 +216,8 @@ namespace PRGE
             _xyz[0] = point3._xyz[0];
             _xyz[1] = point3._xyz[1];
             _xyz[2] = point3._xyz[2];
+            
+            return *this;
         }
 
         template<typename U>
@@ -236,14 +241,17 @@ namespace PRGE
         }
 
         template<template<typename> class U>
-        inline auto operator - (const U<Type>& p) const NOEXCEPT_PRGE
-            -> decltype(is_same<U<Type>, Vec3<Type>>::value ? Point3<Type>{} : Vec3<Type>{})
+        auto operator - (const U<Type>& p) const NOEXCEPT_PRGE
         {
 #if DEBUG_PRGE == 1
             NAN_OR_INF_XYZ(p._xyz[0], p._xyz[1], p._xyz[2]);
 #endif
-
-            return {_xyz[0] - p._xyz[0], _xyz[1] - p._xyz[1], _xyz[2] - p._xyz[2]};
+            
+            if constexpr (is_same_v<U<Type>, Vec3<Type>>) {
+                return Point3<Type> {_xyz[0] - p._xyz[0], _xyz[1] - p._xyz[1], _xyz[2] - p._xyz[2]};
+            } else {
+                return Vec3<Type> {_xyz[0] - p._xyz[0], _xyz[1] - p._xyz[1], _xyz[2] - p._xyz[2]};
+            }
         }
 
         inline Point3 operator * (Type s) const noexcept
@@ -345,6 +353,8 @@ namespace PRGE
         {
             return _xyz[0] != p._xyz[0] || _xyz[1] != p._xyz[1] || _xyz[2] != p._xyz[2];
         }
+
+        friend bool overlabs(const BoundingVolume3<Type>& b1, const BoundingVolume3<Type>& b2);
 
     private:
         Type _xyz[3];
@@ -558,6 +568,8 @@ namespace PRGE
             auto res = _mm_cmpneq_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(point3._xyz));
             return res[0] || res[1] || res[2];
         }
+
+        friend bool overlabs(const BoundingVolume3<float>& b1, const BoundingVolume3<float>& b2);
 
     private:
         inline Point3(__m128 m) NOEXCEPT_PRGE

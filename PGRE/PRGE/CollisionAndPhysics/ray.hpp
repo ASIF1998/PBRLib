@@ -21,9 +21,13 @@ using namespace std;
 
 namespace PRGE
 {
+    template<typename>
+    class BoundingVolume3;
+
     class Ray
     {
         friend class Transform;
+        friend class BoundingVolume3<float>;
 
     public:
         Ray() noexcept;

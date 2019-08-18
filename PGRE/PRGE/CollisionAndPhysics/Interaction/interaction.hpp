@@ -37,7 +37,7 @@ namespace PRGE
         Interaction(const Point3<float>& inp, const Vec3<float>& inw0, const Normal3f& inn, float intime) NOEXCEPT_PRGE;
 
         inline Interaction(const Interaction& interaction) NOEXCEPT_PRGE;
-        inline Interaction(Interaction&& interaction) NOEXCEPT_PRGE;
+        Interaction(Interaction&& interaction) NOEXCEPT_PRGE;
 
         inline Interaction& operator = (const Interaction& interaction) NOEXCEPT_PRGE;
         inline Interaction& operator = (Interaction&& interaction) NOEXCEPT_PRGE;

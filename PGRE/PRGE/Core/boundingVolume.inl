@@ -11,6 +11,8 @@
 
 #include "core.h"
 
+#include "../CollisionAndPhysics/ray.hpp"
+
 #include <limits>
 
 using namespace std;
@@ -333,6 +335,54 @@ namespace PRGE
         }
 
         /// TODO: написать методы intersectP, overlabs, inside, insideWithoutUpperLimit, expand, boxSphere
+
+        friend bool intersect(const BoundingVolume3& boundingVolume3, const Ray& ray, float *t1, float* t2)
+        {
+            Vec3<float> invDir {1.0f / ray._dir[0], 1.0f / ray._dir[1], 1.0f / ray._dir[2]};
+            auto tNear = (boundingVolume3._pMin - ray._o) * invDir;
+            auto tFar = (boundingVolume3._pMax - ray._o) * invDir;
+
+            if (tNear[0] > tFar[0]) {
+                swap(tNear[0], tFar[0]);
+            }
+
+            if (tNear[1] > tFar[1]) {
+                swap(tNear[1], tFar[1]);
+            }
+
+            if (tNear[2] > tFar[2]) {
+                swap(tNear[2], tFar[2]);
+            }
+
+            if (t1) {
+                *t1 = max(tNear[0], max(tNear[1], tNear[2]));
+            }
+
+            if (t2) {
+                *t2 = min(tFar[0], min(tFar[1], tFar[2]));
+            }
+
+            return *t1 < *t2;
+        }
+
+        friend bool overlabs(const BoundingVolume3& b1, const BoundingVolume3& b2)
+        {
+            if constexpr (is_same_v<Type, float>) {
+                // b1._pMax[0] >= b2._pMin[0]  |  b1._pMax[1] >= b2._pMin[1]  |  b1._pMax[2] >= b2._pMin[2]
+                auto r1 = _mm_cmpge_ps(*reinterpret_cast<const __m128*>(b1._pMax._xyz), *reinterpret_cast<const __m128*>(b2._pMin._xyz));
+
+                // b1._pMin[0] <= b2._pMax[0]  |  b1._pMin[1] <= b2._pMax[1]  |  b1._pMin[2] <= b2._pMax[2]
+                auto r2 = _mm_cmple_ps(*reinterpret_cast<const __m128*>(b1._pMin._xyz), *reinterpret_cast<const __m128*>(b2._pMax._xyz));
+
+                return r1[0] && r1[1] && r1[2] && r2[0] && r2[1] && r2[2];
+            } else {
+                bool x = (b1._pMax[0] >= b2._pMin[0]) && (b1._pMin[0] <= b2._pMax[0]);
+                bool y = (b1._pMax[1] >= b2._pMin[1]) && (b1._pMin[1] <= b2._pMax[1]);
+                bool z = (b1._pMax[2] >= b2._pMin[2]) && (b1._pMin[2] <= b2._pMax[2]);
+
+                return (x && y && z);
+            }
+        }
 
     private:
         Point3<Type> _pMin;

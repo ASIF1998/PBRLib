@@ -53,6 +53,10 @@ int main()
 
     
     SurfaceInteraction si;
+    BoundingVolume3<float> b1;
+    BoundingVolume3<float> b2;
+    
+    overlabs(b1, b2);
     
     return 0;
 }
