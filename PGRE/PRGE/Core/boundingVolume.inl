@@ -142,6 +142,8 @@ namespace PRGE
     template<typename Type>
     class BoundingVolume3
     {
+        friend class Transform;
+
     public:
         inline BoundingVolume3() NOEXCEPT_PRGE
         {
@@ -151,6 +153,11 @@ namespace PRGE
             _pMin = Point3<Type>{min, min, min};
             _pMax = Point3<Type>{max, max, max};
         }
+
+        inline BoundingVolume3(const Point3<float>& point3) NOEXCEPT_PRGE :
+            _pMin{point3},
+            _pMax{point3}
+        {}
 
         inline BoundingVolume3(const Point3<Type>& p1, const Point3<Type>& p2) NOEXCEPT_PRGE :
             _pMin{min(p1[0], p2[0]), min(p1[1], p2[1]), min(p1[2], p2[2])},
@@ -291,6 +298,21 @@ namespace PRGE
         {
             Point3<Type> pMin {min(b1._pMin[0], b2._pMin[0]), min(b1._pMin[1], b2._pMin[1]), min(b1._pMin[2], b2._pMin[2])};
             Point3<Type> pMax {max(b1._pMax[0], b2._pMax[0]), max(b1._pMax[1], b2._pMax[1]), max(b1._pMax[2], b2._pMax[2])};
+
+            return {pMin, pMax};
+        }
+
+        /**
+         * Данная функция вычисляет ограничивающее пространство которое включает в себя boundingVolume3 и point3.
+         * 
+         * @param boundingVolume3 ограничивающее пространство
+         * @param point3 точка
+         * @return ограничивающее пространство которое включает в себя boundingVolume3 и point3
+        */
+        friend inline BoundingVolume3 merge(const BoundingVolume3& boundingVolume3, const Point3<Type>& point3) NOEXCEPT_PRGE
+        {
+            Point3<Type> pMin {min(boundingVolume3._pMin[0], point3[0]), min(boundingVolume3._pMin[1], point3[1]), min(boundingVolume3._pMin[2], point3[2])};
+            Point3<Type> pMax {max(boundingVolume3._pMax[0], point3[0]), max(boundingVolume3._pMax[1], point3[1]), max(boundingVolume3._pMax[2], point3[2])};
 
             return {pMin, pMax};
         }

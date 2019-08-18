@@ -24,6 +24,6 @@ namespace PRGE
 
     float IShape::pdf(const Interaction& interaction) const
     {
-        return 1.0f / arena()l
+        return 1.0f / arena();
     }
 }

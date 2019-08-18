@@ -14,7 +14,10 @@
 #include "../Core/Math/point.h"
 #include "../Core/Math/normal.h"
 
+#include "../Core/boundingVolume.hpp"
+
 #include "../CollisionAndPhysics/ray.hpp"
+#include "../CollisionAndPhysics/Interaction/surfaceInteraction.hpp"
 
 #include "../Core/core.h"
 
@@ -38,10 +41,11 @@ namespace PRGE
         Vec3<float> operator () (const Vec3<float>& vec3) const NOEXCEPT_PRGE;
         Point3<float> operator () (const Point3<float>& point3) const NOEXCEPT_PRGE;
         Normal3f operator () (const Normal3f& normal) const NOEXCEPT_PRGE;
-
-        /// TODO: дописать оператор () для BoundingVolume, SurfaceInteraction
         Ray operator () (const Ray& ray) const NOEXCEPT_PRGE;
         RayDifferential operator () (const RayDifferential& rayDifferential) NOEXCEPT_PRGE;
+        BoundingVolume3<float> operator () (const BoundingVolume3<float>& boundingVolume3) const NOEXCEPT_PRGE;
+        SurfaceInteraction operator () (const SurfaceInteraction& surfaceInteraction) const NOEXCEPT_PRGE;
+
 
     private:
         Matrix4x4f _m;

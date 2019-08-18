@@ -132,4 +132,46 @@ namespace PRGE
 
         return outRayDifferential;
     }
+
+    BoundingVolume3<float> Transform::operator () (const BoundingVolume3<float>& boundingVolume3) const NOEXCEPT_PRGE
+    {
+        BoundingVolume3<float> out {this->operator () (boundingVolume3._pMin)};
+        out = merge(out, this->operator () (Point3<float>{boundingVolume3._pMax._xyz[0], boundingVolume3._pMin._xyz[1], boundingVolume3._pMin._xyz[2]}));
+        out = merge(out, this->operator () (Point3<float>{boundingVolume3._pMin._xyz[0], boundingVolume3._pMax._xyz[1], boundingVolume3._pMin._xyz[2]}));
+        out = merge(out, this->operator () (Point3<float>{boundingVolume3._pMax._xyz[0], boundingVolume3._pMax._xyz[1], boundingVolume3._pMin._xyz[2]}));
+        out = merge(out, this->operator () (Point3<float>{boundingVolume3._pMin._xyz[0], boundingVolume3._pMin._xyz[1], boundingVolume3._pMax._xyz[2]}));
+        out = merge(out, this->operator () (Point3<float>{boundingVolume3._pMax._xyz[0], boundingVolume3._pMin._xyz[1], boundingVolume3._pMax._xyz[2]}));
+        out = merge(out, this->operator () (Point3<float>{boundingVolume3._pMin._xyz[0], boundingVolume3._pMax._xyz[1], boundingVolume3._pMax._xyz[2]}));
+        out = merge(out, this->operator () (Point3<float>{boundingVolume3._pMax}));
+
+        return out;
+    }
+
+    SurfaceInteraction Transform::operator () (const SurfaceInteraction& surfaceInteraction) const NOEXCEPT_PRGE
+    {
+        SurfaceInteraction out;
+
+        out.p = this->operator () (surfaceInteraction.p);
+        out.w0 = normalize(this->operator () (surfaceInteraction.w0));
+        out.n = normalize(this->operator () (surfaceInteraction.n));
+        out.time = surfaceInteraction.time;
+        out.uv = surfaceInteraction.uv;
+        out.dpdu = this->operator () (surfaceInteraction.dpdu);
+        out.dpdv = this->operator () (surfaceInteraction.dpdv);
+        out.dndu = this->operator () (surfaceInteraction.dndu);
+        out.dndv = this->operator () (surfaceInteraction.dndv);
+        out.dpdx = this->operator () (surfaceInteraction.dpdx);
+        out.dpdy = this->operator () (surfaceInteraction.dpdy);
+        out.dudx = surfaceInteraction.dudx;
+        out.dudy = surfaceInteraction.dudy;
+        out.dvdx = surfaceInteraction.dvdx;
+        out.dvdy = surfaceInteraction.dvdy;
+        out.shading.n = normalize(this->operator () (surfaceInteraction.shading.n));
+        out.shading.dpdu = this->operator () (surfaceInteraction.shading.dpdu);
+        out.shading.dpdv = this->operator () (surfaceInteraction.shading.dpdv);
+        out.shading.dndu = this->operator () (surfaceInteraction.shading.dndu);
+        out.shading.dndv = this->operator () (surfaceInteraction.shading.dndv);
+
+        return out;
+    }
 }
