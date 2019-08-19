@@ -365,6 +365,13 @@ namespace PRGE
             return *t1 < *t2;
         }
 
+        /**
+         * Функция определяющая перекрываются ли b1 и b2.
+         * 
+         * @param b1 ограничивающее пространство
+         * @param b2 ограничивающее пространство
+         * @return true - если перекрываются, иначе false
+        */
         friend bool overlabs(const BoundingVolume3& b1, const BoundingVolume3& b2)
         {
             if constexpr (is_same_v<Type, float>) {
@@ -382,6 +389,60 @@ namespace PRGE
 
                 return (x && y && z);
             }
+        }
+
+        /**
+         * Функция определяющая находится ли точка point3 внутри boundingVolume3.
+         * 
+         * @param boundingVolume3 ограничивающее пространство
+         * @param point3 точка
+         * @retrun true - если точка p находится внутри коробки boundingVolume3, инаяе false
+        */
+        friend bool inside(const BoundingVolume3& boundingVolume3, const Point3<Type>& point3)
+        {
+            if constexpr (is_same_v<Type, float>) {
+                // point3._xyz[0] <= boundingVolume3._pMax[0]  |  point3._xyz[1] <= boundingVolume3._pMax[1]  |  point3._xyz[2] <= boundingVolume3._pMax[2]
+                auto r1 = _mm_cmple_ps(*reinterpret_cast<const __m128*>(point3._xyz), *reinterpret_cast<const __m128*>(boundingVolume3._pMax._xyz));
+
+                // point3._xyz[0] >= boundingVolume3._pMin[0]  |  point3._xyz[1] >= boundingVolume3._pMin[1]  |  point3._xyz[2] >= boundingVolume3._pMin[2]
+                auto r2 = _mm_cmpge_ps(*reinterpret_cast<const __m128*>(point3._xyz), *reinterpret_cast<const __m128*>(boundingVolume3._pMin._xyz));
+
+                return r1[0] && r1[1] && r1[2] && r2[0] && r2[1] && r2[2];
+            } else {
+                return point3[0] >= boundingVolume3._pMin[0] && point3[0] <= boundingVolume3._pMax[0] 
+                    && point3[1] >= boundingVolume3._pMin[1] && point3[1] <= boundingVolume3._pMax[1] 
+                    && point3[2] >= boundingVolume3._pMin[2] && point3[2] <= boundingVolume3._pMax[2];
+            }
+        }
+
+        friend bool insideWithOutUpper(const BoundingVolume3& boundingVolume3, const Point3<Type>& point3)
+        {
+            if constexpr (is_same_v<Type, float>) {
+                // point3._xyz[0] < boundingVolume3._pMax[0]  |  point3._xyz[1] < boundingVolume3._pMax[1]  |  point3._xyz[2] < boundingVolume3._pMax[2]
+                auto r1 = _mm_cmplt_ps(*reinterpret_cast<const __m128*>(point3._xyz), *reinterpret_cast<const __m128*>(boundingVolume3._pMax._xyz));
+
+                // point3._xyz[0] >= boundingVolume3._pMin[0]  |  point3._xyz[1] >= boundingVolume3._pMin[1]  |  point3._xyz[2] >= boundingVolume3._pMin[2]
+                auto r2 = _mm_cmpge_ps(*reinterpret_cast<const __m128*>(point3._xyz), *reinterpret_cast<const __m128*>(boundingVolume3._pMin._xyz));
+
+                return r1[0] && r1[1] && r1[2] && r2[0] && r2[1] && r2[2];
+            } else {
+                return point3[0] >= boundingVolume3._pMin[0] && point3[0] < boundingVolume3._pMax[0] 
+                    && point3[1] >= boundingVolume3._pMin[1] && point3[1] < boundingVolume3._pMax[1] 
+                    && point3[2] >= boundingVolume3._pMin[2] && point3[2] < boundingVolume3._pMax[2];
+            }
+        }
+
+        /**
+         * Функция возвращающую коробку расширенную на delta по сравнению с коробкой box.
+         * 
+         * @param boundingVolume3 ограничивающее пространство
+         * @param delta дельта 
+         * @return ограничивающее пространство расширенная на delta по сравнению с boundingVolume3
+        */
+        friend inline BoundingVolume3 expand(const BoundingVolume3& boundingVolume3, Type delta)
+        {
+            Vec3<Type> d {delta, delta, delta};
+            return {boundingVolume3._pMin - d, boundingVolume3._pMax + d};
         }
 
     private:

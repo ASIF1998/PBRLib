@@ -18,45 +18,18 @@
 
 using namespace PRGE;
 
-struct Tri :
-    public IShape
-{
-public:
-    Tri(const Transform& objectToWorld, const Transform& worldToObject, bool reverseOrientation, bool transformSwapsHandednes) NOEXCEPT_PRGE :
-        IShape(objectToWorld, worldToObject, reverseOrientation, transformSwapsHandednes)
-    {}
-    
-//    Tri(const Tri& tri) :
-//        IShape(*static_cast<IShape*>(&tri))
-//    {}
-    
-    virtual ~Tri()
-    {}
-};
-
 int main()
 {
     Vec3<float> v1;
     Vec3<float> v2;
-    
-    //auto v3 = cross(v1, v2);
-//    faceforward(v1, v2);
-    
-    //Tri ttrtrri {Transform{}, Transform{}, true, true};
-    
-//    Transform tr1;
-//    Transform tr2;
-//    
-//    Tri t (tr1, tr2, true, true);
-    
-    //Tri tt{t};
-
-    
+    Point3<float> p3;
     SurfaceInteraction si;
     BoundingVolume3<float> b1;
     BoundingVolume3<float> b2;
     
     overlabs(b1, b2);
+    inside(b1, p3);
+    auto bcdf = expand(b1, 12.5f);
     
     return 0;
 }

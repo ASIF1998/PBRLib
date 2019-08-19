@@ -354,8 +354,6 @@ namespace PRGE
             return _xyz[0] != p._xyz[0] || _xyz[1] != p._xyz[1] || _xyz[2] != p._xyz[2];
         }
 
-        friend bool overlabs(const BoundingVolume3<Type>& b1, const BoundingVolume3<Type>& b2);
-
     private:
         Type _xyz[3];
     };
@@ -570,6 +568,8 @@ namespace PRGE
         }
 
         friend bool overlabs(const BoundingVolume3<float>& b1, const BoundingVolume3<float>& b2);
+        friend bool inside(const BoundingVolume3<float>& boundingVolume3, const Point3<float>& point3);
+        friend bool insideWithOutUpper(const BoundingVolume3<float>& boundingVolume3, const Point3<float>& point3);
 
     private:
         inline Point3(__m128 m) NOEXCEPT_PRGE
