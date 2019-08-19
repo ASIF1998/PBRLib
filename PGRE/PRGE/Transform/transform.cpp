@@ -174,4 +174,128 @@ namespace PRGE
 
         return out;
     }
+
+    Transform translate(const Vec3<float>& t) NOEXCEPT_PRGE
+    {
+        return {
+            {
+                0.0f, 0.0f, 0.0f, t[0],
+                0.0f, 0.0f, 0.0f, t[1],
+                0.0f, 0.0f, 0.0f, t[2],
+                0.0f, 0.0f, 0.0f, 1.0f
+            }
+        };
+    }
+
+    Transform scale(float scaleX, float scaleY, float scaleZ) NOEXCEPT_PRGE
+    {
+        Matrix4x4f m {
+            scaleX, 0.0f, 0.0f, 0.0f,
+            0.0f, scaleY, 0.0f, 0.0f,
+            0.0f, 0.0f, scaleZ, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+        };
+
+        Matrix4x4f invM {
+            1.0f / scaleX, 0.0f, 0.0f, 0.0f,
+            0.0f, 1.0f / scaleY, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f / scaleZ, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+        };
+
+        return {m, invM};
+    }
+
+    Transform rotateX(float angle) NOEXCEPT_PRGE
+    {
+        float rad = angle * 180.0f * M_1_PI;
+        float sinTheta = sin(rad);
+        float cosTheta = cos(rad);
+
+        Matrix4x4f m {
+            1.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, cosTheta, -1.0f * sinTheta, 0.0f,
+            0.0f, sinTheta, cosTheta, 0.0f, 
+            0.0f, 0.0f, 0.0f, 1.0f
+        };
+
+        return {m, transpose(m)};
+    }
+
+    Transform rotateY(float angle) NOEXCEPT_PRGE
+    {
+        float rad = angle * 180.0f * M_1_PI;
+        float sinTheta = sin(rad);
+        float cosTheta = cos(rad);
+
+        Matrix4x4f m {
+            cosTheta, 0.0f, sinTheta, 0.0f,
+            0.0f, 1.0f, 0.0f, 0.0f,
+            (-1.0f) * sinTheta, 0.0f, cosTheta, 0.0f, 
+            0.0f, 0.0f, 0.0f, 1.0f
+        };
+
+        return {m, transpose(m)};
+    }
+
+    Transform rotateZ(float angle) NOEXCEPT_PRGE
+    {
+        float rad = angle * 180.0f * M_1_PI;
+        float sinTheta = sin(rad);
+        float cosTheta = cos(rad);
+
+        Matrix4x4f m {
+            cosTheta, (-1.0f) * sinTheta, 0.0f, 0.0f,
+            sinTheta, cosTheta, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f, 
+            0.0f, 0.0f, 0.0f, 1.0f
+        };
+
+        return {m, transpose(m)};
+    }
+
+    Transform rotate(float angle, Vec3<float>& axis) NOEXCEPT_PRGE
+    {
+        auto a = normalize(axis);
+        float rad = angle * 180.0f * M_1_PI;
+        float sinTheta = sin(rad);
+        float cosTheta = cos(rad);
+
+        Matrix4x4f m {
+            a[0] * a[0] + (1.0f - a[0] * a[0]) * cosTheta,
+            a[0] * a[1] * (1.0f - cosTheta) - a[2] * sinTheta,
+            a[0] * a[2] * (1.0f - cosTheta) + a[1] * sinTheta,
+            0.0f,
+            a[0] * a[1] * (1.0f - cosTheta) + a[2] * sinTheta,
+            a[1] * a[1] + (1.0f - a[1] * a[1]) * cosTheta,
+            a[1] * a[2] * (1.0f - cosTheta) - a[0] * sinTheta,
+            0.0f,
+            a[0] * a[2] * (1.0f - cosTheta) - a[1] * sinTheta,
+            a[1] * a[2] * (1.0f - cosTheta) + a[0] * sinTheta,
+            a[2] * a[2] + (1.0f - a[2] * a[2]) * cosTheta,
+            0.0f,
+            0.0f,
+            0.0f,
+            0.0f,
+            1.0f
+        };
+
+        return {m, transpose(m)};
+    }
+    
+    Transform lookAt(Point3<float>& pos, Point3<float>& look, Vec3<float>& up) NOEXCEPT_PRGE
+    {
+        auto dir = normalize(look - pos);
+        auto r = normalize(cross(up, dir));
+        auto n = normalize(cross(dir, r));
+
+        Matrix4x4f viewMatrix {
+            r[0], n[0], dir[0], pos[0],
+            r[1], n[1], dir[1], pos[1],
+            r[2], n[2], dir[2], pos[2],
+            0.0f, 0.0f, 0.0f, 1.0f
+        };
+
+        return {inverse(viewMatrix), viewMatrix};
+    }
 }

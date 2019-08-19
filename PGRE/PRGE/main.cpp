@@ -20,16 +20,5 @@ using namespace PRGE;
 
 int main()
 {
-    Vec3<float> v1;
-    Vec3<float> v2;
-    Point3<float> p3;
-    SurfaceInteraction si;
-    BoundingVolume3<float> b1;
-    BoundingVolume3<float> b2;
-    
-    overlabs(b1, b2);
-    inside(b1, p3);
-    auto bcdf = expand(b1, 12.5f);
-    
     return 0;
 }
