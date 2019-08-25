@@ -16,9 +16,32 @@
 
 #include "LowLevelRendering/SubmissionShape/shape.hpp"
 
+#include "Core/Memory/memoryArena.hpp"
+#include "Core/Memory/STLMemory.hpp"
+
+#include <vector>
+
 using namespace PRGE;
 
 int main()
 {
+    
+    STLAllocator<size_t> callocator;
+    vector<size_t, STLAllocator<size_t>> ty;
+    
+    for(size_t i{0}; i < 20; i++) {
+        ty.push_back(i);
+    }
+    
+    
+    auto alloc = ty.get_allocator();
+    
+    cout << alloc.capacity() << endl;
+    
+    for (auto&& iter: ty) {
+        cout << iter << endl;
+    }
+    
     return 0;
 }
+

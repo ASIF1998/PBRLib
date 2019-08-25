@@ -3,6 +3,20 @@
         "type_traits": "cpp",
         "algorithm": "cpp",
         "chrono": "cpp",
-        "limits": "cpp"
+        "limits": "cpp",
+        "map": "cpp",
+        "unordered_map": "cpp",
+        "__hash_table": "cpp",
+        "__split_buffer": "cpp",
+        "__tree": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "list": "cpp",
+        "memory": "cpp",
+        "string": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp"
     }
 }

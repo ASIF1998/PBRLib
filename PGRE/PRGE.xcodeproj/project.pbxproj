@@ -16,6 +16,8 @@
 		951518952302E7A90061C8CC /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 951518942302E7A90061C8CC /* libSDL2-2.0.0.dylib */; };
 		951518972302E7B60061C8CC /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 951518962302E7B60061C8CC /* libGLEW.2.1.0.dylib */; };
 		957D70D823033F170000F3A9 /* ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 957D70D623033F170000F3A9 /* ray.cpp */; };
+		95B68EE32312726A001A4DA2 /* memoryArena.inl in Sources */ = {isa = PBXBuildFile; fileRef = 95B68EE12312726A001A4DA2 /* memoryArena.inl */; };
+		95B68EE62312C0DC001A4DA2 /* STLMemory.inl in Sources */ = {isa = PBXBuildFile; fileRef = 95B68EE42312C0DC001A4DA2 /* STLMemory.inl */; };
 		95FEB1832305B3A600DFBEDC /* boundingVolume.inl in Sources */ = {isa = PBXBuildFile; fileRef = 95FEB1812305B3A600DFBEDC /* boundingVolume.inl */; };
 		95FEB1872306A7F200DFBEDC /* interaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95FEB1852306A7F200DFBEDC /* interaction.cpp */; };
 		95FEB18A2306AD0500DFBEDC /* surfaceInteraction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95FEB1882306AD0500DFBEDC /* surfaceInteraction.cpp */; };
@@ -57,6 +59,10 @@
 		951518962302E7B60061C8CC /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../../../usr/local/Cellar/glew/2.1.0/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
 		957D70D623033F170000F3A9 /* ray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ray.cpp; sourceTree = "<group>"; };
 		957D70D723033F170000F3A9 /* ray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ray.hpp; sourceTree = "<group>"; };
+		95B68EE12312726A001A4DA2 /* memoryArena.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = memoryArena.inl; sourceTree = "<group>"; };
+		95B68EE22312726A001A4DA2 /* memoryArena.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = memoryArena.hpp; sourceTree = "<group>"; };
+		95B68EE42312C0DC001A4DA2 /* STLMemory.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = STLMemory.inl; sourceTree = "<group>"; };
+		95B68EE52312C0DC001A4DA2 /* STLMemory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = STLMemory.hpp; sourceTree = "<group>"; };
 		95FEB1812305B3A600DFBEDC /* boundingVolume.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = boundingVolume.inl; sourceTree = "<group>"; };
 		95FEB1822305B3A600DFBEDC /* boundingVolume.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = boundingVolume.hpp; sourceTree = "<group>"; };
 		95FEB1852306A7F200DFBEDC /* interaction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interaction.cpp; sourceTree = "<group>"; };
@@ -139,6 +145,7 @@
 		951518792302E6DB0061C8CC /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				95B68EE023127252001A4DA2 /* Memory */,
 				9515187B2302E6DB0061C8CC /* Math */,
 				95FEB1812305B3A600DFBEDC /* boundingVolume.inl */,
 				95FEB1822305B3A600DFBEDC /* boundingVolume.hpp */,
@@ -184,6 +191,17 @@
 				957D70D723033F170000F3A9 /* ray.hpp */,
 			);
 			path = CollisionAndPhysics;
+			sourceTree = "<group>";
+		};
+		95B68EE023127252001A4DA2 /* Memory */ = {
+			isa = PBXGroup;
+			children = (
+				95B68EE12312726A001A4DA2 /* memoryArena.inl */,
+				95B68EE22312726A001A4DA2 /* memoryArena.hpp */,
+				95B68EE42312C0DC001A4DA2 /* STLMemory.inl */,
+				95B68EE52312C0DC001A4DA2 /* STLMemory.hpp */,
+			);
+			path = Memory;
 			sourceTree = "<group>";
 		};
 		95FEB1842306A7B200DFBEDC /* Interaction */ = {
@@ -258,6 +276,8 @@
 				95FEB1832305B3A600DFBEDC /* boundingVolume.inl in Sources */,
 				95FEB1902307FB7500DFBEDC /* math.cpp in Sources */,
 				95133D8023042E4D00B478B9 /* transform.cpp in Sources */,
+				95B68EE32312726A001A4DA2 /* memoryArena.inl in Sources */,
+				95B68EE62312C0DC001A4DA2 /* STLMemory.inl in Sources */,
 				95133D7C23042DB100B478B9 /* shape.cpp in Sources */,
 				9515188B2302E6DB0061C8CC /* quaternion.cpp in Sources */,
 				95FEB1872306A7F200DFBEDC /* interaction.cpp in Sources */,
