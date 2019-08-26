@@ -18,6 +18,8 @@
 
 #include "memoryArena.hpp"
 
+#include <iostream>
+
 using namespace std;
 
 namespace PRGE
@@ -40,6 +42,7 @@ namespace PRGE
 
         inline ~MemoryBlock()
         {
+            cerr << "~MemoryBlock" << endl;
             delete [] ptrMemoryBlock;
         }
 
@@ -52,6 +55,31 @@ namespace PRGE
 
     struct PartMemoryBlock
     {
+        // partMemory: _ptrCurrentBlock, _ptrCurrentBlock->ptrMemoryBlock + _ptrCurrentBlock->currentPositioninMemoryBlock, bytes
+        PartMemoryBlock(MemoryBlock* ptrMemoryBlock, uint8_t* ptrPartMemoryBlock, size_t size) :
+            ptrMemoryBlock{ptrMemoryBlock},
+            ptrPartMemoryBlock{ptrPartMemoryBlock},
+            size{size}
+        {}
+        
+        PartMemoryBlock(const PartMemoryBlock& partMemoryBlock) :
+            ptrMemoryBlock{partMemoryBlock.ptrMemoryBlock},
+            ptrPartMemoryBlock{partMemoryBlock.ptrPartMemoryBlock},
+            size{partMemoryBlock.size}
+        {}
+        
+        PartMemoryBlock(PartMemoryBlock&& partMemoryBlock)
+        {
+            swap(ptrMemoryBlock, partMemoryBlock.ptrMemoryBlock);
+            swap(ptrPartMemoryBlock, partMemoryBlock.ptrPartMemoryBlock);
+            swap(size, partMemoryBlock.size);
+        }
+        
+        ~PartMemoryBlock()
+        {
+            cerr << "~PartMemoryBlock" << endl;
+        }
+        
         MemoryBlock* ptrMemoryBlock;
         uint8_t* ptrPartMemoryBlock;
         size_t size;
@@ -67,8 +95,7 @@ namespace PRGE
         */
         inline STLMemoryArena(size_t memoryBlockSize = PRGE_MEMORY_BLOCK_SIZE) :
             _ptrCurrentBlock{new MemoryBlock (memoryBlockSize)},
-            _memoryBlockSize{memoryBlockSize},
-            _availableBlocks{make_pair(memoryBlockSize, _ptrCurrentBlock)}
+            _memoryBlockSize{memoryBlockSize}
         {}
 
         inline STLMemoryArena(const STLMemoryArena& memoryArena) :
@@ -79,9 +106,9 @@ namespace PRGE
         {}
 
         inline STLMemoryArena(STLMemoryArena&& memoryArena) :
-            _ptrCurrentBlock{memoryArena._ptrCurrentBlock},
             _memoryBlockSize{memoryArena._memoryBlockSize}
         {
+            swap(_ptrCurrentBlock, memoryArena._ptrCurrentBlock);
             swap(_availableBlocks, memoryArena._availableBlocks);
             swap(_usedPartMemoryBlock, memoryArena._usedPartMemoryBlock);
             swap(_usedBlocks, memoryArena._usedBlocks);
@@ -89,6 +116,7 @@ namespace PRGE
 
         inline ~STLMemoryArena()
         {
+            cerr << "~STLMemoryArena" << endl;
             delete _ptrCurrentBlock;
         }
 
@@ -107,6 +135,11 @@ namespace PRGE
 
         uint8_t* allocate(size_t bytes)
         {
+            static int rc = 0;
+            
+            cout << "Inseart RC: " << rc << endl;
+            rc++;
+            
             /// Выраниваем количество байт до размера кратного 16.
             bytes = (bytes + 15) & (~ 15);
 
@@ -116,6 +149,8 @@ namespace PRGE
 
                 if (auto ptr = _availableBlocks.lower_bound(bytes); ptr != _availableBlocks.end()) {
                     _ptrCurrentBlock = ptr->second;
+                    _ptrCurrentBlock->currentPositioninMemoryBlock = 0;
+                    _availableBlocks.erase(ptr);
                 }
 
                 if (!_ptrCurrentBlock) {
@@ -126,15 +161,22 @@ namespace PRGE
             }
 
             auto* partMemory = reinterpret_cast<PartMemoryBlock*>(MemoryArena::_allocator(sizeof(PartMemoryBlock)));
-
-            partMemory->ptrMemoryBlock = _ptrCurrentBlock;
-            partMemory->ptrPartMemoryBlock = _ptrCurrentBlock->ptrMemoryBlock + _ptrCurrentBlock->currentPositioninMemoryBlock;
-            partMemory->size = bytes;
+            
+            new (partMemory) PartMemoryBlock (_ptrCurrentBlock, _ptrCurrentBlock->ptrMemoryBlock + _ptrCurrentBlock->currentPositioninMemoryBlock, bytes);
+        
+            /// TODO: разобраться с багом, в котром в _usedPartMemoryBlock попадают указатели типа NULL
 
             _ptrCurrentBlock->count++;
             _ptrCurrentBlock->currentPositioninMemoryBlock += bytes;
 
             _usedPartMemoryBlock.insert(make_pair(partMemory->ptrPartMemoryBlock, partMemory));
+            
+            for (auto&& ittter: _usedPartMemoryBlock) {
+                if (!ittter.second->ptrPartMemoryBlock) {
+                    
+                    cout << "Zerror" << endl;
+                }
+            }
 
             return partMemory->ptrPartMemoryBlock;
         }
@@ -173,20 +215,26 @@ namespace PRGE
         template<typename Type>
         void deallocator(Type* ptr)
         {
-            auto fPtr = _usedPartMemoryBlock[reinterpret_cast<uint8_t*>(ptr)];
+            static int rc = 0;
+            
+            cout << "Delete RC: " << rc << endl;
+            rc++;
+            
+            auto fIter = _usedPartMemoryBlock.find(reinterpret_cast<uint8_t*>(ptr));
+            
+            if (fIter != _usedPartMemoryBlock.end()) {
 
-            fPtr->ptrMemoryBlock->count--;
+                fIter->second->ptrMemoryBlock->count--;
 
-            if (!fPtr->ptrMemoryBlock->count) {
-                auto ptrUsedBlock = _usedBlocks.find(fPtr->ptrMemoryBlock);
+                if (!fIter->second->ptrMemoryBlock->count) {
+                    auto ptrUsedBlock = _usedBlocks.find(fIter->second->ptrMemoryBlock);
 
-                if (ptrUsedBlock != _usedBlocks.end()) {
-                    _usedBlocks.erase(_usedBlocks.find(fPtr->ptrMemoryBlock));
-                    _availableBlocks.insert(make_pair(fPtr->ptrMemoryBlock->currentMemoryBlockSize, fPtr->ptrMemoryBlock));
+                    if (ptrUsedBlock != _usedBlocks.end()) {
+                        _usedBlocks.erase(_usedBlocks.find(fIter->second->ptrMemoryBlock));
+                        _availableBlocks.insert(make_pair(fIter->second->ptrMemoryBlock->currentMemoryBlockSize, fIter->second->ptrMemoryBlock));
+                    }
                 }
             }
-
-            _usedPartMemoryBlock.erase(_usedPartMemoryBlock.find(reinterpret_cast<uint8_t*>(ptr)));
         }
 
         size_t capacity() const
@@ -210,8 +258,6 @@ namespace PRGE
         MemoryBlock* _ptrCurrentBlock;
         size_t _memoryBlockSize;
     };
-
-    static atomic<STLMemoryArena*> ptrMemoryArena {new STLMemoryArena};
 
     template<typename Type>
     class STLAllocator
@@ -240,7 +286,8 @@ namespace PRGE
             typedef STLAllocator<U> other;
         };
 
-        STLAllocator() noexcept
+        STLAllocator(size_t memoryBlockSize = PRGE_MEMORY_BLOCK_SIZE) noexcept :
+            ptrMemoryArena{new STLMemoryArena (memoryBlockSize)}
         {}
 
         STLAllocator(const STLAllocator& alloc) noexcept
@@ -254,7 +301,9 @@ namespace PRGE
         {}
 
         ~STLAllocator() noexcept
-        {}
+        {
+            delete ptrMemoryArena;
+        }
 
         pointer allocate(size_type size)
         {
@@ -307,5 +356,7 @@ namespace PRGE
 //        {
 //            return false;
 //        }
+        
+        STLMemoryArena* ptrMemoryArena;
     };
 }

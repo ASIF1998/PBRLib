@@ -25,22 +25,23 @@ using namespace PRGE;
 
 int main()
 {
-    
-    STLAllocator<size_t> callocator;
-    vector<size_t, STLAllocator<size_t>> ty;
-    
-    for(size_t i{0}; i < 20; i++) {
-        ty.push_back(i);
+    try {
+        
+        
+        //STLAllocator<int> alloc (3000);
+        
+        vector<int, STLAllocator<int>> vec(400);
+        const auto&& all = vec.get_allocator();
+        
+        for (int i{0}; i < 500; i++) {
+            cout << i << endl;
+            vec.push_back(i);
+        }
+        
+    } catch (const exception& ex) {
+        cerr << ex.what() << endl;
     }
     
-    
-    auto alloc = ty.get_allocator();
-    
-    cout << alloc.capacity() << endl;
-    
-    for (auto&& iter: ty) {
-        cout << iter << endl;
-    }
     
     return 0;
 }
