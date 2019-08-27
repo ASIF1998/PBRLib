@@ -1,12 +1,10 @@
-#include "math.h"
+#include "../core.h"
 
-#include <cmath>
+#include "math.h"
 
 #include "vec.h"
 
-#if DEBUG_PRGE == 1
-#   include <iostream>
-#endif
+#include <cmath>
 
 using namespace std;
 

@@ -8,6 +8,9 @@
 
 #if DEBUG_PRGE == 1
 #   define NOEXCEPT_PRGE
+#   include <iostream>
+#   include <iomanip>
+#   include <stdexcept>
 #else 
 #   define NOEXCEPT_PRGE noexcept
 #endif

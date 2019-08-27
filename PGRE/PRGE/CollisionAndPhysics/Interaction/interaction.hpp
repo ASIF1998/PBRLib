@@ -9,11 +9,11 @@
 #ifndef interaction_hpp
 #define interaction_hpp
 
+#include "../../Core/core.h"
+
 #include "../../Core/Math/vec.h"
 #include "../../Core/Math/normal.h"
 #include "../../Core/Math/point.h"
-
-#include "../../Core/core.h"
 
 namespace PRGE
 {

@@ -9,6 +9,8 @@
 #ifndef transform_hpp
 #define transform_hpp
 
+#include "../Core/core.h"
+
 #include "../Core/Math/matrix.h"
 #include "../Core/Math/vec.h"
 #include "../Core/Math/point.h"
@@ -18,8 +20,6 @@
 
 #include "../CollisionAndPhysics/ray.hpp"
 #include "../CollisionAndPhysics/Interaction/surfaceInteraction.hpp"
-
-#include "../Core/core.h"
 
 namespace PRGE
 {

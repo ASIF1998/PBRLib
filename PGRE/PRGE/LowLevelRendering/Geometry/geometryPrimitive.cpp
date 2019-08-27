@@ -8,10 +8,8 @@
 
 #include "geometryPrimitive.hpp"
 
-#if DEBUG_PRGE == 1
-#   include <stdexcept>
 using namespace std;
-#endif
+
 
 namespace PRGE
 {

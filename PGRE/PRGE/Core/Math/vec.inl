@@ -1,3 +1,5 @@
+#include "../core.h"
+
 #include "math.hpp"
 
 #include <xmmintrin.h>
@@ -5,11 +7,6 @@
 #include <cmath>
 
 #include <limits>
-
-#if DEBUG_PRGE == 1
-#   include <iostream>
-#   include <iomanip>
-#endif
 
 using namespace std;
 

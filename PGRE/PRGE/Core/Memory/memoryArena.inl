@@ -6,6 +6,8 @@
 //  Copyright © 2019 Asif Mamedov. All rights reserved.
 //
 
+#include "../core.h"
+
 #include <cstdint>
 
 #include <list>
@@ -34,7 +36,13 @@ namespace PRGE
             _currentBlockPos{0},
             _currentBlockSize{0},
             _ptrBlock{nullptr}
-        {}
+        {
+#if DEBUG_PRGE == 1
+            if (!blockSize) {
+                throw invalid_argument ("blockSize is zero");
+            }
+#endif
+        }
 
         inline MemoryArena(const MemoryArena& memoryArena) :
             _bolckSize{memoryArena._bolckSize},
@@ -113,11 +121,6 @@ namespace PRGE
             return ptr;
         }
 
-        void deallocator (size_t size, uint8_t* ptr)
-        {
-            
-        }
-
         void reset()
         {
             _currentBlockPos = 0;
@@ -147,6 +150,12 @@ namespace PRGE
     private:
         static uint8_t* _allocator(size_t bytes)
         {
+#if DEBUG_PRGE == 1
+            if (!bytes) {
+                throw invalid_argument ("bytes is zero");
+            }
+#endif
+
 #if (defined (_WIN32) || defined (_WIN64))
             return _aligned_malloc(bytes, PRGE_MEMORY_ALLOCATING_CASH_LINE_SIZE);
 #else

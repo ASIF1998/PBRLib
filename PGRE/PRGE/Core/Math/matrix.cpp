@@ -4,10 +4,6 @@
 
 #include <cmath>
 
-#if DEBUG_PRGE == 1
-#   include <iomanip>
-#endif
-
 using namespace std;
 
 #define NAN_OR_INF_MATRIX4X4(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) \

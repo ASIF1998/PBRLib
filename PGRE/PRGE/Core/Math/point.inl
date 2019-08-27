@@ -1,3 +1,5 @@
+#include "../core.h"
+
 #include "math.h"
 
 #include "vec.h"

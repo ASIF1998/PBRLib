@@ -9,15 +9,12 @@
 #ifndef Ray_hpp
 #define Ray_hpp
 
+#include "../Core/core.h"
+
 #include "../Core/Math/point.h"
 #include "../Core/Math/vec.h"
 
-#include "../Core/core.h"
-
-#if DEBUG_PRGE == 1
-#   include <iostream>
 using namespace std;
-#endif
 
 namespace PRGE
 {

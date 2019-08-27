@@ -1,14 +1,13 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#include "../core.h"
+
 #include "math.hpp"
 
 #include <xmmintrin.h>
 
-#if DEBUG_PRGE == 1
-#   include <iostream>
 using namespace std;
-#endif
 
 namespace PRGE
 {

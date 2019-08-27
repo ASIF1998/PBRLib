@@ -9,9 +9,9 @@
 #ifndef shape_hpp
 #define shape_hpp
 
-#include "../../../Transform/transform.hpp"
-
 #include "../../../Core/core.h"
+
+#include "../../../Transform/transform.hpp"
 
 #include "../../../Core/boundingVolume.hpp"
 
@@ -94,6 +94,7 @@ namespace PRGE
 
         virtual ~IShape() {}
 
+    public:
         Transform objectToWorld;
         Transform worldToObject;
         bool reverseOrientation;

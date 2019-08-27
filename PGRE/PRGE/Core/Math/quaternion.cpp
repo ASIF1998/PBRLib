@@ -4,10 +4,6 @@
 
 #include <algorithm>
 
-#if DEBUG_PRGE == 1
-#include <iomanip>
-#endif
-
 using namespace std;
 
 namespace PRGE

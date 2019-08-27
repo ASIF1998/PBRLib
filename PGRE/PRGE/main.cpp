@@ -25,37 +25,7 @@
 using namespace PRGE;
 
 int main()
-{
-//    try {
-//
-//
-//        //STLAllocator<int> alloc (3000);
-//
-//        vector<int, STLAllocator<int>> vec(400);
-//        const auto&& all = vec.get_allocator();
-//
-//        for (int i{0}; i < 500; i++) {
-//            cout << i << endl;
-//            vec.push_back(i);
-//        }
-//
-//    } catch (const exception& ex) {
-//        cerr << ex.what() << endl;
-//    }
-    
-    shared_ptr<IShape> i = nullptr;
-    
-    SurfaceInteraction s;
-
-    //GeometryPrimitive gp ;
-
-    GeometryPrimitive gp {nullptr};
-    
-    IPrimitive* ptrGP = &gp;
-    
-    gp.intersect(Ray{}, s);
-    ptrGP->intersect(Ray{});
-    
+{   
     return 0;
 }
 
