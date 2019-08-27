@@ -13,6 +13,8 @@
 
 namespace PRGE
 {
+    struct IPrimitive;
+
     /**
      * Данная структура хранит экземпляр нормали поверхности и различные частные
      * производные для представления возможных возмущённых значений этих величин,
@@ -89,7 +91,7 @@ namespace PRGE
         Point2<float> uv;
         Vec3<float> dpdu;
         Vec3<float> dpdv;
-        // const Shape* shape
+        const IPrimitive* ptrPrimitive;
         Normal3f dndu;
         Normal3f dndv;
         Shading shading;

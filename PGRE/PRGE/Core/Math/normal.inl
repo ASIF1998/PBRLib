@@ -5,7 +5,7 @@
 #include "vec.h"
 
 #if DEBUG_PRGE == 1
-#include <iostream>
+#   include <iostream>
 #endif
 
 using namespace std;

@@ -7,9 +7,9 @@
 #define DEBUG_PRGE 1
 
 #if DEBUG_PRGE == 1
-    #define NOEXCEPT_PRGE
+#   define NOEXCEPT_PRGE
 #else 
-    #define NOEXCEPT_PRGE noexcept
+#   define NOEXCEPT_PRGE noexcept
 #endif
 
 #endif // CORE_H

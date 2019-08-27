@@ -9,19 +9,19 @@
 #ifndef shape_hpp
 #define shape_hpp
 
-#include "../../Transform/transform.hpp"
+#include "../../../Transform/transform.hpp"
 
-#include "../../Core/core.h"
+#include "../../../Core/core.h"
 
-#include "../../Core/boundingVolume.hpp"
+#include "../../../Core/boundingVolume.hpp"
 
-#include "../../CollisionAndPhysics/ray.hpp"
+#include "../../../CollisionAndPhysics/ray.hpp"
 
-#include "../../CollisionAndPhysics/Interaction/interaction.hpp"
-#include "../../CollisionAndPhysics/Interaction/surfaceInteraction.hpp"
+#include "../../../CollisionAndPhysics/Interaction/interaction.hpp"
+#include "../../../CollisionAndPhysics/Interaction/surfaceInteraction.hpp"
 
-#include "../../Core/Math/point.h"
-#include "../../Core/Math/vec.h"
+#include "../../../Core/Math/point.h"
+#include "../../../Core/Math/vec.h"
 
 namespace PRGE
 {

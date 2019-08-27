@@ -15,7 +15,7 @@
 #include "../Core/core.h"
 
 #if DEBUG_PRGE == 1
-#include <iostream>
+#   include <iostream>
 using namespace std;
 #endif
 
@@ -28,6 +28,7 @@ namespace PRGE
     {
         friend class Transform;
         friend class BoundingVolume3<float>;
+        friend class GeometryPrimitive;
 
     public:
         Ray() noexcept;

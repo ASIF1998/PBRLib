@@ -5,7 +5,7 @@
 #include <cmath>
 
 #if DEBUG_PRGE == 1
-#include <iomanip>
+#   include <iomanip>
 #endif
 
 using namespace std;

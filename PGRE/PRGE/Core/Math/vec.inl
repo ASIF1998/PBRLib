@@ -7,8 +7,8 @@
 #include <limits>
 
 #if DEBUG_PRGE == 1
-#include <iostream>
-#include <iomanip>
+#   include <iostream>
+#   include <iomanip>
 #endif
 
 using namespace std;

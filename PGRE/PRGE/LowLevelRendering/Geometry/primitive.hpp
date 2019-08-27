@@ -9,10 +9,10 @@
 #ifndef primitive_hpp
 #define primitive_hpp
 
-#include "../Core/boundingVolume.hpp"
+#include "../../Core/boundingVolume.hpp"
 
-#include "../CollisionAndPhysics/ray.hpp"
-#include "../CollisionAndPhysics/Interaction/surfaceInteraction.hpp"
+#include "../../CollisionAndPhysics/ray.hpp"
+#include "../../CollisionAndPhysics/Interaction/surfaceInteraction.hpp"
 
 namespace PRGE
 {
@@ -30,7 +30,7 @@ namespace PRGE
          * 
          * @return ограничивающий объём
         */
-        virtual BoundingVolume3<float> worldBound() const = 0;
+        virtual BoundingVolume3<float> worldBound() const NOEXCEPT_PRGE = 0;
 
         /**
          * Данный чисто виртуальный метод отвечает за вычисление
@@ -40,7 +40,7 @@ namespace PRGE
          * @return surfaceInteraction информация о геометрии поверхности
          * @return true - в случае если луч пересёк поверхность, иначе false
         */
-        virtual bool intersect(const Ray& ray, SurfaceInteraction& surfaceInteraction) const = 0;
+        virtual bool intersect(const Ray& ray, SurfaceInteraction& surfaceInteraction) const NOEXCEPT_PRGE = 0;
 
         /**
          * Данный чисто виртуальный метод отвечает за вычисление
@@ -49,7 +49,7 @@ namespace PRGE
          * @param ray луч
          * @return true - в случае если луч пересёк поверхность, иначе false
         */
-        virtual bool intersect(const Ray& ray) const = 0;
+        virtual bool intersect(const Ray& ray) const NOEXCEPT_PRGE = 0;
 
         /**
          * TODO: Данная структура так же должна будет содержать чисто виртуальные

@@ -17,6 +17,7 @@
         "memory": "cpp",
         "string": "cpp",
         "unordered_set": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "stdexcept": "cpp"
     }
 }
