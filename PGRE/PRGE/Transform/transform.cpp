@@ -175,6 +175,12 @@ namespace PRGE
         return out;
     }
 
+    bool Transform::swapHandedness() const
+    {
+        auto det = _m.det();
+        return det < 0;
+    }
+
     Transform translate(const Vec3<float>& t) NOEXCEPT_PRGE
     {
         return {

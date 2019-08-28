@@ -10,11 +10,11 @@
 
 namespace PRGE
 {
-    IShape::IShape(const Transform& objectToWorld, const Transform& worldToObject, bool reverseOrientation, bool transformSwapsHandednes) NOEXCEPT_PRGE :
+    IShape::IShape(const Transform& objectToWorld, const Transform& worldToObject, bool reverseOrientation) NOEXCEPT_PRGE :
         objectToWorld{objectToWorld},
         worldToObject{worldToObject},
         reverseOrientation{reverseOrientation},
-        transformSwapsHandednes{transformSwapsHandednes}
+        transformSwapsHandednes{objectToWorld.swapHandedness()}
     {}
 
     Interaction IShape::sample(const Interaction& interaction, const Point2<float>& uv) const

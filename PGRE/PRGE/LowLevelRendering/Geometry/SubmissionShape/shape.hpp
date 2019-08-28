@@ -40,7 +40,7 @@ namespace PRGE
     */
     struct IShape
     {
-        IShape(const Transform& objectToWorld, const Transform& worldToObject, bool reverseOrientation, bool transformSwapsHandednes) NOEXCEPT_PRGE;
+        IShape(const Transform& objectToWorld, const Transform& worldToObject, bool reverseOrientation) NOEXCEPT_PRGE;
 
         IShape(const IShape&) = delete;
         IShape(IShape&&) = delete;

@@ -20,12 +20,16 @@
 #include "Core/Memory/memoryArena.hpp"
 #include "Core/Memory/STLMemory.hpp"
 
-#include <vector>
+#include "LowLevelRendering/Geometry/SubmissionShape/shape.hpp"
+#include "LowLevelRendering/Geometry/SubmissionShape/triangle.hpp"
 
 using namespace PRGE;
 
 int main()
-{   
+{
+    Triangle triangle (Transform{}, Transform{}, true, nullptr, 4);
+    
+    triangle.arena();
     return 0;
 }
 

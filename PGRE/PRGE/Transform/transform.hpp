@@ -46,6 +46,8 @@ namespace PRGE
         BoundingVolume3<float> operator () (const BoundingVolume3<float>& boundingVolume3) const NOEXCEPT_PRGE;
         SurfaceInteraction operator () (const SurfaceInteraction& surfaceInteraction) const NOEXCEPT_PRGE;
 
+        bool swapHandedness() const;
+
     private:
         Matrix4x4f _m;
         Matrix4x4f _invM;
