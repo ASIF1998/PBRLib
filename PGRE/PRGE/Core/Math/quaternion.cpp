@@ -1,76 +1,55 @@
 #include "quaternion.h"
 
-#include <cmath>
-
-#include <algorithm>
 
 using namespace std;
 
 namespace PRGE
 {
-    Quaternion::Quaternion(float x, float y, float z, float w) NOEXCEPT_PRGE
+    Quaternion::Quaternion(const Matrix4x4f& matrix4x4)
     {
-#if DEBUG_PRGE == 1
-            NAN_OR_INF_XYZW(x, y, z, w);
-#endif
+        auto t = matrix4x4[0][0] + matrix4x4[1][1] + matrix4x4[2][2] + 1.0f;
 
-        _xyzw[0] = x;
-        _xyzw[1] = y;
-        _xyzw[2] = z;
-        _xyzw[3] = w;
-    }
+        if (t > 0) {
+            auto s = sqrt(t + 1.0f);
 
-    Quaternion::Quaternion(const Quaternion& quaternion) NOEXCEPT_PRGE
-    {
-#if DEBUG_PRGE == 1
-            NAN_OR_INF_XYZW(quaternion._xyzw[0], quaternion._xyzw[1], quaternion._xyzw[2], quaternion._xyzw[3]);
-#endif
+            _xyzw[3] = s * 0.5f;
+            s = 2.0f * s;
 
-        *reinterpret_cast<__m128*>(_xyzw) = *reinterpret_cast<const __m128*>(quaternion._xyzw);
-    }
+            _xyzw[0] = (matrix4x4[2][1] - matrix4x4[1][2]) * s;
+            _xyzw[1] = (matrix4x4[0][2] - matrix4x4[2][0]) * s;
+            _xyzw[2] = (matrix4x4[1][0] - matrix4x4[0][1]) * s;
+        } else {
+            const int nxt[3] = {1, 2, 0};
+            float q[3];
+            int i = 0;
 
-    Quaternion::Quaternion(Quaternion&& quaternion) NOEXCEPT_PRGE
-    {
-#if DEBUG_PRGE == 1
-        NAN_OR_INF_XYZW(quaternion._xyzw[0], quaternion._xyzw[1], quaternion._xyzw[2], quaternion._xyzw[3]);
-#endif
-        
-        auto&& q1 = move(quaternion._xyzw);
-        auto&& q2 = move(_xyzw);
-        swap(q1, q2);
-    }
+            if (matrix4x4[1][1] > matrix4x4[0][0]) {
+                i = 1;
+            }
 
-    Quaternion::Quaternion(__m128 m) NOEXCEPT_PRGE
-    {
-#if DEBUG_PRGE == 1
-            NAN_OR_INF_XYZW(m[0], m[1], m[2], m[3]);
-#endif
+            if (matrix4x4[2][2] > matrix4x4[i][i]) {
+                i = 2;
+            }
 
-        *reinterpret_cast<__m128*>(_xyzw) = m;
-    }
+            int j = nxt[i];
+            int k = nxt[j];
 
-    Quaternion& Quaternion::operator = (const Quaternion& quaternion) NOEXCEPT_PRGE
-    {
-#if DEBUG_PRGE == 1
-            NAN_OR_INF_XYZW(quaternion._xyzw[0], quaternion._xyzw[1], quaternion._xyzw[2], quaternion._xyzw[3]);
-#endif
+            float s = sqrt((matrix4x4[i][i] - matrix4x4[j][j] + matrix4x4[k][k]) + 1.0f);
 
-        *reinterpret_cast<__m128*>(_xyzw) = *reinterpret_cast<const __m128*>(quaternion._xyzw);
+            q[i] = s * 0.5f;
 
-        return *this;
-    }
+            if (s != 0.f) {
+                s *= 2.0f;
+            }
 
-    Quaternion& Quaternion::operator = (Quaternion&& quaternion) NOEXCEPT_PRGE
-    {
-#if DEBUG_PRGE == 1
-        NAN_OR_INF_XYZW(quaternion._xyzw[0], quaternion._xyzw[1], quaternion._xyzw[2], quaternion._xyzw[3]);
-#endif
+            _xyzw[3] = (matrix4x4[k][j] - matrix4x4[j][k]) * s;
+            q[j] = (matrix4x4[j][i] + matrix4x4[i][j]) * s;
+            q[k] = (matrix4x4[k][i] + matrix4x4[i][k]) * s;
 
-        auto&& q1 = move(quaternion._xyzw);
-        auto&& q2 = move(_xyzw);
-        swap(q1, q2);
-
-        return *this;
+            _xyzw[0] = q[0];
+            _xyzw[1] = q[1];
+            _xyzw[2] = q[2];
+        }
     }
 
     Quaternion Quaternion::operator + (const Quaternion& quaternion) const NOEXCEPT_PRGE
@@ -150,6 +129,21 @@ namespace PRGE
     }
 #endif
 
+    Transform Quaternion::toTransform() const
+    {
+        float xx = _xyzw[0] * _xyzw[0], yy = _xyzw[1] * _xyzw[1], zz = _xyzw[2] * _xyzw[2];
+        float xy = _xyzw[0] * _xyzw[1], xz = _xyzw[0] * _xyzw[2], yz = _xyzw[1] * _xyzw[2];
+        float wx = _xyzw[0] * _xyzw[3], wy = _xyzw[1] * _xyzw[3], wz = _xyzw[2] * _xyzw[3];
+
+        Matrix4x4f m {
+            1 - 2 * (yy + zz), 2 * (xy + wz), 2 * (xz - wy), 0.f,
+            2 * (xy - wz), 1 - 2 * (xx + zz), 2 * (yz + wx), 0.f,
+            2 * (xz + wy), 2 * (yz - wx), 1 - 2 * (xx + yy), 0.f
+        };
+
+        return {transpose(m), m};
+    }
+
     float dot(const Quaternion& q1, const Quaternion& q2) NOEXCEPT_PRGE
     {
 #if DEBUG_PRGE == 1
@@ -166,7 +160,7 @@ namespace PRGE
         return quaternion / sqrt(dot(quaternion, quaternion));
     }
 
-    Quaternion slerp(const Quaternion& q1, const Quaternion& q2, float t) NOEXCEPT_PRGE
+    Quaternion slerp(float t, const Quaternion& q1, const Quaternion& q2) NOEXCEPT_PRGE
     {
         float cosTheta = dot(q1, q2);
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		950F886E23195C0D002B19A0 /* intervalAreithmetic.inl in Sources */ = {isa = PBXBuildFile; fileRef = 950F886C23195C0D002B19A0 /* intervalAreithmetic.inl */; };
 		95133D7C23042DB100B478B9 /* shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95133D7A23042DB100B478B9 /* shape.cpp */; };
 		95133D8023042E4D00B478B9 /* transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95133D7E23042E4D00B478B9 /* transform.cpp */; };
 		9515188A2302E6DB0061C8CC /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 951518842302E6DB0061C8CC /* matrix.cpp */; };
@@ -15,6 +16,7 @@
 		951518932302E7810061C8CC /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 951518922302E7810061C8CC /* OpenGL.framework */; };
 		951518952302E7A90061C8CC /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 951518942302E7A90061C8CC /* libSDL2-2.0.0.dylib */; };
 		951518972302E7B60061C8CC /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 951518962302E7B60061C8CC /* libGLEW.2.1.0.dylib */; };
+		9564669E23183E02006C98D6 /* animatedTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9564669C23183E02006C98D6 /* animatedTransform.cpp */; };
 		957D70D823033F170000F3A9 /* ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 957D70D623033F170000F3A9 /* ray.cpp */; };
 		959AE2BE23156D5700D9C186 /* geometryPrimitive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 959AE2BC23156D5700D9C186 /* geometryPrimitive.cpp */; };
 		95B68EE32312726A001A4DA2 /* memoryArena.inl in Sources */ = {isa = PBXBuildFile; fileRef = 95B68EE12312726A001A4DA2 /* memoryArena.inl */; };
@@ -41,6 +43,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		950F886C23195C0D002B19A0 /* intervalAreithmetic.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = intervalAreithmetic.inl; sourceTree = "<group>"; };
+		950F886D23195C0D002B19A0 /* intervalAreithmetic.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = intervalAreithmetic.hpp; sourceTree = "<group>"; };
 		95133D7A23042DB100B478B9 /* shape.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = shape.cpp; sourceTree = "<group>"; };
 		95133D7B23042DB100B478B9 /* shape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = shape.hpp; sourceTree = "<group>"; };
 		95133D7E23042E4D00B478B9 /* transform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transform.cpp; sourceTree = "<group>"; };
@@ -61,6 +65,8 @@
 		951518922302E7810061C8CC /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		951518942302E7A90061C8CC /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../../../../../../usr/local/Cellar/sdl2/2.0.8/lib/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
 		951518962302E7B60061C8CC /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../../../usr/local/Cellar/glew/2.1.0/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
+		9564669C23183E02006C98D6 /* animatedTransform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = animatedTransform.cpp; sourceTree = "<group>"; };
+		9564669D23183E02006C98D6 /* animatedTransform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = animatedTransform.hpp; sourceTree = "<group>"; };
 		957D70D623033F170000F3A9 /* ray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ray.cpp; sourceTree = "<group>"; };
 		957D70D723033F170000F3A9 /* ray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ray.hpp; sourceTree = "<group>"; };
 		959AE2BC23156D5700D9C186 /* geometryPrimitive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = geometryPrimitive.cpp; sourceTree = "<group>"; };
@@ -125,6 +131,8 @@
 			children = (
 				95133D7E23042E4D00B478B9 /* transform.cpp */,
 				95133D7F23042E4D00B478B9 /* transform.hpp */,
+				9564669C23183E02006C98D6 /* animatedTransform.cpp */,
+				9564669D23183E02006C98D6 /* animatedTransform.hpp */,
 			);
 			path = Transform;
 			sourceTree = "<group>";
@@ -173,6 +181,8 @@
 		9515187B2302E6DB0061C8CC /* Math */ = {
 			isa = PBXGroup;
 			children = (
+				950F886C23195C0D002B19A0 /* intervalAreithmetic.inl */,
+				950F886D23195C0D002B19A0 /* intervalAreithmetic.hpp */,
 				9515187C2302E6DB0061C8CC /* point.inl */,
 				9515187D2302E6DB0061C8CC /* point.h */,
 				951518822302E6DB0061C8CC /* vec.inl */,
@@ -302,6 +312,7 @@
 				95FEB18A2306AD0500DFBEDC /* surfaceInteraction.cpp in Sources */,
 				959AE2BE23156D5700D9C186 /* geometryPrimitive.cpp in Sources */,
 				9515188A2302E6DB0061C8CC /* matrix.cpp in Sources */,
+				9564669E23183E02006C98D6 /* animatedTransform.cpp in Sources */,
 				95FEB1832305B3A600DFBEDC /* boundingVolume.inl in Sources */,
 				95FEB1902307FB7500DFBEDC /* math.cpp in Sources */,
 				95C8FEDE23145BD1002867DA /* primitive.cpp in Sources */,
@@ -312,6 +323,7 @@
 				95133D7C23042DB100B478B9 /* shape.cpp in Sources */,
 				9515188B2302E6DB0061C8CC /* quaternion.cpp in Sources */,
 				95FEB1872306A7F200DFBEDC /* interaction.cpp in Sources */,
+				950F886E23195C0D002B19A0 /* intervalAreithmetic.inl in Sources */,
 				957D70D823033F170000F3A9 /* ray.cpp in Sources */,
 				95E79ABE23168DEC008CBE77 /* triangle.cpp in Sources */,
 				9515188C2302E6DB0061C8CC /* main.cpp in Sources */,

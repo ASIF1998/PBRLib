@@ -26,6 +26,7 @@ namespace PRGE
         friend class Transform;
         friend class BoundingVolume3<float>;
         friend class GeometryPrimitive;
+        friend class AnimatedTransform;
 
     public:
         Ray() noexcept;
@@ -69,6 +70,7 @@ namespace PRGE
         public Ray
     {
         friend class Transform;
+        friend class AnimatedTransform;
 
     public:
         RayDifferential();

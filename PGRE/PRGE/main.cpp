@@ -4,10 +4,12 @@
 #include "Core/Math/point.h"
 #include "Core/Math/normal.h"
 #include "Core/Math/matrix.h"
+#include "Core/Math/intervalAreithmetic.hpp"
 
 #include "CollisionAndPhysics/ray.hpp"
 
 #include "Transform/transform.hpp"
+#include "Transform/animatedTransform.hpp"
 
 #include "Core/boundingVolume.hpp"
 
@@ -27,9 +29,15 @@ using namespace PRGE;
 
 int main()
 {
-    Triangle triangle (Transform{}, Transform{}, true, nullptr, 4);
+    const AnimatedTransform at (nullptr, nullptr, 1, 2);
+    Point3<float> point;
+    IntervalArithmetic<float> ia {0.f, 1.f};
+    IntervalArithmetic<float> io {0.f, 1.f};
     
-    triangle.arena();
+    io = ia * io;
+    
+    at.interpolate(32.54f);
+    at.boundingMoutionPoint(point);
     return 0;
 }
 

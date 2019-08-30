@@ -25,6 +25,8 @@ namespace PRGE
 {
     class Transform
     {
+        friend class AnimatedTransform;
+
     public:
         Transform() NOEXCEPT_PRGE;
         Transform(const Matrix4x4f& transformMatrix) NOEXCEPT_PRGE;
@@ -42,7 +44,7 @@ namespace PRGE
         Point3<float> operator () (const Point3<float>& point3) const NOEXCEPT_PRGE;
         Normal3f operator () (const Normal3f& normal) const NOEXCEPT_PRGE;
         Ray operator () (const Ray& ray) const NOEXCEPT_PRGE;
-        RayDifferential operator () (const RayDifferential& rayDifferential) NOEXCEPT_PRGE;
+        RayDifferential operator () (const RayDifferential& rayDifferential) const NOEXCEPT_PRGE;
         BoundingVolume3<float> operator () (const BoundingVolume3<float>& boundingVolume3) const NOEXCEPT_PRGE;
         SurfaceInteraction operator () (const SurfaceInteraction& surfaceInteraction) const NOEXCEPT_PRGE;
 
@@ -59,7 +61,7 @@ namespace PRGE
      * @param t вектор перемещения
      * @return трансформация пермещения
     */
-    inline Transform translate(const Vec3<float>& t) NOEXCEPT_PRGE;
+    Transform translate(const Vec3<float>& t) NOEXCEPT_PRGE;
 
     /**
      * Функция вычисляющая трансформацию маштабирования.
