@@ -334,7 +334,7 @@ namespace PRGE
             return {p1, p2};
         }
 
-        /// TODO: написать методы intersectP, overlabs, inside, insideWithoutUpperLimit, expand, boxSphere
+        /// TODO: написать методы iboxSphere
 
         friend bool intersect(const BoundingVolume3& boundingVolume3, const Ray& ray, float *t1, float* t2)
         {

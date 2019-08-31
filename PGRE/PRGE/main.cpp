@@ -29,15 +29,7 @@ using namespace PRGE;
 
 int main()
 {
-    const AnimatedTransform at (nullptr, nullptr, 1, 2);
-    Point3<float> point;
-    IntervalArithmetic<float> ia {0.f, 1.f};
-    IntervalArithmetic<float> io {0.f, 1.f};
-    
-    io = ia * io;
-    
-    at.interpolate(32.54f);
-    at.boundingMoutionPoint(point);
+    Mesh mesh {12, 21};
     return 0;
 }
 

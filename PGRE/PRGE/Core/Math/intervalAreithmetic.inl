@@ -18,8 +18,8 @@ namespace PRGE
 {
     /**
      * Данная структура представляет собой математическую структуру, которая 
-     * позваляет выполнять операции над интервалами аналагично тем, которые
-     * выполняются в абычной арифметике.
+     * позволяет выполнять операции над интервалами аналогично тем, которые
+     * выполняются в обычной арифметике.
     */
     template<typename Type>
     struct IntervalArithmetic
@@ -86,7 +86,7 @@ namespace PRGE
             return *this;
         }
 
-        inline IntervalArithmetic operator -() const noexcept
+        inline IntervalArithmetic operator - () const noexcept
         {
             return {-high, -low};
         }

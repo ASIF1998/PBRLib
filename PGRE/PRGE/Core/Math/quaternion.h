@@ -103,7 +103,6 @@ namespace PRGE
         /**
          * TODO:
          * 1) Добавить конструктор с классом Transform
-         * 2) Добавить метод toTransform 
         */
 
        Transform toTransform() const;
