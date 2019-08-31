@@ -12,12 +12,20 @@ namespace PRGE
 {
     BoundingVolume3<float> Triangle::objectBound() const NOEXCEPT_PRGE
     {
-        return {};
+        auto p0 = worldToObject(_ptrMesh->ptrVertices[_ptrMesh->indices[_indexInIndecesArray]]);
+        auto p1 = worldToObject(_ptrMesh->ptrVertices[_ptrMesh->indices[_indexInIndecesArray + 1]]);
+        auto p2 = worldToObject(_ptrMesh->ptrVertices[_ptrMesh->indices[_indexInIndecesArray + 2]]);
+
+        return merge(BoundingVolume3<float>(p0, p1), p2);
     }
 
     BoundingVolume3<float> Triangle::worldBound() const NOEXCEPT_PRGE
     {
-        return {};
+        auto p0 = _ptrMesh->ptrVertices[_ptrMesh->indices[_indexInIndecesArray]];
+        auto p1 = _ptrMesh->ptrVertices[_ptrMesh->indices[_indexInIndecesArray + 1]];
+        auto p2 = _ptrMesh->ptrVertices[_ptrMesh->indices[_indexInIndecesArray + 2]];
+
+        return merge(BoundingVolume3<float>(p0, p1), p2);
     }
 
     bool Triangle::intersect(const Ray& ray, float* tHit, SurfaceInteraction* surfaceInteraction, bool testAlphaTexture) const NOEXCEPT_PRGE

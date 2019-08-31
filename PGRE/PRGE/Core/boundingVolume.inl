@@ -166,6 +166,11 @@ namespace PRGE
             _pMax{max(p1[0], p2[0]), max(p1[1], p2[1]), max(p1[2], p2[2])}
         {}
 
+        inline BoundingVolume3(const Vec3<float>& v1, const Vec3<float>& v2) NOEXCEPT_PRGE :
+            _pMin{min(v1[0], v2[0]), min(v1[1], v2[1]), min(v1[2], v2[2])},
+            _pMax{max(v1[0], v2[0]), max(v1[1], v2[1]), max(v1[2], v2[2])}
+        {}
+
         inline BoundingVolume3(const BoundingVolume3& boundingVolume3) NOEXCEPT_PRGE :
             _pMin{boundingVolume3._pMin},
             _pMax{boundingVolume3._pMax}
