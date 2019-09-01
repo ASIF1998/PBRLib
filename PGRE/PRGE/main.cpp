@@ -30,6 +30,7 @@ using namespace PRGE;
 int main()
 {
     Mesh mesh {12, 21};
+    Mesh::loadModel("asif");
     return 0;
 }
 

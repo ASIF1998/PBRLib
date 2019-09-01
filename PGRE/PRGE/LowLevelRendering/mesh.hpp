@@ -16,13 +16,14 @@
 #include "../Core/Math/normal.h"
 
 #include "../Core/Memory/STLMemory.hpp"
-#include "../Core/Memory/memoryArena.hpp"
 
 #include <memory>
 
 #include <vector>
 
 #include <cstdint>
+
+#include <string_view>
 
 using namespace std;
 
@@ -32,29 +33,18 @@ namespace PRGE
     {
         inline Mesh(size_t verticesCount, size_t indicesCount) :
             indices(indicesCount),
-            ptrVertices{new Point3<float> [verticesCount]},
-            ptrNormals{new Normal3f [verticesCount]},
-            ptrTangets{new Vec3<float> [verticesCount]},
-            uv{new Point2<float> [verticesCount]},
-            nVertices{verticesCount}
-        {}
-
-        inline Mesh(size_t verticesCount, size_t indicesCount, MemoryArena& memoryArena) :
-            indices(indicesCount),
-            ptrVertices{memoryArena.allocator<Point3<float>>(verticesCount)},
-            ptrNormals{memoryArena.allocator<Normal3f>(verticesCount)},
-            ptrTangets{memoryArena.allocator<Vec3<float>>(verticesCount)},
-            uv{memoryArena.allocator<Point2<float>>(verticesCount)},
-            nVertices{verticesCount}
+            vertices(verticesCount),
+            normals(verticesCount),
+            tangets(verticesCount),
+            uvs(verticesCount)
         {}
         
         inline Mesh(Mesh&& mesh) :
             indices{move(mesh.indices)},
-            ptrVertices{move(mesh.ptrVertices)},
-            ptrNormals{move(mesh.ptrNormals)},
-            ptrTangets{move(mesh.ptrTangets)},
-            uv{move(mesh.uv)},
-            nVertices{mesh.nVertices}
+            vertices{move(mesh.vertices)},
+            normals{move(mesh.normals)},
+            tangets{move(mesh.tangets)},
+            uvs{move(mesh.uvs)}
         {}
 
         Mesh(const Mesh&) = delete;
@@ -64,7 +54,7 @@ namespace PRGE
 
         inline size_t verticesCount() const
         {
-            return indices.size();
+            return vertices.size();
         }
 
         inline size_t indicesCount() const
@@ -72,13 +62,21 @@ namespace PRGE
             return indices.size();
         }
 
+        /**
+         * Статический метод загружающий модель в виде нескольких мешей.
+         * Загрузка текстур в обязанности данного статического метола не входит.
+         * 
+         * @param path путь до файла
+         * @return вектор мешей
+        */
+        static vector<Mesh> loadModel(const string_view path);
+
     public:
         vector<uint32_t, STLAllocator<uint32_t>> indices;
-        unique_ptr<Point3<float> []> ptrVertices;
-        unique_ptr<Normal3f []> ptrNormals;
-        unique_ptr<Vec3<float> []> ptrTangets;
-        unique_ptr<Point2<float> []> uv;
-        const size_t nVertices;
+        vector<Point3<float>, STLAllocator<Point3<float>>> vertices;
+        vector<Normal3f, STLAllocator<Normal3f>> normals;
+        vector<Vec3<float>, STLAllocator<Vec3<float>>> tangets;
+        vector<Point2<float>, STLAllocator<Point2<float>>> uvs;
 
         /**
          * TODO: должен присутствовать указатель типа 
