@@ -27,6 +27,7 @@ namespace PRGE
         friend class BoundingVolume3<float>;
         friend class GeometryPrimitive;
         friend class AnimatedTransform;
+        friend class Triangle;
 
     public:
         Ray() noexcept;

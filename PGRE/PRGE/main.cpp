@@ -31,6 +31,9 @@ int main()
 {
     Mesh mesh {12, 21};
     Mesh::loadModel("asif");
+    const Vec3<float> f;
+    
+    f[0];
     return 0;
 }
 

@@ -11,6 +11,8 @@
 
 #include "../core.h"
 
+#include <cmath>
+
 #define NAN_OR_INF_XY(x, y) if(isnan(x) || isnan(y) || isinf(x) || isinf(y)) throw invalid_argument("The x and y arguments passed are not valid")
 #define NAN_OR_INF_XYZ(x, y, z) if(isnan(x) || isnan(y) || isnan(z) || isinf(x) || isinf(y) || isinf(z)) throw invalid_argument("The x, y and z arguments passed are not valid")
 #define NAN_OR_INF_XYZW(x, y, z, w) if(isnan(x) || isnan(y) || isnan(z) || isnan(w) || isinf(x) || isinf(y) || isinf(z) || isinf(w)) throw invalid_argument("The x, y, z and w arguments passed are not valid")
@@ -62,7 +64,18 @@ namespace PRGE
     {
         return (dot(u1, u2) < 0 ? u1 * -1 : u1);
     }
+    
+    template<typename Type>
+    inline size_t maxDimension(const Type& x) NOEXCEPT_PRGE
+    {
+        return (x[0] > x[1] ? 0 : (x[1] > x[2] ? 1 : 2));
+    }
 
+    template<typename Type1, template<typename> class Type2>
+    inline Type2<Type1> abs(const Type2<Type1>& x) NOEXCEPT_PRGE
+    {
+        return {std::abs(x[0]), std::abs(x[0]), std::abs(x[0])};
+    }
 }
 
 #endif /* math_hpp */

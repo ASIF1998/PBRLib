@@ -899,7 +899,7 @@ _c1[1].kz = -(multipliedNumbers2[3] * s002) - multipliedNumbers3[0] * s002 - s01
               n1 = _mm_sub_ps(*reinterpret_cast<const __m128*>(r[1]), *reinterpret_cast<const __m128*>(rNext[1]));
               n2 = _mm_sub_ps(*reinterpret_cast<const __m128*>(r[2]), *reinterpret_cast<const __m128*>(rNext[2]));
 
-              norm = max(norm, max(abs(n0[0]) + abs(n0[1]) + abs(n0[2]), max(abs(n1[0]) + abs(n1[1]) + abs(n1[2]), abs(n2[0]) + abs(n2[1]) + abs(n2[2]))));
+           norm = max(norm, max(std::abs(n0[0]) + std::abs(n0[1]) + std::abs(n0[2]), max(std::abs(n1[0]) + std::abs(n1[1]) + std::abs(n1[2]), std::abs(n2[0]) + std::abs(n2[1]) + std::abs(n2[2]))));
               r = rNext;
 
        } while (++count < 100 && norm > 0.001f);
@@ -950,7 +950,7 @@ _c1[1].kz = -(multipliedNumbers2[3] * s002) - multipliedNumbers3[0] * s002 - s01
      *           c1 + (c2 + c3 * t) * cos(2 * theta * t) + (c4 + c5 * t) * sin(2 * theta * t).
      * 
      * Эта функция работает итеративно. Пока depth не равен нулю будет осуществлятся деление интервала на
-     * две части и рекурсивно вызывать эта же функция. Когда depth будет равен нулю будет применяться 
+     * две части и рекурсивно вызываться эта же функция. Когда depth будет равен нулю будет применяться 
      * метод Ньютона.
      * 
      * ВНИМЕНИЕ, данная функция будет находить только один ноль, даже если есть возможность найти еще нули !!!
