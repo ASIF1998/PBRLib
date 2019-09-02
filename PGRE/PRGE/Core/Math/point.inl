@@ -74,6 +74,15 @@ namespace PRGE
             return {_xy[0] + vec2._xy[0], _xy[1] + vec2._xy[1]};
         }
 
+        inline Point2 operator + (const Point2<Type>& point2) const NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XY(point2._xy[0], point2._xy[1]);
+#endif
+            
+            return {_xy[0] + point2._xy[0], _xy[1] + point2._xy[1]};
+        }
+
         template<typename T, template<typename> class U>
         inline Vec2<T> operator - (const U<T>& p) const NOEXCEPT_PRGE
         {
@@ -240,6 +249,15 @@ namespace PRGE
 #endif
 
             return {_xyz[0] + vec3._xyz[0], _xyz[1] + vec3._xyz[1], _xyz[2] + vec3._xyz[2]};
+        }
+
+        inline Point3 operator + (const Point3<Type>& point3) const NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(point3._xyz[0], point3._xyz[1], point3._xyz[2]);
+#endif
+            
+            return {_xyz[0] + point3._xyz[0], _xyz[1] + point3._xyz[1], _xyz[2] + point3._xyz[2]};
         }
 
         template<template<typename> class U>
@@ -440,6 +458,15 @@ namespace PRGE
 #endif
 
             return {_mm_add_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(vec3._xyz))};
+        }
+
+        inline Point3 operator + (const Point3<float>& point3) const NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            NAN_OR_INF_XYZ(point3._xyz[0], point3._xyz[1], point3._xyz[2]);
+#endif
+            
+            return {_mm_add_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(point3._xyz))};
         }
 
         inline Vec3<float> operator - (const Point3& point3) const NOEXCEPT_PRGE

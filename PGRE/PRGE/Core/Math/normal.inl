@@ -43,6 +43,11 @@ namespace PRGE
 
             *reinterpret_cast<__m128*>(_xyz) = *reinterpret_cast<const __m128*>(normal._xyz);
         }
+        
+        operator Vec3<float> () const
+        {
+            return {_xyz[0], _xyz[1], _xyz[2]};
+        }
 
         Normal3f(Normal3f&& normal) NOEXCEPT_PRGE
         {

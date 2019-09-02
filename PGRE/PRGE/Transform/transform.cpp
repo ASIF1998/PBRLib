@@ -7,6 +7,7 @@
 //
 
 #include "transform.hpp"
+#include "../CollisionAndPhysics/Interaction/surfaceInteraction.hpp"
 
 namespace PRGE
 {

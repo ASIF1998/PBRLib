@@ -19,10 +19,12 @@
 #include "../Core/boundingVolume.hpp"
 
 #include "../CollisionAndPhysics/ray.hpp"
-#include "../CollisionAndPhysics/Interaction/surfaceInteraction.hpp"
+//#include "../CollisionAndPhysics/Interaction/surfaceInteraction.hpp"
 
 namespace PRGE
 {
+    struct SurfaceInteraction;
+    
     class Transform
     {
         friend class AnimatedTransform;

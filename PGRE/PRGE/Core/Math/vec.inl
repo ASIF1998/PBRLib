@@ -353,6 +353,16 @@ namespace PRGE
             return _xyz[0] != vec3._xyz[0] || _xyz[1] != vec3._xyz[1] || _xyz[2] != vec3._xyz[2];
         }
 
+        inline float lengthSquared() const noexcept
+        {
+            return _xyz[0] * _xyz[0] + _xyz[1] * _xyz[1] * _xyz[2] * _xyz[2];
+        }
+
+        inline float length() const noexcept
+        {
+            return std::sqrt(_xyz[0] * _xyz[0] + _xyz[1] * _xyz[1] * _xyz[2] * _xyz[2]);
+        }
+
         /**
          * Функция осуществляющая скалярное произведение.
          * 
@@ -564,6 +574,16 @@ namespace PRGE
         {
             auto res = _mm_cmpneq_ps(*reinterpret_cast<const __m128*>(_xyz), *reinterpret_cast<const __m128*>(vec3._xyz));
             return res[0] || res[1] || res[2];
+        }
+        
+        inline float lengthSquared() const noexcept
+        {
+            return _xyz[0] * _xyz[0] + _xyz[1] * _xyz[1] * _xyz[2] * _xyz[2];
+        }
+
+        inline float length() const noexcept
+        {
+            return std::sqrt(_xyz[0] * _xyz[0] + _xyz[1] * _xyz[1] * _xyz[2] * _xyz[2]);
         }
 
         /**

@@ -13,6 +13,8 @@
 
 #include <cmath>
 
+using namespace std;
+
 #define NAN_OR_INF_XY(x, y) if(isnan(x) || isnan(y) || isinf(x) || isinf(y)) throw invalid_argument("The x and y arguments passed are not valid")
 #define NAN_OR_INF_XYZ(x, y, z) if(isnan(x) || isnan(y) || isnan(z) || isinf(x) || isinf(y) || isinf(z)) throw invalid_argument("The x, y and z arguments passed are not valid")
 #define NAN_OR_INF_XYZW(x, y, z, w) if(isnan(x) || isnan(y) || isnan(z) || isnan(w) || isinf(x) || isinf(y) || isinf(z) || isinf(w)) throw invalid_argument("The x, y, z and w arguments passed are not valid")
@@ -21,6 +23,8 @@ namespace PRGE
 {
     template<typename>
     class Vec3;
+    
+    class Normal3f;
 
     /**
      * Функция необходимая для решения линейной системы вида:
@@ -75,6 +79,18 @@ namespace PRGE
     inline Type2<Type1> abs(const Type2<Type1>& x) NOEXCEPT_PRGE
     {
         return {std::abs(x[0]), std::abs(x[0]), std::abs(x[0])};
+    }
+
+    template<typename Type>
+    inline void coordinateSystem(const Vec3<Type>& v1, Vec3<Type>* v2, Vec3<Type>* v3)
+    {
+        if (std::abs(v1[0]) > std::abs(v1[1])) {
+            *v2 = Vec3<Type>{-v1[2], static_cast<Type>(0), v1[0]} * (static_cast<Type>(1) / std::sqrt(v1[0] * v1[0] + v1[2] * v1[2]));
+        } else {
+            *v2 = Vec3<Type>{static_cast<Type>(0), v1[2], -v1[1]} * (static_cast<Type>(1) / std::sqrt(v1[1] * v1[1] + v1[2] * v1[2]));
+        }
+
+        *v3 = cross(v1, *v2);
     }
 }
 

@@ -11,9 +11,12 @@
 
 #include "interaction.hpp"
 
+#include "../../LowLevelRendering/Geometry/SubmissionShape/shape.hpp"
+
 namespace PRGE
 {
     struct IPrimitive;
+    //struct IShape;
 
     /**
      * Данная структура хранит экземпляр нормали поверхности и различные частные
@@ -64,14 +67,21 @@ namespace PRGE
          * @param dndv параметрическая частная производная нормали
          * @param time время связанное с взаимодействием
         */
-        inline SurfaceInteraction(const Point3<float>& p, 
+        SurfaceInteraction(const Point3<float>& p, 
                                   const Point2<float>& uv, 
                                   const Vec3<float>& wo, 
                                   const Vec3<float>& dpdu, 
                                   const Vec3<float>& dpdv, 
                                   const Normal3f& dndu, 
                                   const Normal3f& dndv, 
-                                  float time) NOEXCEPT_PRGE;
+                                  float time,
+                                  const IShape* s) NOEXCEPT_PRGE;
+
+        SurfaceInteraction(const SurfaceInteraction& surfaceInteraction) NOEXCEPT_PRGE;
+        SurfaceInteraction(SurfaceInteraction&& surfaceInteraction) NOEXCEPT_PRGE;
+
+        SurfaceInteraction& operator = (const SurfaceInteraction& surfaceInteraction) NOEXCEPT_PRGE;
+        SurfaceInteraction& operator = (SurfaceInteraction&& surfaceInteraction) NOEXCEPT_PRGE;
 
         /**
          * Метод, позволяющий установить значения для шейдинга.

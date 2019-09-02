@@ -18,7 +18,6 @@
 #include "../../../CollisionAndPhysics/ray.hpp"
 
 #include "../../../CollisionAndPhysics/Interaction/interaction.hpp"
-#include "../../../CollisionAndPhysics/Interaction/surfaceInteraction.hpp"
 
 #include "../../../Core/Math/point.h"
 #include "../../../Core/Math/vec.h"
@@ -85,7 +84,7 @@ namespace PRGE
          * 
          * @return площадь поверхности фигуры
         */
-        virtual float arena() const NOEXCEPT_PRGE = 0;
+        virtual float area() const NOEXCEPT_PRGE = 0;
 
         virtual Interaction sample(const Point2<float>& uv) const = 0;
         virtual Interaction sample(const Interaction& interaction, const Point2<float>& uv) const;

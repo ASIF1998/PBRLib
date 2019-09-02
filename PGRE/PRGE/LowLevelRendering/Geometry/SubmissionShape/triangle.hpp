@@ -44,8 +44,16 @@ namespace PRGE
         virtual BoundingVolume3<float> worldBound() const NOEXCEPT_PRGE override;
         virtual bool intersect(const Ray& ray, float* tHit, SurfaceInteraction* surfaceInteraction, bool testAlphaTexture = true) const NOEXCEPT_PRGE override;
         virtual bool intersect(const Ray& ray, bool testAlphaTexture = true) const NOEXCEPT_PRGE override;
-        virtual float arena() const NOEXCEPT_PRGE override;
+        virtual float area() const NOEXCEPT_PRGE override;
         virtual Interaction sample(const Point2<float>& uv) const override;
+
+        /**
+         * Данный метод возвращает параметрические коорлинаты
+         * для трёх вершин треугольника.
+         * 
+         * @return uv параметрические координаты трёх вершин треугольника
+        */
+        void getUV(Point2<float> uv[3]) const;
 
     private:
         shared_ptr<Mesh> _ptrMesh;
