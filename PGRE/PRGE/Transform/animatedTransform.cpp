@@ -150,64 +150,94 @@ namespace PRGE
        /// 2 * q1y, 2 * q1z, 0, 0
        auto multipliedNumbers30 = _mm_mul_ps(_mm_setr_ps(2.0f, 2.0f, 0.0f, 0.0f), _mm_setr_ps(q1y, q1z, 0.0f, 0.0f));
 
+       /// multipliedNumbers3[0] * s010, multipliedNumbers3[2] * s020, multipliedNumbers1[3] * s100, multipliedNumbers2[3] * s110
+       auto multipliedNumbers31 = _mm_mul_ps(_mm_setr_ps(multipliedNumbers3[0], multipliedNumbers3[2], multipliedNumbers1[3], multipliedNumbers2[3]), _mm_setr_ps(s010, s020, s100, s110));
+
+       /// multipliedNumbers3[3] * s120, multipliedNumbers3[0] * s011, multipliedNumbers3[2] * s021, multipliedNumbers1[3] * s101
+       auto multipliedNumbers32 = _mm_mul_ps(_mm_setr_ps(multipliedNumbers3[3], multipliedNumbers3[0], multipliedNumbers3[2], multipliedNumbers1[3]), _mm_setr_ps(s120, s011, s021, s101));
+
+       /// multipliedNumbers2[3] * s111, multipliedNumbers3[1] * s121, multipliedNumbers3[3] * s121, multipliedNumbers3[2] * s121
+       auto multipliedNumbers33 = _mm_mul_ps(_mm_setr_ps(multipliedNumbers2[3], multipliedNumbers3[1], multipliedNumbers3[3], multipliedNumbers3[2]), _mm_setr_ps(s111, s121, s121, s121));
+
+       /// multipliedNumbers3[0] * s012, multipliedNumbers3[2] * s022, multipliedNumbers1[3] * s102, multipliedNumbers2[3] * s112
+       auto multipliedNumbers34 = _mm_mul_ps(_mm_setr_ps(multipliedNumbers3[0], multipliedNumbers3[2], multipliedNumbers1[3], multipliedNumbers2[3]), _mm_setr_ps(s012, s022, s102, s112));
+
+       /// multipliedNumbers3[3] * s122, multipliedNumbers2[3] * s000, multipliedNumbers3[0] * s000, multipliedNumbers1[1] * s010
+       auto multipliedNumbers35 = _mm_mul_ps(_mm_setr_ps(multipliedNumbers3[3], multipliedNumbers2[3], multipliedNumbers3[0], multipliedNumbers1[1]), _mm_setr_ps(s122, s000, s000, s010));
+
+       /// multipliedNumbers2[1] * s010, multipliedNumbers1[3] * s010, q1y * multipliedNumbers4[0], qperpw * multipliedNumbers8[1]
+       auto multipliedNumbers36 = _mm_mul_ps(_mm_setr_ps(multipliedNumbers2[1], multipliedNumbers1[3], q1y, qperpw), _mm_setr_ps(s010, s010, multipliedNumbers4[0], multipliedNumbers8[1]));
+
+       /// multipliedNumbers16[0] * s020, multipliedNumbers2[3] * s100, multipliedNumbers3[0] * s100, multipliedNumbers1[1] * s110
+       auto multipliedNumbers37 = _mm_mul_ps(_mm_setr_ps(multipliedNumbers16[0], multipliedNumbers2[3], multipliedNumbers3[0], multipliedNumbers1[1]), _mm_setr_ps(s020, s100, s100, s110));
+
+       /// multipliedNumbers2[1] * s110,  multipliedNumbers1[3] * s110, q1y * multipliedNumbers4[1], qperpw * multipliedNumbers12[1]
+       auto multipliedNumbers38 = _mm_mul_ps(_mm_setr_ps(multipliedNumbers2[1], multipliedNumbers1[3], q1y, qperpw), _mm_setr_ps(s110, s110, multipliedNumbers4[1], multipliedNumbers12[1]));
+
+       /// multipliedNumbers16[0] * s120, multipliedNumbers2[3] * s001, multipliedNumbers3[0] * s001, multipliedNumbers1[1] * s011
+       auto multipliedNumbers39 = _mm_mul_ps(_mm_setr_ps(multipliedNumbers16[0], multipliedNumbers2[3], multipliedNumbers3[0], multipliedNumbers1[1]), _mm_setr_ps(s120, s001, s001, s011));
+
+       /// multipliedNumbers2[1] * s011,  multipliedNumbers1[3] * s011, q1y * multipliedNumbers4[2], qperpw * multipliedNumbers9[3]
+       auto multipliedNumbers40 = _mm_mul_ps(_mm_setr_ps(multipliedNumbers2[1], multipliedNumbers1[3], q1y, qperpw), _mm_setr_ps(s011, s011, multipliedNumbers4[2], multipliedNumbers9[3]));
+
        // _c1[0]
 
        _c1[0].kx = (-1 + multipliedNumbers1[0] + multipliedNumbers1[1] + multipliedNumbers1[2] + multipliedNumbers1[3]) *
                      s000 +
               multipliedNumbers2[2] * s010 - multipliedNumbers2[3] * s010 +
-              multipliedNumbers3[0] * s010 - multipliedNumbers3[1] * s020 -
-              multipliedNumbers3[2] * s020 - multipliedNumbers3[3] * s020 + s100 -
+              multipliedNumbers31[0] - multipliedNumbers3[1] * s020 -
+              multipliedNumbers31[1] - multipliedNumbers3[3] * s020 + s100 -
               multipliedNumbers1[0] * s100 - multipliedNumbers1[1] * s100 - multipliedNumbers1[2] * s100 -
-              multipliedNumbers1[3] * s100 - multipliedNumbers2[2] * s110 +
-              multipliedNumbers2[3] * s110 - multipliedNumbers3[0] * s110 +
+              multipliedNumbers31[2] - multipliedNumbers2[2] * s110 +
+              multipliedNumbers31[3] - multipliedNumbers3[0] * s110 +
               multipliedNumbers3[1] * s120 + multipliedNumbers3[2] * s120 +
-              multipliedNumbers3[3] * s120 +
+              multipliedNumbers32[0] +
               q1x * (-(q1y * s010) - multipliedNumbers4[0] + q1y * s110 + multipliedNumbers4[1]);
 
        _c1[0].ky = (-1 + multipliedNumbers1[0] + multipliedNumbers1[1] + multipliedNumbers1[2] + multipliedNumbers1[3]) *
                      s001 +
               multipliedNumbers2[2] * s011 - multipliedNumbers2[3] * s011 +
-              multipliedNumbers3[0] * s011 - multipliedNumbers3[1] * s021 -
-              multipliedNumbers3[2] * s021 - multipliedNumbers3[3] * s021 + s101 -
+              multipliedNumbers32[1] - multipliedNumbers3[1] * s021 -
+              multipliedNumbers32[2] - multipliedNumbers3[3] * s021 + s101 -
               multipliedNumbers1[0] * s101 - multipliedNumbers1[1] * s101 - multipliedNumbers1[2] * s101 -
-              multipliedNumbers1[3] * s101 - multipliedNumbers2[2] * s111 +
-              multipliedNumbers2[3] * s111 - multipliedNumbers3[0] * s111 +
-              multipliedNumbers3[1] * s121 + multipliedNumbers3[2] * s121 +
-              multipliedNumbers3[3] * s121 +
+              multipliedNumbers32[3] - multipliedNumbers2[2] * s111 +
+              multipliedNumbers33[0] - multipliedNumbers3[0] * s111 +
+              multipliedNumbers33[1] + multipliedNumbers33[3] +
+              multipliedNumbers33[2] +
               q1x * (-(q1y * s011) - multipliedNumbers4[2] + q1y * s111 + multipliedNumbers4[3]);
 
        _c1[0].kz = (-1 + multipliedNumbers1[0] + multipliedNumbers1[1] + multipliedNumbers1[2] + multipliedNumbers1[3]) *
               s002 +
               multipliedNumbers2[2] * s012 - multipliedNumbers2[3] * s012 +
-              multipliedNumbers3[0] * s012 - multipliedNumbers3[1] * s022 -
-              multipliedNumbers3[2] * s022 - multipliedNumbers3[3] * s022 + s102 -
+              multipliedNumbers34[0] - multipliedNumbers3[1] * s022 -
+              multipliedNumbers34[1] - multipliedNumbers3[3] * s022 + s102 -
               multipliedNumbers1[0] * s102 - multipliedNumbers1[1] * s102 - multipliedNumbers1[2] * s102 -
-              multipliedNumbers1[3] * s102 - multipliedNumbers2[2] * s112 +
-              multipliedNumbers2[3] * s112 - multipliedNumbers3[0] * s112 +
+              multipliedNumbers34[2] - multipliedNumbers2[2] * s112 +
+              multipliedNumbers34[3] - multipliedNumbers3[0] * s112 +
               multipliedNumbers3[1] * s122 + multipliedNumbers3[2] * s122 +
-              multipliedNumbers3[3] * s122 +
+              multipliedNumbers35[0] +
               q1x * (-(q1y * s012) - multipliedNumbers5[0] + q1y * s112 + multipliedNumbers5[1]);
 
        _c1[0].kc = -t0x + t1x;
 
        // _c1[1]
 
-       _c1[1].kx = -(multipliedNumbers2[3] * s000) - multipliedNumbers3[0] * s000 - s010 +
-              multipliedNumbers1[1] * s010 + multipliedNumbers2[1] * s010 +
-              multipliedNumbers1[3] * s010 - q1y * multipliedNumbers4[0] +
-              qperpw * multipliedNumbers8[1] - multipliedNumbers16[0] * s020 +
-              multipliedNumbers2[3] * s100 + multipliedNumbers3[0] * s100 +
+       _c1[1].kx = -(multipliedNumbers35[1]) - multipliedNumbers35[2] - s010 +
+              multipliedNumbers35[3] + multipliedNumbers36[0] +
+              multipliedNumbers36[1] - multipliedNumbers36[2] +
+              multipliedNumbers36[3] - multipliedNumbers37[0] +
+              multipliedNumbers37[1] + multipliedNumbers37[2] +
               multipliedNumbers2[2] * (-s000 + s100) + multipliedNumbers2[0] * (s010 - s110) + s110 -
-              multipliedNumbers1[1] * s110 - multipliedNumbers2[1] * s110 -
-              multipliedNumbers1[3] * s110 +
+              multipliedNumbers37[3] - multipliedNumbers38[0] -
+              multipliedNumbers38[1] +
               q1x * (q1y * (-s000 + s100) + q1w * (s020 - s120)) +
-              q1y * multipliedNumbers4[1] - qperpw * multipliedNumbers12[1] +
-              multipliedNumbers16[0] * s120;
+              multipliedNumbers38[2] - multipliedNumbers38[3] +
+              multipliedNumbers39[0];
 
-       _c1[1].ky = -(multipliedNumbers2[3] * s001) - multipliedNumbers3[0] * s001 - s011 +
-              multipliedNumbers1[1] * s011 + multipliedNumbers2[1] * s011 +
-              multipliedNumbers1[3] * s011 - q1y * multipliedNumbers4[2] +
-              qperpw * multipliedNumbers9[3] - multipliedNumbers16[0] * s021 +
+       _c1[1].ky = -(multipliedNumbers39[1]) - multipliedNumbers39[2] - s011 +
+              multipliedNumbers39[3] + multipliedNumbers40[0] +
+              multipliedNumbers40[1] - multipliedNumbers40[2] +
+              multipliedNumbers40[3] - multipliedNumbers16[0] * s021 +
               multipliedNumbers2[3] * s101 + multipliedNumbers3[0] * s101 +
               multipliedNumbers2[2] * (-s001 + s101) + multipliedNumbers2[0] * (s011 - s111) + s111 -
               multipliedNumbers1[1] * s111 - multipliedNumbers2[1] * s111 -
@@ -270,12 +300,12 @@ _c1[1].kz = -(multipliedNumbers2[3] * s002) - multipliedNumbers3[0] * s002 - s01
        // _c2[0]
 
        _c2[0].kx = -(multipliedNumbers1[2] * s000) - multipliedNumbers1[3] * s000 +
-              multipliedNumbers2[3] * s010 - multipliedNumbers3[0] * s010 +
-              multipliedNumbers3[2] * s020 + multipliedNumbers3[3] * s020 +
+              multipliedNumbers2[3] * s010 - multipliedNumbers31[0] +
+              multipliedNumbers31[1] + multipliedNumbers3[3] * s020 +
               multipliedNumbers1[0] * (s000 - s100) + multipliedNumbers1[1] * (s000 - s100) +
-              multipliedNumbers1[2] * s100 + multipliedNumbers1[3] * s100 -
-              multipliedNumbers2[3] * s110 + multipliedNumbers3[0] * s110 -
-              multipliedNumbers3[2] * s120 - multipliedNumbers3[3] * s120 +
+              multipliedNumbers1[2] * s100 + multipliedNumbers31[2] -
+              multipliedNumbers31[3] + multipliedNumbers3[0] * s110 -
+              multipliedNumbers3[2] * s120 - multipliedNumbers32[0] +
               multipliedNumbers28[3] * qperpy * multipliedNumbers5[3] -
               2 * multipliedNumbers6[0] * multipliedNumbers5[3] +
               2 * multipliedNumbers6[1] * multipliedNumbers6[2] +
@@ -289,12 +319,12 @@ _c1[1].kz = -(multipliedNumbers2[3] * s002) - multipliedNumbers3[0] * s002 - s01
                      theta);
 
        _c2[0].ky = -(multipliedNumbers1[2] * s001) - multipliedNumbers1[3] * s001 +
-              multipliedNumbers2[3] * s011 - multipliedNumbers3[0] * s011 +
-              multipliedNumbers3[2] * s021 + multipliedNumbers3[3] * s021 +
+              multipliedNumbers2[3] * s011 - multipliedNumbers32[1] +
+              multipliedNumbers32[2] + multipliedNumbers3[3] * s021 +
               multipliedNumbers1[0] * (s001 - s101) + multipliedNumbers1[1] * (s001 - s101) +
-              multipliedNumbers1[2] * s101 + multipliedNumbers1[3] * s101 -
-              multipliedNumbers2[3] * s111 + multipliedNumbers3[0] * s111 -
-              multipliedNumbers3[2] * s121 - multipliedNumbers3[3] * s121 +
+              multipliedNumbers1[2] * s101 + multipliedNumbers32[3] -
+              multipliedNumbers33[0] + multipliedNumbers3[0] * s111 -
+              multipliedNumbers33[3] - multipliedNumbers33[2] +
               multipliedNumbers28[3] * qperpy * multipliedNumbers15[3] -
               2 * multipliedNumbers6[0] * multipliedNumbers15[3] +
               2 * multipliedNumbers6[1] * multipliedNumbers10[0] +
@@ -308,12 +338,12 @@ _c1[1].kz = -(multipliedNumbers2[3] * s002) - multipliedNumbers3[0] * s002 - s01
                      theta);
 
        _c2[0].kz = -(multipliedNumbers1[2] * s002) - multipliedNumbers1[3] * s002 +
-              multipliedNumbers2[3] * s012 - multipliedNumbers3[0] * s012 +
-              multipliedNumbers3[2] * s022 + multipliedNumbers3[3] * s022 +
+              multipliedNumbers2[3] * s012 - multipliedNumbers34[0] +
+              multipliedNumbers34[1] + multipliedNumbers3[3] * s022 +
               multipliedNumbers1[0] * (s002 - s102) + multipliedNumbers1[1] * (s002 - s102) +
-              multipliedNumbers1[2] * s102 + multipliedNumbers1[3] * s102 -
-              multipliedNumbers2[3] * s112 + multipliedNumbers3[0] * s112 -
-              multipliedNumbers3[2] * s122 - multipliedNumbers3[3] * s122 +
+              multipliedNumbers1[2] * s102 + multipliedNumbers34[2] -
+              multipliedNumbers34[3] + multipliedNumbers3[0] * s112 -
+              multipliedNumbers3[2] * s122 - multipliedNumbers35[0] +
               multipliedNumbers28[3] * multipliedNumbers28[1] * theta -
               2 * multipliedNumbers6[0] * s012 * theta +
               2 * multipliedNumbers6[1] * multipliedNumbers10[1] +
@@ -330,14 +360,14 @@ _c1[1].kz = -(multipliedNumbers2[3] * s002) - multipliedNumbers3[0] * s002 - s01
 
        // _c2[1]
 
-       _c2[1].kx = multipliedNumbers2[3] * s000 + multipliedNumbers3[0] * s000 + multipliedNumbers1[1] * s010 -
-              multipliedNumbers2[1] * s010 - multipliedNumbers1[3] * s010 -
-              q1y * multipliedNumbers4[0] - qperpw * multipliedNumbers8[1] +
-              multipliedNumbers16[0] * s020 - multipliedNumbers2[3] * s100 -
-              multipliedNumbers3[0] * s100 + multipliedNumbers2[0] * (s010 - s110) -
-              multipliedNumbers1[1] * s110 + multipliedNumbers2[1] * s110 +
-              multipliedNumbers1[3] * s110 + q1y * multipliedNumbers4[1] +
-              qperpw * multipliedNumbers12[1] - multipliedNumbers16[0] * s120 +
+       _c2[1].kx = multipliedNumbers35[1] + multipliedNumbers35[2] + multipliedNumbers35[3] -
+              multipliedNumbers36[0] - multipliedNumbers36[1] -
+              multipliedNumbers36[2] - multipliedNumbers36[3] +
+              multipliedNumbers37[0] - multipliedNumbers37[1] -
+              multipliedNumbers37[2] + multipliedNumbers2[0] * (s010 - s110) -
+              multipliedNumbers37[3] + multipliedNumbers38[0] +
+              multipliedNumbers38[1] + multipliedNumbers38[2] +
+              multipliedNumbers38[3] - multipliedNumbers39[0] +
               2 * multipliedNumbers16[2] * multipliedNumbers16[3] +
               2 * multipliedNumbers17[0] * multipliedNumbers16[3] -
               4 * multipliedNumbers17[1] * multipliedNumbers5[3] +
@@ -349,9 +379,9 @@ _c1[1].kz = -(multipliedNumbers2[3] * s002) - multipliedNumbers3[0] * s002 - s01
               q1w * (-(multipliedNumbers17[3]) + multipliedNumbers18[0] + 2 * multipliedNumbers7[3] * theta -
                      multipliedNumbers29[2] * multipliedNumbers6[2]);
 
-       _c2[1].ky = multipliedNumbers2[3] * s001 + multipliedNumbers3[0] * s001 + multipliedNumbers1[1] * s011 -
-              multipliedNumbers2[1] * s011 - multipliedNumbers1[3] * s011 -
-              q1y * multipliedNumbers4[2] - qperpw * multipliedNumbers9[3] +
+       _c2[1].ky = multipliedNumbers39[1] + multipliedNumbers39[2] + multipliedNumbers39[3] -
+              multipliedNumbers40[0] - multipliedNumbers40[1] -
+              multipliedNumbers40[2] - multipliedNumbers40[3] +
               multipliedNumbers16[0] * s021 - multipliedNumbers2[3] * s101 -
               multipliedNumbers3[0] * s101 + multipliedNumbers2[0] * (s011 - s111) -
               multipliedNumbers1[1] * s111 + multipliedNumbers2[1] * s111 +
@@ -605,7 +635,7 @@ _c1[1].kz = -(multipliedNumbers2[3] * s002) - multipliedNumbers3[0] * s002 - s01
               2 * multipliedNumbers1[2] * multipliedNumbers16[1] -
               2 * multipliedNumbers1[3] * multipliedNumbers16[1] +
               2 * multipliedNumbers2[3] * s012 * theta -
-              2 * multipliedNumbers3[0] * s012 * theta +
+              2 * multipliedNumbers34[0] * theta +
               2 * multipliedNumbers3[2] * multipliedNumbers10[1] +
               2 * multipliedNumbers3[3] * multipliedNumbers10[1] +
               q1y * (-(multipliedNumbers10[3]) - multipliedNumbers11[0] +
@@ -746,35 +776,35 @@ _c1[1].kz = -(multipliedNumbers2[3] * s002) - multipliedNumbers3[0] * s002 - s01
        // _c5[0]
 
        _c5[0].kx = 2 * (multipliedNumbers1[2] * s000 + multipliedNumbers1[3] * s000 -
-              multipliedNumbers2[3] * s010 + multipliedNumbers3[0] * s010 -
-              multipliedNumbers3[2] * s020 - multipliedNumbers3[3] * s020 -
-              multipliedNumbers1[2] * s100 - multipliedNumbers1[3] * s100 +
+              multipliedNumbers2[3] * s010 + multipliedNumbers31[0] -
+              multipliedNumbers31[1] - multipliedNumbers3[3] * s020 -
+              multipliedNumbers1[2] * s100 - multipliedNumbers31[2] +
               multipliedNumbers1[0] * (-s000 + s100) + multipliedNumbers1[1] * (-s000 + s100) +
-              multipliedNumbers2[3] * s110 - multipliedNumbers3[0] * s110 +
+              multipliedNumbers31[3] - multipliedNumbers3[0] * s110 +
               q1y * (q1x * (s010 - s110) + q1w * (s020 - s120)) +
-              multipliedNumbers3[2] * s120 + multipliedNumbers3[3] * s120 +
+              multipliedNumbers3[2] * s120 + multipliedNumbers32[0] +
               q1z * (-(q1w * s010) + q1x * s020 + q1w * s110 - q1x * s120)) *
               theta;
 
        _c5[0].ky = 2 * (multipliedNumbers1[2] * s001 + multipliedNumbers1[3] * s001 -
-              multipliedNumbers2[3] * s011 + multipliedNumbers3[0] * s011 -
-              multipliedNumbers3[2] * s021 - multipliedNumbers3[3] * s021 -
-              multipliedNumbers1[2] * s101 - multipliedNumbers1[3] * s101 +
+              multipliedNumbers2[3] * s011 + multipliedNumbers32[1] -
+              multipliedNumbers32[2] - multipliedNumbers3[3] * s021 -
+              multipliedNumbers1[2] * s101 - multipliedNumbers32[3] +
               multipliedNumbers1[0] * (-s001 + s101) + multipliedNumbers1[1] * (-s001 + s101) +
-              multipliedNumbers2[3] * s111 - multipliedNumbers3[0] * s111 +
+              multipliedNumbers33[0] - multipliedNumbers3[0] * s111 +
               q1y * (q1x * (s011 - s111) + q1w * (s021 - s121)) +
-              multipliedNumbers3[2] * s121 + multipliedNumbers3[3] * s121 +
+              multipliedNumbers33[3] + multipliedNumbers33[2] +
               q1z * (-(q1w * s011) + q1x * s021 + q1w * s111 - q1x * s121)) *
               theta;
 
        _c5[0].kz = 2 * (multipliedNumbers1[2] * s002 + multipliedNumbers1[3] * s002 -
-              multipliedNumbers2[3] * s012 + multipliedNumbers3[0] * s012 -
-              multipliedNumbers3[2] * s022 - multipliedNumbers3[3] * s022 -
-              multipliedNumbers1[2] * s102 - multipliedNumbers1[3] * s102 +
+              multipliedNumbers2[3] * s012 + multipliedNumbers34[0] -
+              multipliedNumbers34[1] - multipliedNumbers3[3] * s022 -
+              multipliedNumbers1[2] * s102 - multipliedNumbers34[2] +
               multipliedNumbers1[0] * (-s002 + s102) + multipliedNumbers1[1] * (-s002 + s102) +
-              multipliedNumbers2[3] * s112 - multipliedNumbers3[0] * s112 +
+              multipliedNumbers34[3] - multipliedNumbers3[0] * s112 +
               q1y * (q1x * (s012 - s112) + q1w * (s022 - s122)) +
-              multipliedNumbers3[2] * s122 + multipliedNumbers3[3] * s122 +
+              multipliedNumbers3[2] * s122 + multipliedNumbers35[0] +
               q1z * (-(q1w * s012) + q1x * s022 + q1w * s112 - q1x * s122)) *
               theta;
 
@@ -782,23 +812,23 @@ _c1[1].kz = -(multipliedNumbers2[3] * s002) - multipliedNumbers3[0] * s002 - s01
 
        // _c5[1]
 
-       _c5[1].kx = -2 * (multipliedNumbers2[3] * s000 + multipliedNumbers3[0] * s000 +
-                     multipliedNumbers1[1] * s010 - multipliedNumbers2[1] * s010 -
-                     multipliedNumbers1[3] * s010 - q1y * multipliedNumbers4[0] -
-                     qperpw * multipliedNumbers8[1] + multipliedNumbers16[0] * s020 -
-                     multipliedNumbers2[3] * s100 - multipliedNumbers3[0] * s100 +
+       _c5[1].kx = -2 * (multipliedNumbers35[1] + multipliedNumbers35[2] +
+                     multipliedNumbers35[3] - multipliedNumbers36[0] -
+                     multipliedNumbers36[1] - multipliedNumbers36[2] -
+                     multipliedNumbers36[3] + multipliedNumbers37[0] -
+                     multipliedNumbers37[1] - multipliedNumbers37[2] +
                      multipliedNumbers2[2] * (-s000 + s100) + multipliedNumbers2[0] * (s010 - s110) -
-                     multipliedNumbers1[1] * s110 + multipliedNumbers2[1] * s110 +
-                     multipliedNumbers1[3] * s110 +
+                     multipliedNumbers37[3] + multipliedNumbers38[0] +
+                     multipliedNumbers38[1] +
                      q1x * (q1y * (-s000 + s100) + q1w * (s020 - s120)) +
-                     q1y * multipliedNumbers4[1] + qperpw * multipliedNumbers12[1] -
-                     multipliedNumbers16[0] * s120) *
+                     multipliedNumbers38[2] + multipliedNumbers38[3] -
+                     multipliedNumbers39[0]) *
               theta;
 
-       _c5[1].ky = -2 * (multipliedNumbers2[3] * s001 + multipliedNumbers3[0] * s001 +
-              multipliedNumbers1[1] * s011 - multipliedNumbers2[1] * s011 -
-              multipliedNumbers1[3] * s011 - q1y * multipliedNumbers4[2] -
-              qperpw * multipliedNumbers9[3] + multipliedNumbers16[0] * s021 -
+       _c5[1].ky = -2 * (multipliedNumbers39[1] + multipliedNumbers39[2] +
+              multipliedNumbers39[3] - multipliedNumbers40[0] -
+              multipliedNumbers40[1] - multipliedNumbers40[2] -
+              multipliedNumbers40[3] + multipliedNumbers16[0] * s021 -
               multipliedNumbers2[3] * s101 - multipliedNumbers3[0] * s101 +
               multipliedNumbers2[2] * (-s001 + s101) + multipliedNumbers2[0] * (s011 - s111) -
               multipliedNumbers1[1] * s111 + multipliedNumbers2[1] * s111 +
