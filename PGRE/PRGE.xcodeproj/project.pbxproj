@@ -19,6 +19,7 @@
 		9564669E23183E02006C98D6 /* animatedTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9564669C23183E02006C98D6 /* animatedTransform.cpp */; };
 		957D70D823033F170000F3A9 /* ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 957D70D623033F170000F3A9 /* ray.cpp */; };
 		959AE2BE23156D5700D9C186 /* geometryPrimitive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 959AE2BC23156D5700D9C186 /* geometryPrimitive.cpp */; };
+		95B0C06A23215462005E1840 /* bvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B0C06823215462005E1840 /* bvh.cpp */; };
 		95B2E148231BB32E00FE47CC /* libassimp.4.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 95B2E147231BB32E00FE47CC /* libassimp.4.1.0.dylib */; };
 		95B68EE32312726A001A4DA2 /* memoryArena.inl in Sources */ = {isa = PBXBuildFile; fileRef = 95B68EE12312726A001A4DA2 /* memoryArena.inl */; };
 		95B68EE62312C0DC001A4DA2 /* STLMemory.inl in Sources */ = {isa = PBXBuildFile; fileRef = 95B68EE42312C0DC001A4DA2 /* STLMemory.inl */; };
@@ -72,6 +73,8 @@
 		957D70D723033F170000F3A9 /* ray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ray.hpp; sourceTree = "<group>"; };
 		959AE2BC23156D5700D9C186 /* geometryPrimitive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = geometryPrimitive.cpp; sourceTree = "<group>"; };
 		959AE2BD23156D5700D9C186 /* geometryPrimitive.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = geometryPrimitive.hpp; sourceTree = "<group>"; };
+		95B0C06823215462005E1840 /* bvh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bvh.cpp; sourceTree = "<group>"; };
+		95B0C06923215462005E1840 /* bvh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bvh.hpp; sourceTree = "<group>"; };
 		95B2E147231BB32E00FE47CC /* libassimp.4.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.4.1.0.dylib; path = ../../../../../usr/local/Cellar/assimp/4.1.0/lib/libassimp.4.1.0.dylib; sourceTree = "<group>"; };
 		95B68EE12312726A001A4DA2 /* memoryArena.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = memoryArena.inl; sourceTree = "<group>"; };
 		95B68EE22312726A001A4DA2 /* memoryArena.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = memoryArena.hpp; sourceTree = "<group>"; };
@@ -172,6 +175,7 @@
 		951518792302E6DB0061C8CC /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				95B0C06723215449005E1840 /* CullingOptimization */,
 				95B68EE023127252001A4DA2 /* Memory */,
 				9515187B2302E6DB0061C8CC /* Math */,
 				95FEB1812305B3A600DFBEDC /* boundingVolume.inl */,
@@ -233,6 +237,15 @@
 				95133D7923042DA700B478B9 /* SubmissionShape */,
 			);
 			path = Geometry;
+			sourceTree = "<group>";
+		};
+		95B0C06723215449005E1840 /* CullingOptimization */ = {
+			isa = PBXGroup;
+			children = (
+				95B0C06823215462005E1840 /* bvh.cpp */,
+				95B0C06923215462005E1840 /* bvh.hpp */,
+			);
+			path = CullingOptimization;
 			sourceTree = "<group>";
 		};
 		95B68EE023127252001A4DA2 /* Memory */ = {
@@ -320,6 +333,7 @@
 				95FEB1832305B3A600DFBEDC /* boundingVolume.inl in Sources */,
 				95FEB1902307FB7500DFBEDC /* math.cpp in Sources */,
 				95C8FEDE23145BD1002867DA /* primitive.cpp in Sources */,
+				95B0C06A23215462005E1840 /* bvh.cpp in Sources */,
 				95E79AC123168E8E008CBE77 /* mesh.cpp in Sources */,
 				95133D8023042E4D00B478B9 /* transform.cpp in Sources */,
 				95B68EE32312726A001A4DA2 /* memoryArena.inl in Sources */,

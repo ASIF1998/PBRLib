@@ -145,6 +145,8 @@ namespace PRGE
     class BoundingVolume3
     {
         friend class Transform;
+        friend class BVHPrimitiveInfo;
+        friend class BVH;
 
     public:
         inline BoundingVolume3() NOEXCEPT_PRGE
@@ -270,15 +272,15 @@ namespace PRGE
             auto d = _pMax - _pMin;
 
             if (_pMax[0] > _pMin[0]) {
-                o.setX(o[0] / d[0]);
+                o[0] = o[0] / d[0];
             }
 
             if (_pMax[1] > _pMin[1]) {
-                o.setY(o[1] / d[1]);
+                o[1] = o[1] / d[1];
             }
 
             if (_pMax[2] > _pMin[2]) {
-                o.setZ(o[2] / d[2]);
+                o[3] = o[2] / d[2];
             }
 
             return o;
@@ -292,6 +294,12 @@ namespace PRGE
                 ptr[(c & 2) ? 1 : 0][1],
                 ptr[(c & 4) ? 1 : 0][2]
             };
+        }
+
+        inline auto maxExtent() const NOEXCEPT_PRGE
+        {
+            auto v = _pMax - _pMin;
+            return maxDimension(v);
         }
 
         /**

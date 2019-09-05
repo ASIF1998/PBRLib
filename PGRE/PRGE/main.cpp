@@ -25,15 +25,19 @@
 #include "LowLevelRendering/Geometry/SubmissionShape/shape.hpp"
 #include "LowLevelRendering/Geometry/SubmissionShape/triangle.hpp"
 
+#include "Core/CullingOptimization/bvh.hpp"
+
 using namespace PRGE;
 
 int main()
 {
-    Mesh mesh {12, 21};
-    Mesh::loadModel("asif");
-    const Vec3<float> f;
+    shared_ptr<IPrimitive> ptr {new GeometryPrimitive {nullptr}};
+    vector<shared_ptr<IPrimitive>> prims;
     
-    f[0];
+    prims.push_back(ptr);
+    
+    BVH bvh {prims, 12};
+    
     return 0;
 }
 
