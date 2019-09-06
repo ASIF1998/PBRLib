@@ -42,6 +42,20 @@ namespace PRGE
         return first;
     }
 
+    struct LinearBVH
+    {
+        BoundingVolume3<float> bounds;
+        union
+        {
+            size_t primitivesOffset;
+            size_t secondChildOffset;
+        };
+
+        uint16_t numPrimitives;
+        uint8_t axis;
+        uint8_t pad[1];
+    };
+
     /**
      * @feild count количество примитивов в ведре
      * @feild bounds коробка описывающая объём ведра
@@ -166,6 +180,19 @@ namespace PRGE
 
         vector<shared_ptr<IPrimitive>> orderPrims;
         BVHBuildNode* root = recursiveBuild(primitiveInfo, 0, primitives.size(), &totalNodes, orderPrims);
+
+        swap(_primitives, orderPrims);
+        primitiveInfo.resize(0);
+
+        _nodes = new LinearBVH [totalNodes];
+        size_t offset = 0;
+
+        flattenBVH(root, &offset);
+    }
+
+    BVH::~BVH()
+    {
+        delete [] _nodes;
     }
 
     BVHBuildNode* BVH::recursiveBuild(const vector<BVHPrimitiveInfo>& primitivesInfo, 
@@ -297,5 +324,24 @@ namespace PRGE
         }
 
         return node;
+    }
+
+    int BVH::flattenBVH(BVHBuildNode* node, size_t* offset)
+    {
+        auto* linearNode = _nodes + *offset;
+        linearNode->bounds = node->bounds;
+        size_t myOffset = (*offset)++;
+
+        if (node->numPrimitives > 0) {
+            linearNode->primitivesOffset = node->firstPrimitivesOffset;
+            linearNode->numPrimitives = node->numPrimitives;
+        } else {
+            linearNode->axis = node->splitAxis;
+            linearNode->numPrimitives = 0;
+            flattenBVH(node->childrens[0], offset);
+            linearNode->secondChildOffset = flattenBVH(node->childrens[1], offset);
+        }
+
+        return 0;
     }
 }

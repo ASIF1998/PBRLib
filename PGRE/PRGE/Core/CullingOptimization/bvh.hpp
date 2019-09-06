@@ -23,11 +23,13 @@ namespace PRGE
 {
     struct BVHPrimitiveInfo;
     struct BVHBuildNode;
+    struct LinearBVH;
 
     class BVH
     {
     public:
         BVH(const vector<shared_ptr<IPrimitive>>& primitives, uint32_t maxPrimitivesInNode);
+        ~BVH();
 
     private:
         BVHBuildNode* recursiveBuild(const vector<BVHPrimitiveInfo>& primitivesInfo, 
@@ -36,8 +38,12 @@ namespace PRGE
                                      int* totalNodes, 
                                      vector<shared_ptr<IPrimitive>>& orderPrimitives);
 
+        int flattenBVH(BVHBuildNode* node, size_t* offset);
+
+    private:
         uint32_t _maxPrimitiveInNode;
         vector<shared_ptr<IPrimitive>> _primitives;
+        LinearBVH* _nodes;
     };
 }
 
