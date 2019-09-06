@@ -12,25 +12,36 @@
 
 #include "../Math/point.h"
 
-#include <algorithm>
-
-using namespace std;
-
 namespace PRGE
 {
-    struct BVHPrimitiveInfo;
-}
-
-namespace std
-{
-    void swap(PRGE::BVHPrimitiveInfo& p1, PRGE::BVHPrimitiveInfo& p2)
+    template<class Predicate, class ForwardIterator>
+    ForwardIterator partition(ForwardIterator first, ForwardIterator last, Predicate pred)
     {
-        
-    }
-}
+        ForwardIterator temp;
+        while (true) {
+            if (first == last) {
+                return first;
+            }
 
-namespace PRGE
-{
+            if (!pred(*first)) {
+                break;
+            }
+
+            first++;
+
+            for (auto p{first}; ++p != last;) {
+                if (pred(*p)) {
+                    temp = first;
+                    first = p;
+                    p = temp;
+                    first++;
+                }
+            }
+        }
+
+        return first;
+    }
+
     /**
      * @feild count количество примитивов в ведре
      * @feild bounds коробка описывающая объём ведра
@@ -175,7 +186,6 @@ namespace PRGE
         }
 
         if (numPrimitives == 1) {
-            /// Create leaf BVHBuildNode
             auto offset = orderPrimitives.size();
 
             for (size_t i{start}; i < end; i++) {
@@ -184,7 +194,6 @@ namespace PRGE
 
             node->initLeaf(offset, numPrimitives, bounds);
         } else {
-            /// Compute bound of primitive centroids, choose split dimension dim
             BoundingVolume3<float> centroidBounds;
 
             for (size_t i{start}; i < end; i++) {
@@ -197,7 +206,6 @@ namespace PRGE
             /// Если все точки центроида находятся в одном и том же положении, то
             /// рекурсия останавливается и создаётся узел с примитивами.
             if (centroidBounds._pMax[dim] == centroidBounds._pMin[dim]) {
-                /// Create leaf BVHBuildNode
                 auto offset = orderPrimitives.size();
 
                 for (size_t i{start}; i < end; i++) {
@@ -208,81 +216,84 @@ namespace PRGE
 
                 return node;
             } else {
-                if (numPrimitives <= 4) {
-                    /// Partition primitives into equally  sized subtest
-                } else {
-                    /// Allocate BucketInfo for SAH partitons buckets
-                    constexpr size_t numBuckets = 12;
-                    BucketInfo buckets[numBuckets];
+                constexpr size_t numBuckets = 12;
+                BucketInfo buckets[numBuckets];
 
-                    /// Initialize BucketInfo for SAH partitons buckets
-                    for (size_t i{start}; i < end; i++) {
-                        int b = numBuckets * centroidBounds.offset(primitivesInfo[i].centroid)[dim];
+                for (size_t i{start}; i < end; i++) {
+                    int b = numBuckets * centroidBounds.offset(primitivesInfo[i].centroid)[dim];
 
-                        if (b == numBuckets) {
-                            b--;
-                        }
-
-                        buckets[b].count++;
-                        buckets[b].bounds = merge(buckets[b].bounds, primitivesInfo[i].bounds);
+                    if (b == numBuckets) {
+                        b--;
                     }
 
-                    /// Compute costs for splitting after each bucket
-                    float cost[numBuckets - 1];
+                    buckets[b].count++;
+                    buckets[b].bounds = merge(buckets[b].bounds, primitivesInfo[i].bounds);
+                }
 
-                    for(size_t i{0}; i < numBuckets - 1; i++) {
-                        BoundingVolume3<float> b0, b1;
-                        int count0 =0, count1 = 0;
+                float cost[numBuckets - 1];
 
-                        for (size_t j{0}; j <= i; j++) {
-                            b0 = merge(b0, buckets[j].bounds);
-                            count0 += buckets[j].count;
-                        }
+                for(size_t i{0}; i < numBuckets - 1; i++) {
+                    BoundingVolume3<float> b0, b1;
+                    int count0 =0, count1 = 0;
 
-                        for (size_t j{i}; j < numBuckets; j++) {
-                            b1 = merge(b0, buckets[j].bounds);
-                            count1 += buckets[j].count;
-                        }
-
-                        cost[i] = .125f + (count0 * b0.surfaceArea() + count1 * b1.surfaceArea()) / bounds.surfaceArea();
+                    for (size_t j{0}; j <= i; j++) {
+                        b0 = merge(b0, buckets[j].bounds);
+                        count0 += buckets[j].count;
                     }
 
-                    /// Find bucket to split at that minimizes SAH metric
-                    float minCost = cost[0];
-                    size_t minCostSplitBucket = 0;
-
-                    for (size_t i{0}; i < numBuckets - 1; i++) {
-                        if (cost[i] < minCost) {
-                            minCost = cost[i];
-                            minCostSplitBucket = i;
-                        }
+                    for (size_t j{i}; j < numBuckets; j++) {
+                        b1 = merge(b0, buckets[j].bounds);
+                        count1 += buckets[j].count;
                     }
 
-                    /// Either create leaf or split primitives at selected SAH bucket
-                    float leafCost = static_cast<float>(numPrimitives);
+                    cost[i] = .125f + (count0 * b0.surfaceArea() + count1 * b1.surfaceArea()) / bounds.surfaceArea();
+                }
 
-                    if (numPrimitives > _maxPrimitiveInNode || minCost < leafCost) {
-                        /// TODO: написать функцию partition
-                    } else {
-                        /// Create leaf BVHBuildNode
-                        auto offset = orderPrimitives.size();
+                float minCost = cost[0];
+                size_t minCostSplitBucket = 0;
 
-                        for (size_t i{start}; i < end; i++) {
-                            orderPrimitives.push_back(_primitives[primitivesInfo[i].primitiveNumber]);
-                        }
-
-                        node->initLeaf(offset, numPrimitives, bounds);
-
-                        return node;
+                for (size_t i{0}; i < numBuckets - 1; i++) {
+                    if (cost[i] < minCost) {
+                        minCost = cost[i];
+                        minCostSplitBucket = i;
                     }
                 }
+
+                float leafCost = static_cast<float>(numPrimitives);
+
+                if (numPrimitives > _maxPrimitiveInNode || minCost < leafCost) {
+                    auto ptrMid = PRGE::partition(
+                        primitivesInfo.begin(),
+                        primitivesInfo.end(),
+                        [=] (const BVHPrimitiveInfo& primitiveInfo) {
+                            int b = numBuckets * centroidBounds.offset(primitiveInfo.centroid)[dim];
+
+                            if (b == numBuckets) {
+                                b--;
+                            }
+
+                            return b <= minCostSplitBucket;
+                        }
+                    );
+
+                    mid = &(*ptrMid) - &primitivesInfo[0];
+                } else {
+                    auto offset = orderPrimitives.size();
+
+                    for (size_t i{start}; i < end; i++) {
+                        orderPrimitives.push_back(_primitives[primitivesInfo[i].primitiveNumber]);
+                    }
+
+                    node->initLeaf(offset, numPrimitives, bounds);
+
+                    return node;
+                }
+                
 
                 node->initInterior(dim,
                                    recursiveBuild(primitivesInfo, start, mid, totalNodes, orderPrimitives),
                                    recursiveBuild(primitivesInfo, mid, end, totalNodes, orderPrimitives));
             }
-
-            /// Partition primitives into two sets and build children
         }
 
         return node;
