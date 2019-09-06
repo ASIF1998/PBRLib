@@ -11,6 +11,13 @@
 #include "../boundingVolume.hpp"
 
 #include "../Math/point.h"
+#include "../Math/vec.h"
+
+#include "../boundingVolume.hpp"
+
+#include <stack>
+
+using namespace std;
 
 namespace PRGE
 {
@@ -326,7 +333,7 @@ namespace PRGE
         return node;
     }
 
-    int BVH::flattenBVH(BVHBuildNode* node, size_t* offset)
+    size_t BVH::flattenBVH(BVHBuildNode* node, size_t* offset)
     {
         auto* linearNode = _nodes + *offset;
         linearNode->bounds = node->bounds;
@@ -342,6 +349,45 @@ namespace PRGE
             linearNode->secondChildOffset = flattenBVH(node->childrens[1], offset);
         }
 
-        return 0;
+        return myOffset;
+    }
+
+    void BVH::intersect(const Ray& ray, SurfaceInteraction* surfaceInteraction) const
+    {
+        bool hit = false;
+        Vec3<float> invDir {1.0f / ray._dir[0], 1.0f / ray._dir[1], 1.0f / ray._dir[1]};
+        Vec3<bool> dirIsNeg {invDir[0] < 0, invDir[0] < 0, invDir[0] < 0};
+
+        size_t currentNodeindex = 0;
+        stack<size_t> nodesToVisit;
+
+        while(true) {
+            const auto* node = _nodes + currentNodeindex;
+
+            if (intersectP(node->bounds, ray, invDir, dirIsNeg)) {
+                    if (node->numPrimitives > 0) {
+                        for (size_t i{0}; i < node->numPrimitives; i++) {
+                            if (_primitives[node->primitivesOffset + i]->intersect(ray, *surfaceInteraction)) {
+                                hit = true;
+                            }
+                        }
+
+                        if (nodesToVisit.empty()) {
+                            break;
+                        }
+
+                        currentNodeindex = nodesToVisit.top();
+                        nodesToVisit.pop();
+                    } else {
+                        if (dirIsNeg[node->axis]) {
+                            nodesToVisit.push(currentNodeindex + 1);
+                            currentNodeindex = node->secondChildOffset;
+                        } else {
+                            nodesToVisit.push(node->secondChildOffset);
+                            currentNodeindex++;
+                        }
+                    }
+            }
+        }
     }
 }

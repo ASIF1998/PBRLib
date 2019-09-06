@@ -28,6 +28,7 @@ namespace PRGE
         friend class GeometryPrimitive;
         friend class AnimatedTransform;
         friend class Triangle;
+        friend class BVH;
 
     public:
         Ray() noexcept;

@@ -73,6 +73,27 @@ namespace PRGE
             return _pMin != boundingVolume2._pMax || _pMax != boundingVolume2._pMax;
         }
 
+        inline const Point2<Type>& operator[](size_t i) const NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            if (i > 1) {
+                throw out_of_range("This operator only processes arguments within [0, 1]");
+            }
+#endif
+
+            return (i == 0) ? _pMin : _pMax;
+        }
+
+        inline Point2<Type>& operator[](size_t i)
+        {
+#if DEBUG_PRGE == 1
+            if (i > 1) {
+                throw out_of_range("This operator only processes arguments within [0, 1]");
+            }
+#endif
+            
+            return (i == 0) ? _pMin : _pMax;
+        }
 
         template<typename U>
         inline explicit operator BoundingVolume2<U> () const
@@ -207,6 +228,28 @@ namespace PRGE
         inline bool operator != (const BoundingVolume3& boundingVolume3) const noexcept
         {
             return _pMin != boundingVolume3._pMin || _pMax != boundingVolume3._pMax;
+        }
+
+        inline const Point3<Type>& operator[](size_t i) const NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            if (i > 1) {
+                throw out_of_range("This operator only processes arguments within [0, 1]");
+            }
+#endif
+
+            return (i == 0) ? _pMin : _pMax;
+        }
+
+        inline Point3<Type>& operator[](size_t i) NOEXCEPT_PRGE
+        {
+#if DEBUG_PRGE == 1
+            if (i > 1) {
+                throw out_of_range("This operator only processes arguments within [0, 1]");
+            }
+#endif
+
+            return (i == 0) ? _pMin : _pMax;
         }
 
         inline Vec3<Type> diagonal() const NOEXCEPT_PRGE
@@ -376,6 +419,43 @@ namespace PRGE
             }
 
             return *t1 < *t2;
+        }
+
+        friend bool intersectP(const BoundingVolume3& boundingVolume3, const Ray& ray, const Vec3<Type>& invDir, const Vec3<bool>& dirIsNeg)
+        {
+            float tMin = (boundingVolume3[dirIsNeg[0]][0]- ray._o[0]) * invDir[0];
+            float tMax = (boundingVolume3[!dirIsNeg[0]][0]- ray._o[0]) * invDir[0];
+            float tyMin = (boundingVolume3[dirIsNeg[1]][1]- ray._o[1]) * invDir[1];
+            float tyMax = (boundingVolume3[!dirIsNeg[1]][1]- ray._o[1]) * invDir[1];
+
+            if (tMin > tyMax || tyMin > tMax) {
+                return false;
+            }
+
+            if (tyMin > tMin) {
+                tMin = tyMin;
+            }
+
+            if (tyMax < tMax) {
+                tMax = tyMax;
+            }
+
+            float tzMin = (boundingVolume3[dirIsNeg[2]][2]- ray._o[2]) * invDir[2];
+            float tzMax = (boundingVolume3[!dirIsNeg[2]][2]- ray._o[2]) * invDir[2];
+
+            if (tMin > tzMax || tzMin > tMax) {
+                return false;
+            }
+
+            if (tzMin > tMin) {
+                tMin = tzMin;
+            }
+
+            if (tzMax < tMax) {
+                tMax = tzMax;
+            }
+
+            return (tMin < ray._tMax) && (tMax > 0);;
         }
 
         /**

@@ -11,6 +11,10 @@
 
 #include "../../LowLevelRendering/Geometry/primitive.hpp"
 
+#include "../../CollisionAndPhysics/ray.hpp"
+
+#include "../../CollisionAndPhysics/Interaction/surfaceInteraction.hpp"
+
 #include <memory>
 
 #include <vector>
@@ -31,6 +35,8 @@ namespace PRGE
         BVH(const vector<shared_ptr<IPrimitive>>& primitives, uint32_t maxPrimitivesInNode);
         ~BVH();
 
+        virtual void intersect(const Ray& ray, SurfaceInteraction* surfaceInteraction) const;
+
     private:
         BVHBuildNode* recursiveBuild(const vector<BVHPrimitiveInfo>& primitivesInfo, 
                                      size_t start, 
@@ -38,7 +44,7 @@ namespace PRGE
                                      int* totalNodes, 
                                      vector<shared_ptr<IPrimitive>>& orderPrimitives);
 
-        int flattenBVH(BVHBuildNode* node, size_t* offset);
+        size_t flattenBVH(BVHBuildNode* node, size_t* offset);
 
     private:
         uint32_t _maxPrimitiveInNode;
